@@ -1,1391 +1,1884 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Telegram</title>
-<style>
-:root {
-  --bg: #0e1621;
-  --surface: #17212b;
-  --surface2: #242f3d;
-  --surface3: #1c2733;
-  --border: rgba(255,255,255,0.08);
-  --blue: #5288c1;
-  --blue2: #6ab3f3;
-  --text: #f5f5f5;
-  --text2: #708499;
-  --text3: #a0b4c8;
-  --green: #4dcd5e;
-  --red: #ec3942;
-  --orange: #f0883e;
-  --bubble-out: #2b5278;
-  --bubble-in: #182533;
-  --input-bg: #242f3d;
-  --divider: rgba(255,255,255,0.06);
-  --tab-active: #5288c1;
-  --tab-inactive: #708499;
-  --radius: 12px;
-  --tr: 0.18s ease;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-}
-.theme-light {
-  --bg: #f4f4f5;
-  --surface: #ffffff;
-  --surface2: #f0f0f0;
-  --surface3: #f8f8f8;
-  --border: rgba(0,0,0,0.1);
-  --text: #000000;
-  --text2: #999999;
-  --text3: #555555;
-  --bubble-out: #effdde;
-  --bubble-in: #ffffff;
-  --input-bg: #f0f0f0;
-  --divider: rgba(0,0,0,0.08);
-  --tab-inactive: #999999;
-}
-.theme-classic {
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --surface2: #f5f5f5;
-  --surface3: #f9f9f9;
-  --border: rgba(0,0,0,0.09);
-  --blue: #2196f3;
-  --blue2: #42a5f5;
-  --text: #212121;
-  --text2: #9e9e9e;
-  --text3: #616161;
-  --bubble-out: #dcf8c6;
-  --bubble-in: #ffffff;
-  --input-bg: #eeeeee;
-  --divider: rgba(0,0,0,0.07);
-  --tab-inactive: #9e9e9e;
-}
-.theme-midnight {
-  --bg: #060a11;
-  --surface: #0f1923;
-  --surface2: #1a2535;
-  --surface3: #121d2c;
-  --bubble-out: #1a3a5c;
-  --bubble-in: #0f1923;
-}
-.theme-teal {
-  --bg: #0d1f1e;
-  --surface: #112220;
-  --surface2: #1a302e;
-  --surface3: #0d2422;
-  --blue: #3db8aa;
-  --blue2: #4ecdc4;
-  --bubble-out: #1a3830;
-  --bubble-in: #112220;
-  --tab-active: #3db8aa;
-}
-.theme-daylight {
-  --bg: #e8f4fb;
-  --surface: #ffffff;
-  --surface2: #daeef7;
-  --surface3: #f0f8fd;
-  --border: rgba(0,120,180,0.12);
-  --text: #1a2c3d;
-  --text2: #7ca3be;
-  --text3: #3d6e8a;
-  --bubble-out: #c2e0f4;
-  --bubble-in: #ffffff;
-  --input-bg: #daeef7;
-  --divider: rgba(0,120,180,0.08);
-  --tab-inactive: #7ca3be;
-  --blue: #2196f3;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Telegram</title>
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #1c1c1e;
+            --surface2: #2c2c2e;
+            --surface3: #3a3a3c;
+            --border: rgba(255,255,255,0.1);
+            --blue: #007aff;
+            --blue2: #0a84ff;
+            --text: #ffffff;
+            --text2: #8e8e93;
+            --text3: #aeaeb2;
+            --green: #34c759;
+            --red: #ff3b30;
+            --orange: #ff9500;
+            --bubble-out: #007aff;
+            --bubble-in: #1c1c1e;
+            --input-bg: #2c2c2e;
+            --divider: rgba(255,255,255,0.08);
+            --tab-active: #007aff;
+            --tab-inactive: #8e8e93;
+            --radius: 12px;
+            --tr: 0.2s ease;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
 
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;transition:background var(--tr),color var(--tr);}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background var(--tr);
+        }
 
-@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes scaleIn{from{opacity:0;transform:scale(0.94)}to{opacity:1;transform:scale(1)}}
-@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
-@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.5}}
-@keyframes fadeOut{to{opacity:0;transform:translateX(-50%) translateY(8px)}}
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(-50%) translateY(10px); }
+        }
 
-/* ── APP ── */
-.app{display:flex;flex-direction:column;height:100%;height:100dvh;}
+        .app {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            height: 100dvh;
+        }
 
-/* ── LOGIN ── */
-.login{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:32px 28px;text-align:center;animation:fadeIn .5s ease;background:var(--bg);}
-.login-logo{font-size:80px;margin-bottom:24px;}
-.login h1{font-size:28px;font-weight:700;margin-bottom:8px;}
-.login p{color:var(--text2);font-size:15px;margin-bottom:32px;line-height:1.5;}
-.login-input{width:100%;max-width:300px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:15px 18px;color:var(--text);font-size:18px;text-align:center;outline:none;letter-spacing:1px;transition:border var(--tr);-webkit-user-select:auto;user-select:auto;}
-.login-input:focus{border-color:var(--blue);}
-.btn-main{width:100%;max-width:300px;margin-top:16px;padding:15px;background:var(--blue);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;transition:all var(--tr);}
-.btn-main:active{transform:scale(.97);opacity:.9;}
+        /* LOGIN */
+        .login {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 32px 28px;
+            text-align: center;
+            animation: fadeIn .5s ease;
+            background: var(--bg);
+        }
+        .login-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+        .login h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .login-sub {
+            color: var(--text2);
+            font-size: 15px;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+        .login-input {
+            width: 100%;
+            max-width: 300px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px 18px;
+            color: var(--text);
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+            letter-spacing: 1px;
+            transition: border var(--tr);
+            -webkit-user-select: auto;
+            user-select: auto;
+        }
+        .login-input:focus {
+            border-color: var(--blue);
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all var(--tr);
+            margin: 4px 0;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: var(--blue);
+            color: #fff;
+        }
+        .btn-danger {
+            background: var(--red);
+            color: #fff;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text2);
+            border: 1px solid var(--border);
+        }
 
-/* ── HEADER ── */
-.header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;padding-top:max(12px,var(--safe-top));display:flex;align-items:center;gap:12px;z-index:10;flex-shrink:0;transition:background var(--tr);}
-.header-title{font-size:20px;font-weight:700;flex:1;}
-.hbtn{background:none;border:none;color:var(--blue);font-size:16px;cursor:pointer;padding:6px 8px;border-radius:8px;transition:background var(--tr);font-weight:500;}
-.hbtn:active{background:rgba(128,128,128,.15);}
-.hbtn-icon{font-size:22px;padding:6px;}
+        /* HEADER */
+        .header {
+            background: var(--surface);
+            border-bottom: 0.5px solid var(--border);
+            padding: 12px 16px;
+            padding-top: max(12px, var(--safe-top));
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            flex: 1;
+        }
+        .hbtn {
+            background: none;
+            border: none;
+            color: var(--blue);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: background var(--tr);
+            font-weight: 500;
+        }
+        .hbtn:active {
+            background: var(--surface2);
+        }
 
-/* ── SEARCH ── */
-.searchbar{margin:8px 12px;background:var(--input-bg);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;color:var(--text2);font-size:16px;cursor:pointer;border:1px solid transparent;transition:all var(--tr);flex-shrink:0;}
-.searchbar:active{border-color:var(--blue);}
+        /* SEARCH */
+        .searchbar {
+            margin: 8px 12px;
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text2);
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all var(--tr);
+            flex-shrink: 0;
+        }
+        .searchbar:active {
+            border-color: var(--blue);
+        }
 
-/* ── TABS ── */
-.tabbar{background:var(--surface);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;padding-bottom:max(6px,var(--safe-bottom));flex-shrink:0;z-index:10;transition:background var(--tr);}
-.tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--tab-inactive);background:none;border:none;padding:5px 12px;cursor:pointer;transition:color var(--tr);position:relative;}
-.tab.on{color:var(--tab-active);}
-.tab svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--tr);}
-.tab.on svg{transform:scale(1.08);}
-.tab-badge{position:absolute;top:2px;right:8px;background:var(--red);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;font-weight:700;}
+        /* TABS */
+        .tabbar {
+            background: var(--surface);
+            border-top: 0.5px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0;
+            padding-bottom: max(6px, var(--safe-bottom));
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            color: var(--tab-inactive);
+            background: none;
+            border: none;
+            padding: 5px 12px;
+            cursor: pointer;
+            transition: color var(--tr);
+            position: relative;
+        }
+        .tab.on {
+            color: var(--tab-active);
+        }
+        .tab-icon {
+            font-size: 24px;
+            line-height: 1;
+        }
+        .tab-badge {
+            position: absolute;
+            top: 2px;
+            right: 8px;
+            background: var(--red);
+            color: #fff;
+            font-size: 10px;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-weight: 700;
+        }
 
-/* ── PAGES ── */
-.page{display:none;flex-direction:column;flex:1;overflow:hidden;animation:fadeIn .18s ease;}
-.page.on{display:flex;}
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+        /* PAGES */
+        .page {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+            animation: fadeIn .18s ease;
+        }
+        .page.on {
+            display: flex;
+        }
+        .scroll {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
 
-/* ── CHAT LIST ── */
-.citem{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;transition:background var(--tr);border-bottom:1px solid var(--divider);position:relative;}
-.citem:active{background:var(--surface2);}
-.ava{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:21px;color:#fff;flex-shrink:0;position:relative;}
-.ava.b{background:linear-gradient(135deg,#5288c1,#3a6fa8);}
-.ava.g{background:linear-gradient(135deg,#4dcd5e,#2eaa3f);}
-.ava.o{background:linear-gradient(135deg,#f0883e,#d4702a);}
-.ava.p{background:linear-gradient(135deg,#9c6fe4,#7a4fc7);}
-.ava.r{background:linear-gradient(135deg,#e85d75,#c0395c);}
-.ava.t{background:linear-gradient(135deg,#3db8aa,#2a8e84);}
-.ava-emoji{font-size:28px;background:none!important;}
-.online{width:13px;height:13px;background:var(--green);border-radius:50%;border:2.5px solid var(--surface);position:absolute;bottom:1px;right:1px;}
-.cinfo{flex:1;min-width:0;}
-.cname{font-weight:600;font-size:16px;display:flex;align-items:center;gap:5px;}
-.clast{color:var(--text2);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
-.cmeta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
-.ctime{color:var(--text2);font-size:12px;}
-.cbadge{background:var(--blue);color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 6px;}
-.cbadge.muted{background:var(--text2);}
-.pinicon{color:var(--text2);font-size:13px;}
-.verified{display:inline-block;width:16px;height:16px;background:var(--blue);border-radius:50%;color:#fff;font-size:10px;text-align:center;line-height:16px;font-weight:700;flex-shrink:0;}
-.folder-bar{display:flex;overflow-x:auto;gap:0;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;padding:0 4px;}
-.folder-bar::-webkit-scrollbar{display:none;}
-.folder-tab{padding:10px 16px;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all var(--tr);}
-.folder-tab.on{color:var(--blue);border-color:var(--blue);}
-.section-label{font-size:13px;color:var(--text2);padding:12px 16px 6px;font-weight:500;}
+        /* CHAT LIST */
+        .citem {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background var(--tr);
+            border-bottom: 0.5px solid var(--divider);
+        }
+        .citem:active {
+            background: var(--surface);
+        }
+        .ava {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 21px;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .ava.blue {
+            background: #007aff;
+        }
+        .ava.green {
+            background: #34c759;
+        }
+        .ava.orange {
+            background: #ff9500;
+        }
+        .ava.purple {
+            background: #af52de;
+        }
+        .ava.red {
+            background: #ff3b30;
+        }
+        .ava.teal {
+            background: #5ac8fa;
+        }
+        .online {
+            width: 13px;
+            height: 13px;
+            background: var(--green);
+            border-radius: 50%;
+            border: 2.5px solid var(--bg);
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+        }
+        .cinfo {
+            flex: 1;
+            min-width: 0;
+        }
+        .cname {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .clast {
+            color: var(--text2);
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 1px;
+        }
+        .cmeta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .ctime {
+            color: var(--text2);
+            font-size: 12px;
+        }
+        .cbadge {
+            background: var(--blue);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+        }
+        .section-label {
+            font-size: 13px;
+            color: var(--text2);
+            padding: 12px 16px 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-/* ── SETTINGS ── */
-.sblock{margin:0 0 8px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.sitem{display:flex;align-items:center;gap:14px;padding:13px 16px;cursor:pointer;border-bottom:1px solid var(--divider);transition:background var(--tr);font-size:16px;position:relative;}
-.sitem:last-child{border-bottom:none;}
-.sitem:active{background:var(--surface2);}
-.sicon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.sicon.blue{background:#3a8dd9;}
-.sicon.green{background:#4dcd5e;}
-.sicon.red{background:#ec3942;}
-.sicon.orange{background:#f0883e;}
-.sicon.purple{background:#9c6fe4;}
-.sicon.gray{background:#8e8e93;}
-.sicon.teal{background:#3db8aa;}
-.sicon.pink{background:#e85d75;}
-.sicon.indigo{background:#5e5ce6;}
-.sicon.yellow{background:#ffd60a;color:#000;}
-.sarrow{color:var(--text2);margin-left:auto;font-size:20px;}
-.sval{color:var(--text2);font-size:15px;margin-left:auto;}
-.stoggle{margin-left:auto;width:50px;height:28px;background:var(--text2);border-radius:14px;cursor:pointer;position:relative;transition:background var(--tr);flex-shrink:0;}
-.stoggle.on{background:var(--green);}
-.stoggle::after{content:'';position:absolute;top:2px;left:2px;width:24px;height:24px;background:#fff;border-radius:50%;transition:transform var(--tr);box-shadow:0 2px 4px rgba(0,0,0,.3);}
-.stoggle.on::after{transform:translateX(22px);}
-.sname{flex:1;}
-.profile-top{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.profile-ava{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#5288c1,#3a6fa8);display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;color:#fff;margin-bottom:10px;position:relative;cursor:pointer;}
-.profile-ava .camera-ov{position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid var(--surface);}
-.pname{font-size:22px;font-weight:700;}
-.pphone{color:var(--text2);font-size:15px;margin-top:2px;}
-.pusername{color:var(--blue);font-size:14px;margin-top:1px;}
-.pstatus{color:var(--text2);font-size:13px;margin-top:2px;}
+        /* SETTINGS */
+        .sblock {
+            margin: 0 0 24px;
+            background: var(--surface);
+            border-top: 0.5px solid var(--border);
+            border-bottom: 0.5px solid var(--border);
+        }
+        .sitem {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 16px;
+            cursor: pointer;
+            border-bottom: 0.5px solid var(--divider);
+            transition: background var(--tr);
+            font-size: 16px;
+        }
+        .sitem:last-child {
+            border-bottom: none;
+        }
+        .sitem:active {
+            background: var(--surface2);
+        }
+        .sicon {
+            font-size: 22px;
+            width: 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .sarrow {
+            color: var(--text2);
+            margin-left: auto;
+            font-size: 20px;
+        }
+        .sval {
+            color: var(--text2);
+            font-size: 15px;
+            margin-left: auto;
+        }
+        .toggle {
+            margin-left: auto;
+            width: 50px;
+            height: 28px;
+            background: var(--surface3);
+            border-radius: 14px;
+            cursor: pointer;
+            position: relative;
+            transition: background var(--tr);
+            flex-shrink: 0;
+        }
+        .toggle.on {
+            background: var(--green);
+        }
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform var(--tr);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+        }
+        .toggle.on::after {
+            transform: translateX(22px);
+        }
+        .tag-new {
+            background: var(--blue);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            margin-left: auto;
+        }
+        .verified {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: var(--blue);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 10px;
+            text-align: center;
+            line-height: 18px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
 
-/* ── PROFILE PAGE ── */
-.profile-page-header{background:var(--surface);border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding-top:max(40px,var(--safe-top));padding-bottom:0;position:relative;}
-.profile-cover{width:100%;height:160px;background:linear-gradient(135deg,#2b5278 0%,#1a3a5c 100%);position:relative;}
-.profile-cover img{width:100%;height:100%;object-fit:cover;}
-.profile-ava-big{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#5288c1,#3a6fa8);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:700;color:#fff;border:3px solid var(--surface);position:absolute;bottom:-30px;left:20px;cursor:pointer;overflow:hidden;}
-.profile-ava-big img{width:100%;height:100%;object-fit:cover;}
-.profile-name-row{padding:40px 20px 10px;display:flex;align-items:center;gap:6px;}
-.profile-main-name{font-size:22px;font-weight:700;}
-.profile-info-row{padding:0 20px 16px;display:flex;flex-direction:column;gap:2px;}
-.profile-tabs{display:flex;border-top:1px solid var(--border);}
-.profile-tab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--tr);}
-.profile-tab.on{color:var(--blue);border-color:var(--blue);}
-.gift-owned-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;}
-.gift-owned-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 8px;text-align:center;cursor:pointer;transition:all var(--tr);position:relative;}
-.gift-owned-card:active{transform:scale(.96);}
-.gift-big-emoji{font-size:42px;display:block;margin-bottom:6px;}
-.gift-cname{font-size:13px;font-weight:600;margin-bottom:2px;}
-.gift-from{font-size:11px;color:var(--text2);}
-.story-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
-.story-card{background:var(--surface2);border-radius:14px;overflow:hidden;aspect-ratio:9/16;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.story-card:active{opacity:.85;}
-.story-add-btn{background:var(--surface);border:2px dashed var(--border);border-radius:14px;aspect-ratio:9/16;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:var(--text2);transition:all var(--tr);}
-.story-add-btn:active{background:var(--surface2);}
-.story-thumb{width:100%;height:100%;object-fit:cover;}
-.story-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);padding:10px 8px 8px;font-size:12px;color:#fff;font-weight:500;}
-.story-del{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.5);border:none;color:#fff;width:24px;height:24px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+        /* PROFILE */
+        .profile-header {
+            background: var(--surface);
+            border-bottom: 0.5px solid var(--border);
+            padding: 30px 16px 20px;
+            text-align: center;
+        }
+        .profile-ava {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #007aff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+        .profile-ava .camera {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 26px;
+            height: 26px;
+            background: var(--blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 2px solid var(--bg);
+        }
+        .pname {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .pphone {
+            color: var(--text2);
+            font-size: 15px;
+            margin-top: 4px;
+        }
+        .puser {
+            color: var(--blue);
+            font-size: 14px;
+            margin-top: 2px;
+        }
 
-/* ── CHAT VIEW ── */
-.chat-header{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 12px;padding-top:max(10px,var(--safe-top));display:flex;align-items:center;gap:10px;z-index:10;flex-shrink:0;}
-.chat-ava-sm{width:38px;height:38px;border-radius:50%;font-size:16px;font-weight:600;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.chat-info-h{flex:1;min-width:0;}
-.chat-name-h{font-weight:700;font-size:16px;}
-.chat-status-h{font-size:12px;color:var(--green);}
-.messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--bg);}
-.mrow{display:flex;align-items:flex-end;gap:5px;max-width:82%;animation:slideUp .2s ease;}
-.mrow.out{align-self:flex-end;flex-direction:row-reverse;}
-.mrow.in{align-self:flex-start;}
-.mbubble{padding:8px 13px;border-radius:18px;font-size:16px;line-height:1.45;word-break:break-word;}
-.mrow.out .mbubble{background:var(--bubble-out);border-bottom-right-radius:4px;}
-.mrow.in .mbubble{background:var(--bubble-in);border-bottom-left-radius:4px;}
-.mtime{font-size:11px;color:var(--text2);margin-top:2px;text-align:right;display:flex;align-items:center;gap:3px;justify-content:flex-end;}
-.mcheck{font-size:13px;color:var(--blue2);}
-.mava-sm{width:28px;height:28px;border-radius:50%;font-size:12px;font-weight:600;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.day-divider{text-align:center;margin:8px 0;font-size:12px;color:var(--text2);}
-.day-divider span{background:var(--surface2);padding:4px 12px;border-radius:12px;}
-.cinput-bar{background:var(--surface);border-top:1px solid var(--border);padding:8px 10px;display:flex;align-items:flex-end;gap:8px;padding-bottom:max(8px,var(--safe-bottom));flex-shrink:0;}
-.cinput{flex:1;background:var(--input-bg);border:1px solid var(--border);border-radius:20px;padding:10px 16px;color:var(--text);font-size:16px;outline:none;resize:none;max-height:120px;font-family:inherit;line-height:1.4;-webkit-user-select:auto;user-select:auto;transition:border var(--tr);}
-.cinput:focus{border-color:var(--blue);}
-.csend{width:42px;height:42px;background:var(--blue);border:none;border-radius:50%;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--tr);}
-.csend:active{transform:scale(.9);}
-.cico-btn{width:38px;height:38px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background var(--tr);}
-.cico-btn:active{background:var(--surface2);}
+        /* CHAT VIEW */
+        .chat-header {
+            background: var(--surface);
+            border-bottom: 0.5px solid var(--border);
+            padding: 10px 12px;
+            padding-top: max(10px, var(--safe-top));
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+            flex-shrink: 0;
+        }
+        .chat-ava-sm {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .chat-name-h {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .chat-status-h {
+            font-size: 12px;
+            color: var(--green);
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            background: var(--bg);
+        }
+        .mrow {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            max-width: 82%;
+            animation: slideUp .2s ease;
+        }
+        .mrow.out {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .mrow.in {
+            align-self: flex-start;
+        }
+        .mbubble {
+            padding: 8px 13px;
+            border-radius: 18px;
+            font-size: 16px;
+            line-height: 1.45;
+            word-break: break-word;
+        }
+        .mrow.out .mbubble {
+            background: var(--bubble-out);
+            border-bottom-right-radius: 4px;
+        }
+        .mrow.in .mbubble {
+            background: var(--bubble-in);
+            border-bottom-left-radius: 4px;
+        }
+        .mtime {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+            text-align: right;
+        }
+        .cinput-bar {
+            background: var(--surface);
+            border-top: 0.5px solid var(--border);
+            padding: 8px 10px;
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            padding-bottom: max(8px, var(--safe-bottom));
+            flex-shrink: 0;
+        }
+        .cinput {
+            flex: 1;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: var(--text);
+            font-size: 16px;
+            outline: none;
+            font-family: inherit;
+            -webkit-user-select: auto;
+            user-select: auto;
+            transition: border var(--tr);
+        }
+        .cinput:focus {
+            border-color: var(--blue);
+        }
+        .csend {
+            width: 38px;
+            height: 38px;
+            background: var(--blue);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all var(--tr);
+        }
+        .csend:active {
+            transform: scale(0.9);
+        }
+        .cico {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            color: var(--text2);
+            font-size: 22px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cico:active {
+            background: var(--surface2);
+        }
+        .day-divider {
+            text-align: center;
+            margin: 8px 0;
+            font-size: 12px;
+            color: var(--text2);
+        }
+        .day-divider span {
+            background: var(--surface);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--blue);
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+        }
 
-/* ── GIFTS CATALOG ── */
-.gift-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 0;}
-.gcard{text-align:center;padding:14px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all var(--tr);position:relative;}
-.gcard:active{transform:scale(.95);border-color:var(--blue);}
-.gemoji{font-size:40px;display:block;margin-bottom:5px;}
-.gname{font-size:12px;font-weight:600;margin-bottom:2px;}
-.gprice{font-size:12px;color:var(--orange);font-weight:600;}
-.gsent{font-size:10px;color:var(--text2);}
-.gtop{position:absolute;top:5px;right:7px;background:var(--orange);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:5px;}
+        /* GIFTS */
+        .gift-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 10px 0;
+        }
+        .gcard {
+            text-align: center;
+            padding: 14px 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all var(--tr);
+            position: relative;
+        }
+        .gcard:active {
+            transform: scale(0.95);
+            border-color: var(--blue);
+        }
+        .gcard.nft {
+            border-color: rgba(255, 149, 0, 0.5);
+            background: linear-gradient(135deg, rgba(255, 149, 0, 0.1), rgba(255, 59, 48, 0.05));
+        }
+        .gemoji {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .gname {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .gprice {
+            font-size: 12px;
+            color: var(--orange);
+            font-weight: 600;
+        }
+        .gsent {
+            font-size: 10px;
+            color: var(--text2);
+        }
+        .gtop {
+            position: absolute;
+            top: 5px;
+            right: 7px;
+            background: var(--orange);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+        .gnft {
+            position: absolute;
+            top: 5px;
+            left: 7px;
+            background: #ff9500;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+        .gift-owned-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 12px;
+        }
+        .gift-owned-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--tr);
+            position: relative;
+        }
+        .gift-owned-card:active {
+            transform: scale(0.96);
+        }
+        .gift-owned-card.nft-owned {
+            border-color: #ff9500;
+            box-shadow: 0 0 12px rgba(255, 149, 0, 0.2);
+        }
+        .gift-big-emoji {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 4px;
+        }
 
-/* ── STARS ── */
-.stars-big{text-align:center;padding:20px 16px 12px;}
-.stars-big .snum{font-size:48px;font-weight:700;}
-.stars-big .slabel{color:var(--text2);font-size:15px;}
-.spkg{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin:5px 0;cursor:pointer;transition:all var(--tr);}
-.spkg:active{background:var(--surface2);border-color:var(--blue);}
-.spkg .sa{font-weight:700;font-size:17px;}
-.spkg .sp{color:var(--text2);}
+        /* STARS */
+        .stars-big {
+            text-align: center;
+            padding: 20px 16px 12px;
+        }
+        .stars-big .snum {
+            font-size: 48px;
+            font-weight: 700;
+        }
+        .spkg {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: all var(--tr);
+        }
+        .spkg:active {
+            background: var(--surface2);
+            border-color: var(--blue);
+        }
 
-/* ── MODALS ── */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:100;display:none;align-items:flex-end;justify-content:center;}
-.overlay.on{display:flex;animation:fadeIn .2s ease;}
-.modal{background:var(--surface);border-radius:18px 18px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:6px 0 max(20px,var(--safe-bottom));animation:slideUp .28s ease;}
-.mhandle{width:36px;height:5px;background:var(--border);border-radius:3px;margin:10px auto 14px;opacity:.8;}
-.mtitle{font-size:19px;font-weight:700;text-align:center;margin-bottom:16px;padding:0 20px;}
-.minput{width:100%;padding:13px 16px;background:var(--input-bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:16px;outline:none;font-family:inherit;-webkit-user-select:auto;user-select:auto;transition:border var(--tr);}
-.minput:focus{border-color:var(--blue);}
-.mpad{padding:0 16px;}
-.btn{width:100%;padding:14px;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;border:none;transition:all var(--tr);margin:4px 0;}
-.btn:active{transform:scale(.97);}
-.btn-blue{background:var(--blue);color:#fff;}
-.btn-red{background:var(--red);color:#fff;}
-.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);}
-.btn-green{background:var(--green);color:#fff;}
+        /* MODALS */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 100;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .overlay.on {
+            display: flex;
+            animation: fadeIn .2s ease;
+        }
+        .modal {
+            background: var(--surface);
+            border-radius: 14px 14px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 6px 0 max(20px, var(--safe-bottom));
+            animation: slideUp .28s ease;
+        }
+        .mhandle {
+            width: 36px;
+            height: 5px;
+            background: var(--surface3);
+            border-radius: 3px;
+            margin: 10px auto 14px;
+        }
+        .mtitle {
+            font-size: 17px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 0 20px;
+        }
+        .minput {
+            width: 100%;
+            padding: 13px 16px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 16px;
+            outline: none;
+            font-family: inherit;
+            -webkit-user-select: auto;
+            user-select: auto;
+            transition: border var(--tr);
+        }
+        .minput:focus {
+            border-color: var(--blue);
+        }
+        .mpad {
+            padding: 0 16px;
+        }
+        .btn-green {
+            background: var(--green);
+            color: #fff;
+        }
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--text2);
+        }
+        .empty-icon {
+            font-size: 64px;
+        }
+        .toast {
+            position: fixed;
+            bottom: max(100px, calc(70px + var(--safe-bottom)));
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(44, 44, 46, 0.95);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            padding: 11px 22px;
+            border-radius: 22px;
+            font-weight: 600;
+            z-index: 300;
+            animation: slideUp .28s ease, fadeOut .3s ease 1.7s forwards;
+            font-size: 14px;
+            white-space: nowrap;
+            color: #fff;
+            pointer-events: none;
+        }
 
-/* ── CALLS PAGE ── */
-.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text2);}
-.empty-icon{font-size:64px;}
-.empty-title{font-size:18px;font-weight:600;color:var(--text3);}
-.empty-sub{font-size:14px;text-align:center;line-height:1.5;max-width:240px;}
+        /* NFT badge */
+        .nft-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9500, #ff3b30);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            margin-left: 4px;
+        }
+        .exchange-btn {
+            background: var(--orange);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 6px;
+            width: 100%;
+        }
+        .exchange-btn:active {
+            opacity: 0.8;
+        }
 
-/* ── STORY RING ── */
-.story-rings{display:flex;overflow-x:auto;gap:14px;padding:12px 14px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);}
-.story-rings::-webkit-scrollbar{display:none;}
-.sring{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex-shrink:0;}
-.sring-ava{width:58px;height:58px;border-radius:50%;padding:2px;background:linear-gradient(135deg,#f9a825,#e91e63,#9c27b0);position:relative;}
-.sring-ava.seen{background:var(--surface2);}
-.sring-inner{width:100%;height:100%;border-radius:50%;border:2.5px solid var(--surface);overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600;color:#fff;}
-.sring-inner.has-color{color:#fff;}
-.sring-name{font-size:11px;color:var(--text2);max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;}
-.sring-add{background:none;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;border:none;color:var(--text2);flex-shrink:0;}
-.sring-add-circle{width:58px;height:58px;border-radius:50%;border:1.5px dashed var(--text2);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--blue);}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:max(100px,calc(70px + var(--safe-bottom)));left:50%;transform:translateX(-50%);background:rgba(30,40,55,.95);border:1px solid var(--border);backdrop-filter:blur(20px);padding:11px 22px;border-radius:22px;font-weight:600;z-index:300;animation:slideUp .28s ease, fadeOut .3s ease 1.7s forwards;font-size:14px;white-space:nowrap;color:#fff;pointer-events:none;}
-.theme-light .toast,.theme-classic .toast,.theme-daylight .toast{background:rgba(50,50,50,.92);color:#fff;}
-
-/* ── USERNAME SETUP ── */
-.username-edit-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.username-prefix{color:var(--text2);font-size:16px;}
-
-/* ── MISC ── */
-.divider{height:1px;background:var(--divider);margin:0;}
-.back-btn{background:none;border:none;color:var(--blue);font-size:28px;cursor:pointer;line-height:1;padding:4px;display:flex;align-items:center;}
-.tag-new{background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:auto;}
-.tag-beta{background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:auto;}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;}
-.sub-info{color:var(--text2);font-size:13px;margin-left:auto;}
-.noti-badge-sm{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:8px;margin-left:auto;}
-
-/* Premium banner */
-.premium-banner{margin:8px 12px;background:linear-gradient(135deg,#5288c1,#9c6fe4);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:opacity var(--tr);}
-.premium-banner:active{opacity:.88;}
-.premium-icon{font-size:36px;}
-.premium-text h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:2px;}
-.premium-text p{font-size:13px;color:rgba(255,255,255,.8);}
-
-/* Notification row */
-.notif-preview{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface2);border-radius:12px;margin:8px 12px;border:1px solid var(--border);}
-</style>
+        /* Profile tabs */
+        .profile-tabs {
+            display: flex;
+            border-bottom: 0.5px solid var(--border);
+            background: var(--surface);
+        }
+        .profile-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text2);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--tr);
+        }
+        .profile-tab.on {
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+    </style>
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
-<div class="app" id="loginApp">
-  <div class="login" id="loginScreen">
-    <div class="login-logo">✈️</div>
-    <h1>Telegram</h1>
-    <p>Введите ваш номер телефона</p>
-    <input type="tel" class="login-input" id="phoneIn" placeholder="+7 (999) 123-45-67" value="+7 (999) 123-45-67">
-    <button class="btn-main" onclick="doLogin()">Продолжить →</button>
-    <div style="color:var(--text2);font-size:12px;margin-top:16px;max-width:260px;line-height:1.5;text-align:center;">Войдя в систему, вы соглашаетесь с условиями использования Telegram.</div>
-  </div>
-</div>
-
-<!-- ── MAIN APP ── -->
-<div class="app" id="mainApp" style="display:none;">
-
-  <!-- CHATS PAGE -->
-  <div class="page on" id="pChats">
-    <div class="header">
-      <span class="header-title">Telegram</span>
-      <button class="hbtn hbtn-icon" onclick="showToast('Поиск')">🔍</button>
-      <button class="hbtn hbtn-icon" onclick="showToast('Написать')">✏️</button>
-    </div>
-    <div class="folder-bar">
-      <div class="folder-tab on">Все чаты</div>
-      <div class="folder-tab">Личные</div>
-      <div class="folder-tab">Группы</div>
-      <div class="folder-tab">Каналы</div>
-      <div class="folder-tab">Работа</div>
-    </div>
-    <div class="scroll" id="chatList">
-      <!-- stories -->
-      <div class="story-rings" id="storyRings">
-        <button class="sring-add" onclick="openAddStoryModal()">
-          <div class="sring-add-circle">+</div>
-          <span class="sring-name">Моя</span>
-        </button>
-      </div>
-      <!-- chats -->
-      <div class="citem" style="background:var(--surface2);opacity:.7;">
-        <div class="ava o ava-emoji">⭐</div>
-        <div class="cinfo">
-          <div class="cname">Избранное <span class="pinicon">📌</span></div>
-          <div class="clast" id="savedLast">Сохраняйте важные сообщения</div>
+    <!-- LOGIN -->
+    <div class="app" id="loginApp">
+        <div class="login" id="loginScreen">
+            <div class="login-icon">✈️</div>
+            <h1>Telegram</h1>
+            <p class="login-sub">Введите ваш номер телефона</p>
+            <input type="tel" class="login-input" id="phoneIn" placeholder="+7 (999) 123-45-67" value="+7 (999) 123-45-67">
+            <button class="btn btn-primary" style="max-width:300px;margin-top:16px;" onclick="doLogin()">Продолжить →</button>
         </div>
-        <div class="cmeta"><span class="ctime" id="savedT"></span></div>
-      </div>
-      <div id="dynamicChats"></div>
     </div>
-  </div>
 
-  <!-- CALLS PAGE -->
-  <div class="page" id="pCalls">
-    <div class="header"><span class="header-title">Звонки</span><button class="hbtn hbtn-icon">➕</button></div>
-    <div class="scroll">
-      <div class="section-label">Недавние</div>
-      <div class="citem" onclick="showToast('Видеозвонок: Алексей')">
-        <div class="ava b">А</div>
-        <div class="cinfo"><div class="cname">Алексей</div><div class="clast">📹 Видеозвонок · Входящий · 5 мин</div></div>
-        <div class="cmeta"><span class="ctime">10:32</span><span style="font-size:20px;cursor:pointer;" onclick="showToast('Звоним...')">📞</span></div>
-      </div>
-      <div class="citem" onclick="showToast('Звонок: Мария')">
-        <div class="ava g">М</div>
-        <div class="cinfo"><div class="cname">Мария</div><div class="clast" style="color:var(--red)">📞 Исходящий · 2 мин</div></div>
-        <div class="cmeta"><span class="ctime">вчера</span><span style="font-size:20px;cursor:pointer;">📞</span></div>
-      </div>
-      <div class="citem" onclick="showToast('Пропущенный: Елена')">
-        <div class="ava r">Е</div>
-        <div class="cinfo"><div class="cname">Елена</div><div class="clast" style="color:var(--red)">📞 Пропущенный</div></div>
-        <div class="cmeta"><span class="ctime">пн</span><span class="cbadge">1</span></div>
-      </div>
-    </div>
-  </div>
+    <!-- MAIN APP -->
+    <div class="app" id="mainApp" style="display:none;">
 
-  <!-- CONTACTS PAGE -->
-  <div class="page" id="pContacts">
-    <div class="header"><span class="header-title">Контакты</span><button class="hbtn">+ Добавить</button></div>
-    <div class="searchbar" onclick="showToast('Поиск контактов')">🔍 Поиск</div>
-    <div class="scroll">
-      <div class="section-label">Мои контакты</div>
-      <div class="citem" onclick="openChat('Алексей','А','b')"><div class="ava b">А<div class="online"></div></div><div class="cinfo"><div class="cname">Алексей <span class="verified">✓</span></div><div class="clast">@alex_tg · онлайн</div></div></div>
-      <div class="citem" onclick="openChat('Мария','М','g')"><div class="ava g">М</div><div class="cinfo"><div class="cname">Мария</div><div class="clast">@maria_star · была недавно</div></div></div>
-      <div class="citem" onclick="openChat('Елена','Е','r')"><div class="ava r">Е</div><div class="cinfo"><div class="cname">Елена</div><div class="clast">@elena_v · была вчера</div></div></div>
-      <div class="citem" onclick="openChat('Команда','К','p')"><div class="ava p">К</div><div class="cinfo"><div class="cname">Команда</div><div class="clast">@team_group · группа</div></div></div>
-      <div class="citem" onclick="openChat('Дмитрий','Д','t')"><div class="ava t">Д</div><div class="cinfo"><div class="cname">Дмитрий</div><div class="clast">@dmitry_k · был давно</div></div></div>
-    </div>
-  </div>
-
-  <!-- SETTINGS PAGE -->
-  <div class="page" id="pSettings">
-    <div class="header"><span class="header-title">Настройки</span><button class="hbtn hbtn-icon" onclick="showToast('Редактировать')">✏️</button></div>
-    <div class="scroll">
-      <!-- Profile card -->
-      <div class="sblock" style="margin-bottom:0;">
-        <div class="sitem" onclick="openProfilePage()">
-          <div class="ava b" style="width:60px;height:60px;font-size:26px;font-weight:700;" id="setAva">М</div>
-          <div style="flex:1;">
-            <div style="font-size:18px;font-weight:700;" id="setName">Макар</div>
-            <div style="font-size:14px;color:var(--text2);" id="setPhone">+7 (999) 123-45-67</div>
-            <div style="font-size:13px;color:var(--blue);" id="setUsername">@wopst</div>
-          </div>
-          <span class="sarrow">›</span>
+        <!-- CHATS PAGE -->
+        <div class="page on" id="pChats">
+            <div class="header">
+                <span class="header-title">Чаты</span>
+                <button class="hbtn" onclick="showToast('Поиск')">🔍</button>
+                <button class="hbtn" onclick="showToast('Новое сообщение')">✏️</button>
+            </div>
+            <div class="searchbar" onclick="showToast('Поиск по чатам')">🔍 Поиск</div>
+            <div class="scroll" id="chatList">
+                <div class="citem" style="background:var(--surface);" onclick="openChat('saved')">
+                    <div class="ava orange">⭐</div>
+                    <div class="cinfo">
+                        <div class="cname">Избранное <span style="color:var(--text2);font-size:12px;">📌</span></div>
+                        <div class="clast" id="savedLast">Сохраняйте важные сообщения</div>
+                    </div>
+                    <div class="cmeta"><span class="ctime" id="savedT"></span></div>
+                </div>
+                <div id="dynamicChats"></div>
+            </div>
         </div>
-      </div>
 
-      <!-- Premium banner -->
-      <div class="premium-banner" onclick="showToast('Telegram Premium')">
-        <div class="premium-icon">⭐</div>
-        <div class="premium-text">
-          <h3>Telegram Premium</h3>
-          <p>Безлимитные файлы, реакции, стикеры</p>
+        <!-- CALLS PAGE -->
+        <div class="page" id="pCalls">
+            <div class="header"><span class="header-title">Звонки</span><button class="hbtn" onclick="showToast('Новый звонок')">➕</button></div>
+            <div class="scroll">
+                <div class="section-label">Недавние</div>
+                <div class="citem" onclick="showToast('Звоним Алексею...')">
+                    <div class="ava blue">А</div>
+                    <div class="cinfo"><div class="cname">Алексей</div><div class="clast" style="color:var(--green);">📹 Видеозвонок · 5 мин</div></div>
+                    <div class="cmeta"><span class="ctime">10:32</span><span style="cursor:pointer;font-size:20px;">📞</span></div>
+                </div>
+                <div class="citem" onclick="showToast('Звоним Марии...')">
+                    <div class="ava green">М</div>
+                    <div class="cinfo"><div class="cname">Мария</div><div class="clast" style="color:var(--red);">📞 Исходящий · 2 мин</div></div>
+                    <div class="cmeta"><span class="ctime">вчера</span></div>
+                </div>
+                <div class="citem" onclick="showToast('Пропущенный от Елены')">
+                    <div class="ava red">Е</div>
+                    <div class="cinfo"><div class="cname">Елена</div><div class="clast" style="color:var(--red);">📞 Пропущенный</div></div>
+                    <div class="cmeta"><span class="ctime">пн</span><span class="cbadge">1</span></div>
+                </div>
+            </div>
         </div>
-        <span style="color:#fff;font-size:20px;margin-left:auto;">›</span>
-      </div>
 
-      <!-- Main settings -->
-      <div class="sblock">
-        <div class="sitem" onclick="showToast('Уведомления')">
-          <div class="sicon red">🔔</div><span class="sname">Уведомления и звуки</span><span class="sarrow">›</span>
+        <!-- CONTACTS PAGE -->
+        <div class="page" id="pContacts">
+            <div class="header"><span class="header-title">Контакты</span><button class="hbtn" onclick="showToast('Добавить контакт')">+</button></div>
+            <div class="searchbar" onclick="showToast('Поиск контактов')">🔍 Поиск</div>
+            <div class="scroll">
+                <div class="section-label">Мои контакты</div>
+                <div class="citem" onclick="openChat(0)"><div class="ava blue">А<div class="online"></div></div><div class="cinfo"><div class="cname">Алексей <span class="verified">✓</span></div><div class="clast">@alex_tg · онлайн</div></div></div>
+                <div class="citem" onclick="openChat(1)"><div class="ava green">М</div><div class="cinfo"><div class="cname">Мария</div><div class="clast">@maria_star · была недавно</div></div></div>
+                <div class="citem" onclick="openChat(3)"><div class="ava red">Е</div><div class="cinfo"><div class="cname">Елена</div><div class="clast">@elena_v · была вчера</div></div></div>
+                <div class="citem" onclick="openChat(2)"><div class="ava purple">К</div><div class="cinfo"><div class="cname">Команда</div><div class="clast">@team_group · группа</div></div></div>
+                <div class="citem" onclick="openChat(4)"><div class="ava teal">Д</div><div class="cinfo"><div class="cname">Дмитрий</div><div class="clast">@dmitry_k · был давно</div></div></div>
+            </div>
         </div>
-        <div class="sitem" onclick="showPrivacy()">
-          <div class="sicon blue">🔒</div><span class="sname">Конфиденциальность</span><span class="sarrow">›</span>
+
+        <!-- SETTINGS PAGE -->
+        <div class="page" id="pSettings">
+            <div class="header"><span class="header-title">Настройки</span><button class="hbtn" onclick="showEditProfile()">Изм.</button></div>
+            <div class="scroll">
+                <div class="sblock" style="margin-bottom:0;">
+                    <div class="sitem" onclick="openProfilePage()">
+                        <div class="ava blue" style="width:60px;height:60px;font-size:26px;font-weight:700;" id="setAva">М</div>
+                        <div style="flex:1;">
+                            <div style="font-size:18px;font-weight:700;" id="setName">Макар</div>
+                            <div style="font-size:14px;color:var(--text2);" id="setPhone">+7 (999) 123-45-67</div>
+                            <div style="font-size:13px;color:var(--blue);" id="setUsername">@wopst</div>
+                        </div>
+                        <span class="sarrow">›</span>
+                    </div>
+                </div>
+
+                <div style="margin:8px 12px;background:linear-gradient(135deg,#007aff,#5856d6);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showToast('Telegram Premium')">
+                    <span style="font-size:32px;">⭐</span>
+                    <div>
+                        <div style="font-weight:700;color:#fff;">Telegram Premium</div>
+                        <div style="font-size:12px;color:rgba(255,255,255,.8);">Безлимитные файлы, реакции</div>
+                    </div>
+                    <span style="color:#fff;font-size:20px;margin-left:auto;">›</span>
+                </div>
+
+                <div class="sblock">
+                    <div class="sitem" onclick="showNotifications()"><span class="sicon">🔔</span> Уведомления и звуки<span class="sarrow">›</span></div>
+                    <div class="sitem" onclick="showPrivacy()"><span class="sicon">🔒</span> Конфиденциальность<span class="sarrow">›</span></div>
+                    <div class="sitem" onclick="showData()"><span class="sicon">💾</span> Данные и память<span class="sarrow">›</span></div>
+                    <div class="sitem" onclick="showAppearance()"><span class="sicon">🎨</span> Оформление<span class="sval" id="themeLabel">Тёмная</span></div>
+                    <div class="sitem" onclick="showLanguage()"><span class="sicon">🌐</span> Язык<span class="sval">Русский</span></div>
+                </div>
+
+                <div class="sblock">
+                    <div class="sitem" onclick="openProfilePage()"><span class="sicon">⭐</span> Избранное<span class="sarrow">›</span></div>
+                    <div class="sitem" onclick="openGiftsStore()"><span class="sicon">🎁</span> Подарки<span class="tag-new">NEW</span></div>
+                    <div class="sitem" onclick="showStars()"><span class="sicon">🌟</span> Звёзды Telegram<span class="sval" id="starsMenuVal">50 ★</span></div>
+                    <div class="sitem" onclick="showDevices()"><span class="sicon">📱</span> Устройства<span class="sarrow">›</span></div>
+                    <div class="sitem" onclick="showToast('Стикеры')"><span class="sicon">😀</span> Стикеры и эмодзи<span class="sarrow">›</span></div>
+                </div>
+
+                <div class="sblock">
+                    <div class="sitem" onclick="showToast('Задать вопрос')"><span class="sicon">❓</span> Вопросы и ответы<span class="sarrow">›</span></div>
+                    <div class="sitem" onclick="showToast('О приложении')"><span class="sicon">ℹ️</span> О приложении<span class="sarrow">›</span></div>
+                </div>
+
+                <div style="text-align:center;color:var(--text2);font-size:13px;padding:20px 16px 30px;">
+                    Telegram Clone v3.0<br><span style="font-size:11px;">Сделано с ❤️</span>
+                </div>
+            </div>
         </div>
-        <div class="sitem" onclick="showDataStorage()">
-          <div class="sicon green">💾</div><span class="sname">Данные и память</span><span class="sarrow">›</span>
+
+        <!-- PROFILE PAGE -->
+        <div class="page" id="pProfile">
+            <div class="header">
+                <button class="back-btn" onclick="goBack('pSettings')">‹</button>
+                <span class="header-title">Профиль</span>
+                <button class="hbtn" onclick="showEditProfile()">Изм.</button>
+            </div>
+            <div class="scroll">
+                <div class="profile-header">
+                    <div class="profile-ava" id="profAva" onclick="showToast('Изменить фото')">М<div class="camera">📷</div></div>
+                    <div class="pname" id="profName">Макар</div>
+                    <div class="pphone" id="profPhone">+7 (999) 123-45-67</div>
+                    <div class="puser" id="profUsername">@wopst</div>
+                    <div style="color:var(--text2);font-size:13px;margin-top:4px;" id="profBio">Разработчик Telegram ботов 🤖</div>
+                </div>
+
+                <div style="display:flex;gap:8px;padding:12px 16px;">
+                    <button class="btn btn-primary" style="flex:1;" onclick="showToast('Написать себе')">✉️ Написать</button>
+                    <button class="btn btn-ghost" style="flex:1;" onclick="showToast('Поделиться')">📤 Поделиться</button>
+                </div>
+
+                <div class="profile-tabs">
+                    <div class="profile-tab on" id="ptab-gifts" onclick="switchPTab('gifts')">🎁 Подарки</div>
+                    <div class="profile-tab" id="ptab-stories" onclick="switchPTab('stories')">📖 Истории</div>
+                </div>
+
+                <div id="ptab-content-gifts">
+                    <div class="gift-owned-grid" id="ownedGiftsGrid"></div>
+                    <div id="noGifts" style="text-align:center;color:var(--text2);padding:32px;font-size:14px;">У вас пока нет подарков</div>
+                </div>
+                <div id="ptab-content-stories" style="display:none;">
+                    <div style="text-align:center;padding:32px;color:var(--text2);" onclick="showToast('Добавить историю')">+ Добавить историю</div>
+                </div>
+            </div>
         </div>
-        <div class="sitem" onclick="showAppearance()">
-          <div class="sicon purple">🎨</div><span class="sname">Оформление</span><span class="sval" id="themeLabel">Тёмная</span>
+
+        <!-- CHAT PAGE -->
+        <div class="page" id="pChat">
+            <div class="chat-header">
+                <button class="back-btn" onclick="closeChat()">‹</button>
+                <div class="chat-ava-sm blue" id="chatAvaH">А</div>
+                <div style="flex:1;">
+                    <div class="chat-name-h" id="chatNameH">Алексей</div>
+                    <div class="chat-status-h" id="chatStatusH">онлайн</div>
+                </div>
+                <button class="cico" onclick="showToast('Поиск')">🔍</button>
+                <button class="cico" onclick="sendGiftInChat()">🎁</button>
+                <button class="cico" onclick="showToast('Звонок')">📞</button>
+            </div>
+            <div class="messages" id="chatMsgs"></div>
+            <div class="cinput-bar">
+                <button class="cico" onclick="showToast('Прикрепить')">📎</button>
+                <input class="cinput" id="chatInput" placeholder="Сообщение...">
+                <button class="cico" onclick="showToast('Голосовое')">🎤</button>
+                <button class="csend" onclick="sendMsg()">↑</button>
+            </div>
         </div>
-        <div class="sitem" onclick="showLanguage()">
-          <div class="sicon teal">🌐</div><span class="sname">Язык</span><span class="sval">Русский</span>
+
+        <!-- TAB BAR -->
+        <div class="tabbar" id="mainTabbar">
+            <button class="tab on" onclick="switchTab('pChats',this)"><span class="tab-icon">💬</span>Чаты<span class="tab-badge">10</span></button>
+            <button class="tab" onclick="switchTab('pCalls',this)"><span class="tab-icon">📞</span>Звонки</button>
+            <button class="tab" onclick="switchTab('pContacts',this)"><span class="tab-icon">👥</span>Контакты</button>
+            <button class="tab" onclick="switchTab('pSettings',this)"><span class="tab-icon">⚙️</span>Настройки</button>
         </div>
-      </div>
+    </div>
 
-      <div class="sblock">
-        <div class="sitem" onclick="openProfilePage()">
-          <div class="sicon o" style="background:var(--orange);">⭐</div><span class="sname">Избранное</span><span class="sarrow">›</span>
+    <!-- MODALS -->
+
+    <!-- Privacy -->
+    <div class="overlay" id="ovPrivacy">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">🔒 Конфиденциальность</div>
+            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
+                <div class="sitem" onclick="showToast('Кто видит номер: Мои контакты')"><span>Номер телефона</span><span class="sval">Мои контакты</span></div>
+                <div class="sitem" onclick="showToast('Активность: Все')"><span>Последняя активность</span><span class="sval">Все</span></div>
+                <div class="sitem" onclick="showPassModal()"><span>🔑 Пароль</span><span class="sarrow">›</span></div>
+                <div class="sitem" onclick="showBlockedModal()"><span>🚫 Чёрный список</span><span class="sarrow">›</span></div>
+                <div class="sitem"><span>Двухэтапная проверка</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
+            </div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovPrivacy')">Закрыть</button></div>
         </div>
-        <div class="sitem" onclick="openGiftsStore()">
-          <div class="sicon pink">🎁</div><span class="sname">Подарки</span><span class="tag-new">NEW</span>
+    </div>
+
+    <!-- Password -->
+    <div class="overlay" id="ovPass">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">🔑 Пароль входа</div>
+            <div class="mpad">
+                <input type="password" class="minput" placeholder="Новый пароль" id="newPassIn" style="margin-bottom:8px;">
+                <input type="password" class="minput" placeholder="Повторите пароль" id="confPassIn">
+                <button class="btn btn-primary" style="margin-top:12px;" onclick="savePass()">Сохранить</button>
+                <button class="btn btn-ghost" onclick="closeOv('ovPass')">Отмена</button>
+            </div>
         </div>
-        <div class="sitem" onclick="showStars()">
-          <div class="sicon yellow">⭐</div><span class="sname">Звёзды Telegram</span><span class="sval" id="starsMenuVal">50 ★</span>
+    </div>
+
+    <!-- Blocked -->
+    <div class="overlay" id="ovBlocked">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">🚫 Чёрный список</div>
+            <div id="blockedListEl" style="padding:0 16px;"></div>
+            <div class="mpad" style="margin-top:10px;">
+                <button class="btn btn-ghost" onclick="addBlocked()">+ Добавить</button>
+                <button class="btn btn-ghost" onclick="closeOv('ovBlocked')">Закрыть</button>
+            </div>
         </div>
-        <div class="sitem" onclick="showToast('Telegram Business')">
-          <div class="sicon blue">💼</div><span class="sname">Telegram Business</span><span class="tag-beta">BETA</span>
+    </div>
+
+    <!-- Data -->
+    <div class="overlay" id="ovData">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">💾 Данные и память</div>
+            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
+                <div class="sitem"><span>Использовано</span><span class="sval">24.6 МБ</span></div>
+                <div class="sitem"><span>Кэш</span><span class="sval">8.2 МБ</span></div>
+                <div class="sitem"><span>Автозагрузка фото</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
+            </div>
+            <div class="mpad">
+                <button class="btn btn-primary" onclick="clearCache()">Очистить кэш</button>
+                <button class="btn btn-ghost" onclick="closeOv('ovData')">Закрыть</button>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <div class="sblock">
-        <div class="sitem" onclick="showConnectedApps()">
-          <div class="sicon indigo">🔗</div><span class="sname">Устройства</span><span class="sarrow">›</span>
+    <!-- Appearance -->
+    <div class="overlay" id="ovAppearance">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">🎨 Оформление</div>
+            <div class="mpad">
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;">
+                    <div onclick="setTheme('dark')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid var(--blue);" id="thcard-dark"><div style="height:40px;background:#000;"></div><div style="background:var(--surface);padding:4px;text-align:center;font-size:12px;font-weight:600;">🌙 Тёмная</div></div>
+                    <div onclick="setTheme('light')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid transparent;" id="thcard-light"><div style="height:40px;background:#fff;"></div><div style="background:#f0f0f0;padding:4px;text-align:center;font-size:12px;font-weight:600;color:#000;">☀️ Светлая</div></div>
+                </div>
+                <button class="btn btn-ghost" onclick="closeOv('ovAppearance')">Закрыть</button>
+            </div>
         </div>
-        <div class="sitem" onclick="showToast('Чаты папки')">
-          <div class="sicon teal">📁</div><span class="sname">Папки чатов</span><span class="sarrow">›</span>
+    </div>
+
+    <!-- Language -->
+    <div class="overlay" id="ovLang">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">🌐 Язык</div>
+            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
+                <div class="sitem" onclick="selectLang('ru')"><span>🇷🇺 Русский</span><span style="color:var(--blue);margin-left:auto;" id="lang-ru">✓</span></div>
+                <div class="sitem" onclick="selectLang('en')"><span>🇺🇸 English</span><span style="color:var(--blue);margin-left:auto;display:none;" id="lang-en">✓</span></div>
+            </div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovLang')">Закрыть</button></div>
         </div>
-        <div class="sitem" onclick="showToast('Быстрые реакции')">
-          <div class="sicon orange" style="background:var(--orange);">⚡</div><span class="sname">Быстрые реакции</span><span class="sarrow">›</span>
+    </div>
+
+    <!-- Devices -->
+    <div class="overlay" id="ovDevices">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">📱 Устройства</div>
+            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
+                <div class="sitem"><span>📱 iPhone (текущее)</span><span class="sval" style="color:var(--green);">активно</span></div>
+                <div class="sitem"><span>💻 MacBook Pro</span><span class="sval">2 дня назад</span></div>
+            </div>
+            <div class="mpad">
+                <button class="btn btn-danger" onclick="showToast('Все сессии завершены')">Завершить все сессии</button>
+                <button class="btn btn-ghost" onclick="closeOv('ovDevices')">Закрыть</button>
+            </div>
         </div>
-        <div class="sitem" onclick="showToast('Стикеры и эмодзи')">
-          <div class="sicon green">😀</div><span class="sname">Стикеры и эмодзи</span><span class="sarrow">›</span>
+    </div>
+
+    <!-- Notifications -->
+    <div class="overlay" id="ovNotif">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">🔔 Уведомления и звуки</div>
+            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
+                <div class="sitem"><span>Уведомления</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
+                <div class="sitem"><span>Звук</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
+                <div class="sitem"><span>Вибрация</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
+                <div class="sitem"><span>Предпросмотр</span><span class="sval">Всегда</span></div>
+            </div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovNotif')">Закрыть</button></div>
         </div>
-      </div>
+    </div>
 
-      <div class="sblock">
-        <div class="sitem" onclick="showToast('Задать вопрос')">
-          <div class="sicon blue">❓</div><span class="sname">Вопросы и ответы</span><span class="sarrow">›</span>
+    <!-- Gifts Store -->
+    <div class="overlay" id="ovGifts">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">🎁 Магазин подарков</div>
+            <div style="text-align:center;color:var(--text2);font-size:14px;margin:-8px 0 8px;">Баланс: <strong id="giftsBal">50 ★</strong> | 1⭐ = 1₽</div>
+            <div class="mpad">
+                <div style="display:flex;gap:6px;margin-bottom:10px;">
+                    <button class="btn btn-primary" style="flex:1;font-size:13px;" onclick="filterGifts('all')" id="giftFilterAll">Все</button>
+                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('nft')" id="giftFilterNft">NFT ✨</button>
+                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('popular')" id="giftFilterPop">TOP</button>
+                </div>
+                <div class="gift-grid" id="giftsGrid"></div>
+            </div>
+            <div class="mpad">
+                <button class="btn btn-primary" onclick="showStars()">⭐ Пополнить звёзды</button>
+                <button class="btn btn-ghost" onclick="closeOv('ovGifts')">Закрыть</button>
+            </div>
         </div>
-        <div class="sitem" onclick="showToast('Сообщить о баге')">
-          <div class="sicon gray">🐛</div><span class="sname">Сообщить об ошибке</span><span class="sarrow">›</span>
+    </div>
+
+    <!-- Stars -->
+    <div class="overlay" id="ovStars">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="stars-big">
+                <div style="font-size:54px;">⭐</div>
+                <div class="snum" id="starsNum">50</div>
+                <div style="color:var(--text2);">Звёзд Telegram</div>
+            </div>
+            <div style="text-align:center;color:var(--text2);font-size:13px;margin-bottom:12px;">1 звезда ≈ 1 ₽</div>
+            <div class="mpad" id="starPkgs"></div>
+            <div style="color:var(--text2);font-size:13px;padding:12px 16px 4px;">История:</div>
+            <div id="starsHist" style="max-height:130px;overflow-y:auto;padding:0 16px;"></div>
+            <div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="closeOv('ovStars')">Закрыть</button></div>
         </div>
-        <div class="sitem" onclick="showToast('@Telegram')">
-          <div class="sicon blue">📢</div><span class="sname">Telegram для iOS</span><span class="sarrow">›</span>
+    </div>
+
+    <!-- Send Gift in Chat -->
+    <div class="overlay" id="ovSendGift">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle" id="sendGiftTitle">🎁 Отправить подарок</div>
+            <div class="mpad"><div class="gift-grid" id="sendGiftGrid"></div></div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovSendGift')">Отмена</button></div>
         </div>
-      </div>
-
-      <div style="text-align:center;color:var(--text2);font-size:13px;padding:20px 16px 10px;">
-        Telegram Clone v2.1<br>
-        <span style="font-size:11px;">Для Макара · с ❤️</span>
-      </div>
     </div>
-  </div>
 
-  <!-- PROFILE PAGE (full) -->
-  <div class="page" id="pProfile">
-    <div class="header">
-      <button class="back-btn" onclick="goBack('pSettings')">‹</button>
-      <span class="header-title">Профиль</span>
-      <button class="hbtn" onclick="showEditProfile()">Изм.</button>
-    </div>
-    <div class="scroll">
-      <!-- Cover / avatar -->
-      <div style="position:relative;background:linear-gradient(135deg,#1a3a5c,#2b5278);height:150px;overflow:hidden;" id="profileCover">
-        <div id="coverImg" style="width:100%;height:100%;object-fit:cover;display:none;"></div>
-      </div>
-      <div style="position:relative;margin-top:-44px;padding:0 16px 0;">
-        <div class="profile-ava-big" id="profAvaBig" onclick="changeAvatar()">М
-          <div style="position:absolute;bottom:0;right:0;width:26px;height:26px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;border:2.5px solid var(--surface);">📷</div>
+    <!-- Edit Profile -->
+    <div class="overlay" id="ovEditProfile">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle">Редактировать профиль</div>
+            <div class="mpad">
+                <input class="minput" id="editName" placeholder="Имя" style="margin-bottom:8px;">
+                <input class="minput" id="editLastName" placeholder="Фамилия" style="margin-bottom:8px;">
+                <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
+                    <span style="color:var(--text2);">@</span>
+                    <input class="minput" id="editUsername" placeholder="username" style="flex:1;">
+                </div>
+                <input class="minput" id="editBio" placeholder="О себе" style="margin-bottom:8px;">
+                <button class="btn btn-primary" style="margin-top:8px;" onclick="saveProfile()">Сохранить</button>
+                <button class="btn btn-ghost" onclick="closeOv('ovEditProfile')">Отмена</button>
+            </div>
         </div>
-      </div>
-      <div class="profile-name-row">
-        <span class="profile-main-name" id="profName">Макар</span>
-        <span class="verified" style="width:20px;height:20px;font-size:12px;line-height:20px;">✓</span>
-      </div>
-      <div class="profile-info-row">
-        <span style="color:var(--text2);font-size:14px;" id="profStatus">в сети</span>
-        <span style="color:var(--blue);font-size:14px;margin-top:3px;" id="profUsername">@wopst</span>
-        <span style="color:var(--text2);font-size:13px;margin-top:4px;" id="profBio">Разработчик Telegram ботов 🤖</span>
-        <span style="color:var(--text2);font-size:13px;margin-top:2px;" id="profPhone">+7 (999) 123-45-67</span>
-      </div>
+    </div>
 
-      <!-- Action buttons -->
-      <div style="display:flex;gap:10px;padding:10px 16px 14px;">
-        <button style="flex:1;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;" onclick="showToast('Сообщение')">✉️ Написать</button>
-        <button style="flex:1;padding:10px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;" onclick="showToast('Звонок')">📞 Позвонить</button>
-        <button style="width:44px;height:44px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:18px;cursor:pointer;flex-shrink:0;" onclick="showToast('Ещё')">···</button>
-      </div>
-
-      <!-- Tabs -->
-      <div class="profile-tabs" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface);">
-        <div class="profile-tab on" id="ptab-gifts" onclick="switchPTab('gifts')">🎁 Подарки</div>
-        <div class="profile-tab" id="ptab-stories" onclick="switchPTab('stories')">📖 Истории</div>
-        <div class="profile-tab" id="ptab-media" onclick="switchPTab('media')">🖼 Медиа</div>
-      </div>
-
-      <!-- Gifts tab -->
-      <div id="ptab-content-gifts">
-        <div class="gift-owned-grid" id="ownedGiftsGrid"></div>
-        <div id="noGifts" style="text-align:center;color:var(--text2);padding:32px;font-size:14px;">У вас пока нет подарков.<br>Купите в магазине подарков!</div>
-      </div>
-
-      <!-- Stories tab -->
-      <div id="ptab-content-stories" style="display:none;">
-        <div class="story-grid" id="myStoriesGrid">
-          <div class="story-add-btn" onclick="openAddStoryModal()">
-            <span style="font-size:36px;color:var(--blue);">+</span>
-            <span style="font-size:13px;font-weight:600;">Добавить историю</span>
-          </div>
+    <!-- Gift Detail / Exchange / NFT -->
+    <div class="overlay" id="ovGiftDetail">
+        <div class="modal">
+            <div class="mhandle"></div>
+            <div class="mtitle" id="giftDetailTitle">🎁 Подарок</div>
+            <div style="text-align:center;padding:12px;" id="giftDetailInfo"></div>
+            <div class="mpad" id="giftDetailActions"></div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovGiftDetail')">Закрыть</button></div>
         </div>
-      </div>
-
-      <!-- Media tab -->
-      <div id="ptab-content-media" style="display:none;">
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding-top:2px;" id="mediaGrid"></div>
-        <div id="noMedia" style="text-align:center;color:var(--text2);padding:32px;font-size:14px;">Нет медиафайлов</div>
-      </div>
     </div>
-  </div>
-
-  <!-- CHAT PAGE -->
-  <div class="page" id="pChat">
-    <div class="chat-header">
-      <button class="back-btn" onclick="closeChat()">‹</button>
-      <div class="chat-ava-sm b" id="chatAvaH">А</div>
-      <div class="chat-info-h">
-        <div class="chat-name-h" id="chatNameH">Алексей</div>
-        <div class="chat-status-h" id="chatStatusH">онлайн</div>
-      </div>
-      <button class="cico-btn" onclick="showToast('Поиск в чате')">🔍</button>
-      <button class="cico-btn" onclick="sendGiftInChat()">🎁</button>
-      <button class="cico-btn" onclick="showToast('Звонок')">📞</button>
-    </div>
-    <div class="messages" id="chatMsgs"></div>
-    <div class="cinput-bar">
-      <button class="cico-btn" onclick="showToast('Прикрепить файл')">📎</button>
-      <textarea class="cinput" id="chatInput" placeholder="Сообщение..." rows="1" oninput="autoResize(this)"></textarea>
-      <button class="cico-btn" onclick="showToast('Голосовое')">🎤</button>
-      <button class="csend" id="sendBtn" onclick="sendMsg()">➤</button>
-    </div>
-  </div>
-
-  <!-- TAB BAR -->
-  <div class="tabbar" id="mainTabbar">
-    <button class="tab on" onclick="switchTab('pChats',this)">
-      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-      Чаты
-      <span class="tab-badge">10</span>
-    </button>
-    <button class="tab" onclick="switchTab('pCalls',this)">
-      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.67 19.79 19.79 0 01.01 4.07 2 2 0 012 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81A2 2 0 017.28 8L6.09 9.2a16 16 0 006.72 6.72l1.2-1.19a2 2 0 012.13-.47 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-      Звонки
-    </button>
-    <button class="tab" onclick="switchTab('pContacts',this)">
-      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      Контакты
-    </button>
-    <button class="tab" onclick="switchTab('pSettings',this)">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      Настройки
-    </button>
-  </div>
-</div>
-
-<!-- ── MODALS ── -->
-
-<!-- Privacy -->
-<div class="overlay" id="ovPrivacy">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">🔒 Конфиденциальность</div>
-    <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-      <div class="sitem" onclick="showToast('Номер телефона')"><span class="sname">Номер телефона</span><span class="sval">Мои контакты</span></div>
-      <div class="sitem" onclick="showToast('Последняя активность')"><span class="sname">Последняя активность</span><span class="sval">Все</span></div>
-      <div class="sitem" onclick="showToast('Фото профиля')"><span class="sname">Фото профиля</span><span class="sval">Все</span></div>
-      <div class="sitem" onclick="showToast('Переадресация')"><span class="sname">Переадресация сообщений</span><span class="sval">Все</span></div>
-      <div class="sitem" onclick="showToast('Звонки')"><span class="sname">Звонки</span><span class="sval">Мои контакты</span></div>
-      <div class="sitem" onclick="showToast('Группы')"><span class="sname">Группы и каналы</span><span class="sval">Все</span></div>
-      <div class="sitem" onclick="showPassModal()"><span class="sname">🔑 Пароль</span><span class="sarrow">›</span></div>
-      <div class="sitem" onclick="showBlockedModal()"><span class="sname">🚫 Чёрный список</span><span class="sarrow">›</span></div>
-      <div class="sitem" onclick="showToast('2FA включена')"><span class="sname">Двухэтапная проверка</span><div class="stoggle on" onclick="toggle(this,event)"></div></div>
-    </div>
-    <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovPrivacy')">Закрыть</button></div>
-  </div>
-</div>
-
-<!-- Password -->
-<div class="overlay" id="ovPass">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">🔑 Пароль входа</div>
-    <div class="mpad">
-      <input type="password" class="minput" placeholder="Текущий пароль" style="margin-bottom:8px;" id="curPassIn">
-      <input type="password" class="minput" placeholder="Новый пароль" style="margin-bottom:8px;" id="newPassIn">
-      <input type="password" class="minput" placeholder="Повторите пароль" id="confPassIn">
-      <button class="btn btn-blue" style="margin-top:12px;" onclick="savePass()">Сохранить</button>
-      <button class="btn btn-ghost" onclick="closeOv('ovPass')">Отмена</button>
-    </div>
-  </div>
-</div>
-
-<!-- Blocked -->
-<div class="overlay" id="ovBlocked">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">🚫 Чёрный список</div>
-    <div id="blockedListEl" style="padding:0 16px;"></div>
-    <div class="mpad" style="margin-top:10px;">
-      <button class="btn btn-ghost" onclick="addBlocked()">+ Добавить</button>
-      <button class="btn btn-ghost" onclick="closeOv('ovBlocked')">Закрыть</button>
-    </div>
-  </div>
-</div>
-
-<!-- Data & Storage -->
-<div class="overlay" id="ovData">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">💾 Данные и память</div>
-    <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-      <div class="sitem"><span class="sname">Использовано</span><span class="sval">24.6 МБ</span></div>
-      <div class="sitem"><span class="sname">Кэш</span><span class="sval">8.2 МБ</span></div>
-      <div class="sitem"><span class="sname">Музыка</span><span class="sval">0 МБ</span></div>
-      <div class="sitem"><span class="sname">Видео</span><span class="sval">12.1 МБ</span></div>
-      <div class="sitem"><span class="sname">Автозагрузка фото</span><div class="stoggle on" onclick="toggle(this,event)"></div></div>
-      <div class="sitem"><span class="sname">Автозагрузка видео</span><div class="stoggle" onclick="toggle(this,event)"></div></div>
-      <div class="sitem"><span class="sname">Сохранять в галерею</span><div class="stoggle on" onclick="toggle(this,event)"></div></div>
-    </div>
-    <div class="mpad">
-      <button class="btn btn-blue" onclick="clearCache()">Очистить кэш</button>
-      <button class="btn btn-ghost" onclick="closeOv('ovData')">Закрыть</button>
-    </div>
-  </div>
-</div>
-
-<!-- Appearance -->
-<div class="overlay" id="ovAppearance">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">🎨 Оформление</div>
-    <div style="padding:0 16px;">
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;" id="themeGrid"></div>
-      <div class="sblock" style="border-radius:12px;overflow:hidden;margin:0 0 12px;">
-        <div class="sitem"><span class="sname">Размер текста</span><span class="sval">16 pt</span></div>
-        <div class="sitem"><span class="sname">Крупные эмодзи</span><div class="stoggle on" onclick="toggle(this,event)"></div></div>
-        <div class="sitem"><span class="sname">Анимации</span><div class="stoggle on" onclick="toggle(this,event)"></div></div>
-        <div class="sitem"><span class="sname">Эффект параллакса</span><div class="stoggle" onclick="toggle(this,event)"></div></div>
-      </div>
-      <button class="btn btn-ghost" onclick="closeOv('ovAppearance')">Закрыть</button>
-    </div>
-  </div>
-</div>
-
-<!-- Language -->
-<div class="overlay" id="ovLang">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">🌐 Язык интерфейса</div>
-    <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-      <div class="sitem" onclick="showToast('Русский ✓')"><span class="sname">🇷🇺 Русский</span><span style="color:var(--blue);margin-left:auto;">✓</span></div>
-      <div class="sitem" onclick="showToast('English selected')"><span class="sname">🇺🇸 English</span></div>
-      <div class="sitem" onclick="showToast('Deutsch selected')"><span class="sname">🇩🇪 Deutsch</span></div>
-      <div class="sitem" onclick="showToast('Français selected')"><span class="sname">🇫🇷 Français</span></div>
-      <div class="sitem" onclick="showToast('Español selected')"><span class="sname">🇪🇸 Español</span></div>
-    </div>
-    <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovLang')">Закрыть</button></div>
-  </div>
-</div>
-
-<!-- Connected Apps / Devices -->
-<div class="overlay" id="ovDevices">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">📱 Устройства</div>
-    <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-      <div class="sitem"><span class="sname">📱 iPhone 12 (текущее)</span><span class="sval" style="color:var(--green);">активно</span></div>
-      <div class="sitem" onclick="showToast('Завершить сессию?')"><span class="sname">💻 MacBook Pro</span><span class="sval">2 дня назад</span></div>
-      <div class="sitem" onclick="showToast('Завершить сессию?')"><span class="sname">🌐 Chrome · Windows</span><span class="sval">5 дней назад</span></div>
-    </div>
-    <div class="mpad">
-      <button class="btn btn-red" onclick="showToast('Все сессии завершены')">Завершить все другие сессии</button>
-      <button class="btn btn-ghost" onclick="closeOv('ovDevices')">Закрыть</button>
-    </div>
-  </div>
-</div>
-
-<!-- Gifts store -->
-<div class="overlay" id="ovGifts">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">🎁 Магазин подарков</div>
-    <div style="text-align:center;color:var(--text2);font-size:14px;margin:-8px 0 8px;">Баланс: <strong id="giftsBal">50 ★</strong></div>
-    <div class="mpad"><div class="gift-grid" id="giftsGrid"></div></div>
-    <div class="mpad">
-      <button class="btn btn-blue" onclick="showStars()">⭐ Пополнить звёзды</button>
-      <button class="btn btn-ghost" onclick="closeOv('ovGifts')">Закрыть</button>
-    </div>
-  </div>
-</div>
-
-<!-- Stars -->
-<div class="overlay" id="ovStars">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="stars-big mpad">
-      <div style="font-size:54px;">⭐</div>
-      <div class="snum" id="starsNum">50</div>
-      <div class="slabel">Звёзд Telegram</div>
-    </div>
-    <div style="text-align:center;color:var(--text2);font-size:13px;margin-bottom:12px;">1 звезда ≈ 1 ₽</div>
-    <div class="mpad" id="starPkgs"></div>
-    <div style="color:var(--text2);font-size:13px;padding:12px 16px 4px;">История:</div>
-    <div id="starsHist" style="max-height:130px;overflow-y:auto;padding:0 16px;"></div>
-    <div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="closeOv('ovStars')">Закрыть</button></div>
-  </div>
-</div>
-
-<!-- Send gift in chat -->
-<div class="overlay" id="ovSendGift">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle" id="sendGiftTitle">🎁 Отправить подарок</div>
-    <div class="mpad"><div class="gift-grid" id="sendGiftGrid"></div></div>
-    <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovSendGift')">Отмена</button></div>
-  </div>
-</div>
-
-<!-- Edit Profile -->
-<div class="overlay" id="ovEditProfile">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">Редактировать профиль</div>
-    <div class="mpad">
-      <input class="minput" id="editName" placeholder="Имя" style="margin-bottom:8px;">
-      <input class="minput" id="editLastName" placeholder="Фамилия" style="margin-bottom:8px;">
-      <div class="username-edit-row">
-        <span class="username-prefix">@</span>
-        <input class="minput" id="editUsername" placeholder="username" style="flex:1;">
-      </div>
-      <input class="minput" id="editBio" placeholder="О себе" style="margin-top:8px;margin-bottom:8px;">
-      <button class="btn btn-blue" style="margin-top:8px;" onclick="saveProfile()">Сохранить</button>
-      <button class="btn btn-ghost" onclick="closeOv('ovEditProfile')">Отмена</button>
-    </div>
-  </div>
-</div>
-
-<!-- Add Story -->
-<div class="overlay" id="ovAddStory">
-  <div class="modal">
-    <div class="mhandle"></div>
-    <div class="mtitle">📖 Добавить историю</div>
-    <div class="mpad">
-      <input type="file" id="storyFileIn" accept="image/*,video/*" style="display:none;" onchange="handleStoryFile(this)">
-      <button class="btn btn-blue" onclick="document.getElementById('storyFileIn').click()">📷 Выбрать фото / видео</button>
-      <div style="text-align:center;color:var(--text2);font-size:13px;margin:12px 0;">или введите текст</div>
-      <input class="minput" id="storyTextIn" placeholder="Текст истории..." style="margin-bottom:8px;">
-      <input class="minput" id="storyLabelIn" placeholder="Подпись..." style="margin-bottom:8px;">
-      <button class="btn btn-green" onclick="addStory()">Опубликовать историю</button>
-      <button class="btn btn-ghost" onclick="closeOv('ovAddStory')">Отмена</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ── STATE ──
-let S = {
-  phone: '+7 (999) 123-45-67',
-  name: 'Макар',
-  lastName: '',
-  username: 'wopst',
-  bio: 'Разработчик Telegram ботов 🤖',
-  stars: 50,
-  password: '',
-  blocked: ['spam_user','annoying_bot'],
-  starsHistory: [],
-  savedMsgs: [],
-  ownedGifts: [],
-  stories: [],
-  mediaSent: []
-};
-
-const CHATS = [
-  { name:'Алексей', a:'А', c:'b', last:'Привет! Как дела?', time:'10:32', badge:3, online:true },
-  { name:'Мария', a:'М', c:'g', last:'Отправила подарок 🎁', time:'9:15', badge:0, online:false },
-  { name:'Команда', a:'К', c:'p', last:'Иван: Отличная работа! 🔥', time:'пн', badge:7, online:false },
-  { name:'Елена', a:'Е', c:'r', last:'До встречи! 👋', time:'вчера', badge:0, online:false },
-  { name:'Дмитрий', a:'Д', c:'t', last:'Ок, договорились', time:'вс', badge:0, online:true },
-  { name:'Новости', a:'📢', c:'o', last:'Обновление 2.1 вышло!', time:'2 дня', badge:12, online:false, verified:true },
-];
-
-const GIFTS = [
-  { e:'🧸', n:'Мишка', p:50, s:'12.5K' },
-  { e:'❤️', n:'Сердце', p:30, s:'45.2K', top:true },
-  { e:'🌹', n:'Роза', p:25, s:'38.1K', top:true },
-  { e:'🎁', n:'Подарок', p:75, s:'8.3K' },
-  { e:'💎', n:'Бриллиант', p:500, s:'1.2K' },
-  { e:'🍰', n:'Тортик', p:40, s:'15.7K' },
-  { e:'💍', n:'Кольцо', p:300, s:'3.4K' },
-  { e:'🌸', n:'Цветы', p:20, s:'52.3K', top:true },
-  { e:'🍾', n:'Шампанское', p:100, s:'6.1K' },
-  { e:'☕', n:'Кофе', p:15, s:'28.4K' },
-  { e:'🎈', n:'Шарик', p:10, s:'33.9K' },
-  { e:'🏆', n:'Кубок', p:200, s:'4.5K' },
-];
-
-const STAR_PKGS = [
-  {s:50,p:49},{s:100,p:99},{s:250,p:239},{s:500,p:459},{s:1000,p:899},{s:2500,p:2199},{s:5000,p:4299}
-];
-
-const THEMES = [
-  {id:'dark',label:'Тёмная',bg:'#0e1621',cls:''},
-  {id:'midnight',label:'Midnight',bg:'#060a11',cls:'theme-midnight'},
-  {id:'teal',label:'Teal',bg:'#0d1f1e',cls:'theme-teal'},
-  {id:'light',label:'Светлая',bg:'#f4f4f5',cls:'theme-light'},
-  {id:'classic',label:'Классика',bg:'#fafafa',cls:'theme-classic'},
-  {id:'daylight',label:'Daylight',bg:'#e8f4fb',cls:'theme-daylight'},
-];
-
-let curChat = null;
-let prevPage = 'pChats';
-let chatHistory = {};
-let currentStoryFiles = [];
-
-// ── INIT ──
-function init() {
-  renderDynamicChats();
-  renderStoryRings();
-  renderGiftsGrid('giftsGrid', buyGift);
-  renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
-  renderStarPkgs();
-  renderThemeGrid();
-  updateAllUI();
-  initChatInput();
-}
-
-function doLogin() {
-  const v = document.getElementById('phoneIn').value.trim();
-  if (v.length < 6) { showToast('Введите номер'); return; }
-  S.phone = v;
-  document.getElementById('loginApp').style.display = 'none';
-  document.getElementById('mainApp').style.display = 'flex';
-  init();
-  showToast('Добро пожаловать! 🎉');
-}
-
-// ── CHATS ──
-function renderDynamicChats() {
-  const el = document.getElementById('dynamicChats');
-  el.innerHTML = CHATS.map((c,i) => `
-    <div class="citem" onclick="openChat(${i})">
-      <div class="ava ${c.c}">${c.a}${c.online?'<div class="online"></div>':''}</div>
-      <div class="cinfo">
-        <div class="cname">${c.name}${c.verified?'<span class="verified">✓</span>':''}</div>
-        <div class="clast">${c.last}</div>
-      </div>
-      <div class="cmeta">
-        <span class="ctime">${c.time}</span>
-        ${c.badge?`<span class="cbadge">${c.badge}</span>`:''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderStoryRings() {
-  const el = document.getElementById('storyRings');
-  const addBtn = el.querySelector('.sring-add') || el.children[0];
-  // remove all except add btn
-  while (el.children.length > 1) el.removeChild(el.lastChild);
-
-  // my story
-  const myRing = document.createElement('div');
-  myRing.className = 'sring';
-  const hasMyStory = S.stories.length > 0;
-  myRing.innerHTML = `
-    <div class="sring-ava${hasMyStory?'':' seen'}" onclick="openAddStoryModal()">
-      <div class="sring-inner has-color" style="background:linear-gradient(135deg,#5288c1,#3a6fa8);">${S.name[0]}</div>
-    </div>
-    <span class="sring-name">Моя</span>
-  `;
-  el.appendChild(myRing);
-
-  // friend stories
-  const friends = ['Алексей','Мария','Елена'];
-  const avColors = ['#5288c1','#4dcd5e','#e85d75'];
-  friends.forEach((f,i) => {
-    const d = document.createElement('div');
-    d.className = 'sring';
-    d.innerHTML = `
-      <div class="sring-ava" onclick="showToast('История: ${f}')">
-        <div class="sring-inner" style="background:${avColors[i]};">${f[0]}</div>
-      </div>
-      <span class="sring-name">${f}</span>
-    `;
-    el.appendChild(d);
-  });
-}
-
-function openChat(idx) {
-  if (idx === 'saved') {
-    curChat = { name:'Избранное', a:'⭐', c:'o', saved:true };
-  } else {
-    curChat = {...CHATS[idx], idx};
-  }
-  if (!chatHistory[curChat.name]) {
-    chatHistory[curChat.name] = curChat.saved ? S.savedMsgs.map(m=>({...m,out:true})) : [
-      { text:`Привет! Это чат с ${curChat.name}`, out:false, time:nowTime() }
-    ];
-  }
-  document.getElementById('chatNameH').textContent = curChat.name;
-  document.getElementById('chatAvaH').textContent = curChat.a;
-  document.getElementById('chatAvaH').className = `chat-ava-sm ${curChat.c}`;
-  document.getElementById('chatStatusH').textContent = curChat.online ? 'онлайн' : 'был(а) недавно';
-  document.getElementById('chatStatusH').style.color = curChat.online ? 'var(--green)' : 'var(--text2)';
-  renderChatMsgs();
-  showPageNoTab('pChat');
-}
-
-function closeChat() {
-  showPageNoTab(prevPage || 'pChats');
-}
-
-function renderChatMsgs() {
-  const el = document.getElementById('chatMsgs');
-  const msgs = chatHistory[curChat.name] || [];
-  el.innerHTML = `<div class="day-divider"><span>Сегодня</span></div>` + msgs.map(m => {
-    if (m.gift) {
-      return `<div class="mrow ${m.out?'out':'in'}">${m.out?'':'<div class="mava-sm b">'+curChat.a+'</div>'}<div><div class="mbubble">🎁 Подарок: ${m.gift.e} ${m.gift.n} (⭐ ${m.gift.p})</div><div class="mtime">${m.time}${m.out?'<span class="mcheck">✓✓</span>':''}</div></div></div>`;
-    }
-    const safe = m.text.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    return `<div class="mrow ${m.out?'out':'in'}">${!m.out?`<div class="mava-sm ${curChat.c}">${curChat.a}</div>`:''}<div><div class="mbubble">${safe}</div><div class="mtime">${m.time}${m.out?'<span class="mcheck">✓✓</span>':''}</div></div></div>`;
-  }).join('');
-  el.scrollTop = el.scrollHeight;
-}
-
-function sendMsg() {
-  const inp = document.getElementById('chatInput');
-  const txt = inp.value.trim();
-  if (!txt || !curChat) return;
-  const t = nowTime();
-  if (!chatHistory[curChat.name]) chatHistory[curChat.name] = [];
-  chatHistory[curChat.name].push({ text:txt, out:true, time:t });
-  if (curChat.saved) {
-    S.savedMsgs.push({ text:txt, time:t });
-    updateSavedUI();
-  }
-  inp.value = '';
-  inp.style.height = 'auto';
-  renderChatMsgs();
-  if (!curChat.saved) {
-    setTimeout(() => {
-      const replies = ['Понял! 👍','Отлично!','Хорошая идея 😊','Договорились!','Спасибо! 🙏','Ого! 🔥','Интересно...','Окей!'];
-      chatHistory[curChat.name].push({ text:replies[Math.floor(Math.random()*replies.length)], out:false, time:nowTime() });
-      renderChatMsgs();
-    }, 600 + Math.random()*1000);
-  }
-}
-
-function initChatInput() {
-  document.getElementById('chatInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
-  });
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-// ── PROFILE PAGE ──
-function openProfilePage() {
-  showPageNoTab('pProfile');
-  updateProfilePage();
-}
-
-function updateProfilePage() {
-  document.getElementById('profName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
-  document.getElementById('profUsername').textContent = '@' + S.username;
-  document.getElementById('profBio').textContent = S.bio;
-  document.getElementById('profPhone').textContent = S.phone;
-  document.getElementById('profAvaBig').childNodes[0].textContent = S.name[0];
-  renderOwnedGifts();
-  renderMyStories();
-}
-
-function switchPTab(tab) {
-  ['gifts','stories','media'].forEach(t => {
-    document.getElementById('ptab-'+t).classList.toggle('on', t===tab);
-    document.getElementById('ptab-content-'+t).style.display = t===tab ? '' : 'none';
-  });
-}
-
-function renderOwnedGifts() {
-  const el = document.getElementById('ownedGiftsGrid');
-  const nd = document.getElementById('noGifts');
-  if (S.ownedGifts.length === 0) { el.innerHTML = ''; nd.style.display=''; return; }
-  nd.style.display = 'none';
-  el.innerHTML = S.ownedGifts.map(g => `
-    <div class="gift-owned-card" onclick="showToast('${g.e} ${g.n}')">
-      <span class="gift-big-emoji">${g.e}</span>
-      <div class="gift-cname">${g.n}</div>
-      <div class="gift-from">⭐ ${g.p}</div>
-    </div>
-  `).join('');
-}
-
-function renderMyStories() {
-  const el = document.getElementById('myStoriesGrid');
-  const addBtn = `<div class="story-add-btn" onclick="openAddStoryModal()"><span style="font-size:36px;color:var(--blue);">+</span><span style="font-size:13px;font-weight:600;">Добавить историю</span></div>`;
-  const storyCards = S.stories.map((st,i) => `
-    <div class="story-card">
-      ${st.imgSrc ? `<img class="story-thumb" src="${st.imgSrc}">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:18px;background:linear-gradient(135deg,#1a3a5c,#2b5278);color:#fff;padding:14px;text-align:center;">${st.text||'📖'}</div>`}
-      <div class="story-label">${st.label||st.text||'История'}</div>
-      <button class="story-del" onclick="deleteStory(${i},event)">✕</button>
-    </div>
-  `).join('');
-  el.innerHTML = addBtn + storyCards;
-}
-
-function deleteStory(i, e) {
-  e.stopPropagation();
-  S.stories.splice(i,1);
-  renderMyStories();
-  renderStoryRings();
-  showToast('История удалена');
-}
-
-// ── STORIES ──
-function openAddStoryModal() { openOv('ovAddStory'); }
-
-function handleStoryFile(inp) {
-  const file = inp.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    currentStoryFiles = [{ src: ev.target.result, type: file.type.startsWith('video')?'video':'image' }];
-    showToast('Файл выбран: ' + file.name);
-  };
-  reader.readAsDataURL(file);
-}
-
-function addStory() {
-  const text = document.getElementById('storyTextIn').value.trim();
-  const label = document.getElementById('storyLabelIn').value.trim();
-  const story = { text, label, time: nowTime() };
-  if (currentStoryFiles.length > 0) story.imgSrc = currentStoryFiles[0].src;
-  S.stories.push(story);
-  currentStoryFiles = [];
-  document.getElementById('storyTextIn').value = '';
-  document.getElementById('storyLabelIn').value = '';
-  document.getElementById('storyFileIn').value = '';
-  renderMyStories();
-  renderStoryRings();
-  closeOv('ovAddStory');
-  showToast('История опубликована! 📖');
-}
-
-// ── GIFTS ──
-function renderGiftsGrid(elId, handler) {
-  document.getElementById(elId).innerHTML = GIFTS.map((g,i) => `
-    <div class="gcard${g.top?' gift-popular':''}" onclick="${handler.name}(${i})">
-      ${g.top?'<span class="gtop">TOP</span>':''}
-      <span class="gemoji">${g.e}</span>
-      <div class="gname">${g.n}</div>
-      <div class="gprice">⭐ ${g.p}</div>
-      <div class="gsent">${g.s}</div>
-    </div>
-  `).join('');
-}
-
-function openGiftsStore() {
-  updateGiftsUI();
-  openOv('ovGifts');
-}
-
-function updateGiftsUI() {
-  document.getElementById('giftsBal').textContent = S.stars + ' ★';
-}
-
-function buyGift(i) {
-  const g = GIFTS[i];
-  if (S.stars < g.p) { showToast('Недостаточно звёзд! ⭐'); return; }
-  S.stars -= g.p;
-  S.ownedGifts.push({...g});
-  S.starsHistory.push({t:'buy',g,ts:nowTime()});
-  updateAllUI();
-  renderOwnedGifts();
-  closeOv('ovGifts');
-  showToast(`Куплено ${g.e} ${g.n}!`);
-}
-
-function sendGiftInChat() {
-  if (curChat?.saved) { showToast('Нельзя отправить себе'); return; }
-  document.getElementById('sendGiftTitle').textContent = `🎁 Подарок для ${curChat?.name}`;
-  renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
-  openOv('ovSendGift');
-}
-
-function sendGiftFromChat(i) {
-  const g = GIFTS[i];
-  if (S.stars < g.p) { showToast('Недостаточно звёзд! ⭐'); return; }
-  S.stars -= g.p;
-  S.starsHistory.push({t:'send',g,to:curChat?.name,ts:nowTime()});
-  if (curChat && chatHistory[curChat.name]) {
-    chatHistory[curChat.name].push({gift:g, out:true, time:nowTime()});
-    renderChatMsgs();
-  }
-  updateAllUI();
-  closeOv('ovSendGift');
-  showToast(`Подарок отправлен! ${g.e}`);
-}
-
-// ── STARS ──
-function showStars() {
-  updateStarsUI();
-  openOv('ovStars');
-}
-
-function updateStarsUI() {
-  document.getElementById('starsNum').textContent = S.stars;
-  const el = document.getElementById('starsHist');
-  if (S.starsHistory.length === 0) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:4px 0;">Нет операций</div>'; return; }
-  el.innerHTML = S.starsHistory.slice(-8).reverse().map(h => {
-    const icon = h.t === 'topup' ? '⬆️' : '⬇️';
-    const desc = h.t === 'topup' ? `Пополнение +${h.amt}★ (${h.price}₽)` :
-                 h.t === 'buy' ? `Покупка ${h.g.e} ${h.g.n} −${h.g.p}★` :
-                 `Подарок → ${h.to} ${h.g.e} −${h.g.p}★`;
-    return `<div style="font-size:12px;padding:5px 0;border-bottom:1px solid var(--divider);">${icon} ${desc} <span style="color:var(--text2);float:right;">${h.ts}</span></div>`;
-  }).join('');
-}
-
-function renderStarPkgs() {
-  document.getElementById('starPkgs').innerHTML = STAR_PKGS.map(p => `
-    <div class="spkg" onclick="buyStars(${p.s},${p.p})">
-      <span class="sa">⭐ ${p.s.toLocaleString()}</span>
-      <span class="sp">${p.p} ₽</span>
-    </div>
-  `).join('');
-}
-
-function buyStars(amt,price) {
-  if (!confirm(`Купить ${amt} звёзд за ${price} ₽?`)) return;
-  S.stars += amt;
-  S.starsHistory.push({t:'topup',amt,price,ts:nowTime()});
-  updateAllUI();
-  updateStarsUI();
-  showToast(`+${amt} ⭐ Баланс: ${S.stars}`);
-}
-
-// ── EDIT PROFILE ──
-function showEditProfile() {
-  document.getElementById('editName').value = S.name;
-  document.getElementById('editLastName').value = S.lastName;
-  document.getElementById('editUsername').value = S.username;
-  document.getElementById('editBio').value = S.bio;
-  openOv('ovEditProfile');
-}
-
-function saveProfile() {
-  const n = document.getElementById('editName').value.trim();
-  if (!n) { showToast('Введите имя'); return; }
-  S.name = n;
-  S.lastName = document.getElementById('editLastName').value.trim();
-  S.username = document.getElementById('editUsername').value.trim().replace('@','') || S.username;
-  S.bio = document.getElementById('editBio').value.trim();
-  updateAllUI();
-  updateProfilePage();
-  closeOv('ovEditProfile');
-  showToast('Профиль сохранён ✓');
-}
-
-function changeAvatar() { showToast('Изменить фото'); }
-
-// ── PRIVACY ──
-function showPrivacy() { openOv('ovPrivacy'); }
-function showPassModal() { openOv('ovPass'); }
-function savePass() {
-  const np = document.getElementById('newPassIn').value;
-  const cp = document.getElementById('confPassIn').value;
-  if (np.length < 4) { showToast('Минимум 4 символа'); return; }
-  if (np !== cp) { showToast('Пароли не совпадают'); return; }
-  S.password = np;
-  ['curPassIn','newPassIn','confPassIn'].forEach(id => document.getElementById(id).value = '');
-  closeOv('ovPass');
-  showToast('Пароль установлен 🔒');
-}
-function showBlockedModal() { renderBlockedList(); openOv('ovBlocked'); }
-function renderBlockedList() {
-  const el = document.getElementById('blockedListEl');
-  if (S.blocked.length === 0) { el.innerHTML = '<div style="color:var(--text2);text-align:center;padding:12px;">Список пуст</div>'; return; }
-  el.innerHTML = S.blocked.map(u => `<div class="sitem" style="background:var(--surface2);border-radius:10px;margin:4px 0;"><span>🚫 ${u}</span><span style="color:var(--red);font-size:18px;cursor:pointer;margin-left:auto;" onclick="removeBlocked('${u}')">✕</span></div>`).join('');
-}
-function addBlocked() {
-  const n = prompt('Имя пользователя:');
-  if (n && !S.blocked.includes(n)) { S.blocked.push(n); renderBlockedList(); showToast(`${n} заблокирован 🚫`); }
-}
-function removeBlocked(u) {
-  S.blocked = S.blocked.filter(b=>b!==u);
-  renderBlockedList();
-  showToast(`${u} разблокирован`);
-}
-
-// ── SETTINGS MODALS ──
-function showDataStorage() { openOv('ovData'); }
-function clearCache() { closeOv('ovData'); showToast('Кэш очищен 🧹'); }
-function showLanguage() { openOv('ovLang'); }
-function showConnectedApps() { openOv('ovDevices'); }
-function showAppearance() { openOv('ovAppearance'); }
-
-// ── THEMES ──
-function renderThemeGrid() {
-  document.getElementById('themeGrid').innerHTML = THEMES.map(t => `
-    <div onclick="setTheme('${t.id}','${t.cls}','${t.label}')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:2px solid var(--border);transition:border var(--tr);" id="thcard-${t.id}">
-      <div style="height:50px;background:${t.bg};"></div>
-      <div style="background:var(--surface2);padding:4px;text-align:center;font-size:12px;font-weight:600;">${t.label}</div>
-    </div>
-  `).join('');
-}
-
-function setTheme(id,cls,label) {
-  document.body.className = cls;
-  document.getElementById('themeLabel').textContent = label;
-  closeOv('ovAppearance');
-  showToast(`Тема: ${label} 🎨`);
-}
-
-function toggle(el, e) {
-  e.stopPropagation();
-  el.classList.toggle('on');
-}
-
-// ── NAVIGATION ──
-function switchTab(pageId, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-  document.getElementById(pageId).classList.add('on');
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  prevPage = pageId;
-  document.getElementById('mainTabbar').style.display = '';
-}
-
-function showPageNoTab(pageId) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-  document.getElementById(pageId).classList.add('on');
-  // hide tabbar for full-screen pages
-  const fullScreen = ['pChat','pProfile'].includes(pageId);
-  document.getElementById('mainTabbar').style.display = fullScreen ? 'none' : '';
-}
-
-function goBack(to) {
-  showPageNoTab(to || prevPage);
-  if (!['pChat','pProfile'].includes(to)) {
-    document.getElementById('mainTabbar').style.display = '';
-  }
-}
-
-// ── FOLDER TABS ──
-document.querySelectorAll('.folder-tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.folder-tab').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-  });
-});
-
-// ── OVERLAYS ──
-function openOv(id) { document.getElementById(id).classList.add('on'); }
-function closeOv(id) { document.getElementById(id).classList.remove('on'); }
-document.querySelectorAll('.overlay').forEach(ov => {
-  ov.addEventListener('click', e => { if (e.target===ov) ov.classList.remove('on'); });
-});
-
-// ── UI UPDATES ──
-function updateAllUI() {
-  document.getElementById('starsMenuVal').textContent = S.stars + ' ★';
-  document.getElementById('setName').textContent = S.name + (S.lastName?' '+S.lastName:'');
-  document.getElementById('setPhone').textContent = S.phone;
-  document.getElementById('setUsername').textContent = '@' + S.username;
-  document.getElementById('setAva').textContent = S.name[0];
-  updateGiftsUI();
-  updateStarsUI();
-}
-
-function updateSavedUI() {
-  const last = S.savedMsgs[S.savedMsgs.length-1];
-  document.getElementById('savedLast').textContent = last ? last.text : 'Сохраняйте важные сообщения';
-  document.getElementById('savedT').textContent = last ? last.time : '';
-}
-
-// chat item clicks (chats page)
-document.getElementById('chatList').addEventListener('click', e => {
-  const item = e.target.closest('.citem');
-  if (!item) return;
-  const ava = item.querySelector('.ava');
-  if (ava && ava.textContent.includes('⭐')) { openChat('saved'); return; }
-  // find index by name
-  const nameEl = item.querySelector('.cname');
-  if (!nameEl) return;
-  const name = nameEl.textContent.trim();
-  const idx = CHATS.findIndex(c=>c.name===name);
-  if (idx >= 0) openChat(idx);
-});
-
-// ── TOAST ──
-function showToast(txt) {
-  document.querySelectorAll('.toast').forEach(t=>t.remove());
-  const d = document.createElement('div');
-  d.className = 'toast';
-  d.textContent = txt;
-  document.body.appendChild(d);
-  setTimeout(()=>d.remove(), 2100);
-}
-
-// ── HELPERS ──
-function nowTime() {
-  const now = new Date();
-  return now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
-}
-
-// saved chat click from settings
-document.querySelector('.sitem[onclick*="Избранное"]')?.addEventListener('click', ()=>{ openChat('saved'); });
-</script>
+
+    <script>
+        // ── STATE ──
+        let S = {
+            phone: '+7 (999) 123-45-67',
+            name: 'Макар',
+            lastName: '',
+            username: 'wopst',
+            bio: 'Разработчик Telegram ботов 🤖',
+            stars: 50,
+            password: '',
+            blocked: ['spam_user', 'annoying_bot'],
+            starsHistory: [],
+            savedMsgs: [],
+            ownedGifts: [],
+            stories: []
+        };
+
+        const CHATS = [
+            { name: 'Алексей', a: 'А', c: 'blue', last: 'Привет! Как дела?', time: '10:32', badge: 3, online: true },
+            { name: 'Мария', a: 'М', c: 'green', last: 'Отправила подарок 🎁', time: '9:15', badge: 0, online: false },
+            { name: 'Команда', a: 'К', c: 'purple', last: 'Иван: Отличная работа! 🔥', time: 'пн', badge: 7, online: false },
+            { name: 'Елена', a: 'Е', c: 'red', last: 'До встречи! 👋', time: 'вчера', badge: 0, online: false },
+            { name: 'Дмитрий', a: 'Д', c: 'teal', last: 'Ок, договорились', time: 'вс', badge: 0, online: true },
+            { name: 'Новости', a: '📢', c: 'orange', last: 'Обновление 3.0!', time: '2 дня', badge: 12, online: false, verified: true },
+        ];
+
+        const GIFTS = [
+            { e: '🧸', n: 'Мишка', p: 50, s: '12.5K' },
+            { e: '❤️', n: 'Сердце', p: 30, s: '45.2K', top: true },
+            { e: '🌹', n: 'Роза', p: 25, s: '38.1K', top: true },
+            { e: '🎁', n: 'Подарок', p: 75, s: '8.3K' },
+            { e: '💎', n: 'Бриллиант', p: 500, s: '1.2K', nft: true },
+            { e: '🍰', n: 'Тортик', p: 40, s: '15.7K' },
+            { e: '💍', n: 'Кольцо', p: 300, s: '3.4K', nft: true },
+            { e: '🌸', n: 'Цветы', p: 20, s: '52.3K', top: true },
+            { e: '🍾', n: 'Шампанское', p: 100, s: '6.1K' },
+            { e: '☕', n: 'Кофе', p: 15, s: '28.4K' },
+            { e: '🎈', n: 'Шарик', p: 10, s: '33.9K' },
+            { e: '🏆', n: 'Кубок', p: 200, s: '4.5K', nft: true },
+            { e: '👑', n: 'Корона', p: 1000, s: '892', nft: true },
+            { e: '🎨', n: 'Шедевр', p: 250, s: '1.8K', nft: true },
+            { e: '🚀', n: 'Ракета', p: 150, s: '3.2K' },
+        ];
+
+        const STAR_PKGS = [
+            { s: 50, p: 49 }, { s: 100, p: 99 }, { s: 250, p: 239 }, { s: 500, p: 459 }, { s: 1000, p: 899 }, { s: 2500, p: 2199 }, { s: 5000, p: 4299 }
+        ];
+
+        let curChat = null;
+        let prevPage = 'pChats';
+        let chatHistory = {};
+        let giftFilter = 'all';
+
+        // ── INIT ──
+        function init() {
+            renderDynamicChats();
+            renderGiftsGrid('giftsGrid', buyGift);
+            renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
+            renderStarPkgs();
+            updateAllUI();
+            document.getElementById('chatInput').addEventListener('keydown', e => {
+                if (e.key === 'Enter') { e.preventDefault();
+                    sendMsg(); }
+            });
+        }
+
+        function doLogin() {
+            const v = document.getElementById('phoneIn').value.trim();
+            if (v.length < 6) { showToast('Введите номер'); return; }
+            S.phone = v;
+            document.getElementById('loginApp').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            init();
+            showToast('Добро пожаловать! 🎉');
+        }
+
+        // ── CHATS ──
+        function renderDynamicChats() {
+            document.getElementById('dynamicChats').innerHTML = CHATS.map((c, i) => `
+            <div class="citem" onclick="openChat(${i})">
+              <div class="ava ${c.c}">${c.a}${c.online?'<div class="online"></div>':''}</div>
+              <div class="cinfo">
+                <div class="cname">${c.name}${c.verified?'<span class="verified">✓</span>':''}</div>
+                <div class="clast">${c.last}</div>
+              </div>
+              <div class="cmeta">
+                <span class="ctime">${c.time}</span>
+                ${c.badge?`<span class="cbadge">${c.badge}</span>`:''}
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function openChat(idx) {
+            if (idx === 'saved') {
+                curChat = { name: 'Избранное', a: '⭐', c: 'orange', saved: true };
+            } else {
+                curChat = { ...CHATS[idx], idx };
+            }
+            if (!chatHistory[curChat.name]) {
+                chatHistory[curChat.name] = curChat.saved ? S.savedMsgs.map(m => ({ ...m, out: true })) : [
+                    { text: `Привет! Это чат с ${curChat.name}`, out: false, time: nowTime() }
+                ];
+            }
+            document.getElementById('chatNameH').textContent = curChat.name;
+            document.getElementById('chatAvaH').textContent = curChat.a;
+            document.getElementById('chatAvaH').className = 'chat-ava-sm ' + (curChat.c || 'blue');
+            document.getElementById('chatStatusH').textContent = curChat.online ? 'онлайн' : 'был(а) недавно';
+            document.getElementById('chatStatusH').style.color = curChat.online ? 'var(--green)' : 'var(--text2)';
+            renderChatMsgs();
+            showPageNoTab('pChat');
+        }
+
+        function closeChat() { showPageNoTab(prevPage || 'pChats'); }
+
+        function renderChatMsgs() {
+            const el = document.getElementById('chatMsgs');
+            const msgs = chatHistory[curChat.name] || [];
+            el.innerHTML = `<div class="day-divider"><span>Сегодня</span></div>` + msgs.map(m => {
+                if (m.gift) return `<div class="mrow ${m.out?'out':'in'}">${m.out?'':'<div class="ava blue" style="width:28px;height:28px;font-size:12px;">'+curChat.a+'</div>'}<div><div class="mbubble">🎁 Подарок: ${m.gift.e} ${m.gift.n}${m.gift.nft?' <span class="nft-badge">NFT</span>':''} (⭐ ${m.gift.p})</div><div class="mtime">${m.time}</div></div></div>`;
+                return `<div class="mrow ${m.out?'out':'in'}">${!m.out?`<div class="ava ${curChat.c||'blue'}" style="width:28px;height:28px;font-size:12px;">${curChat.a}</div>`:''}<div><div class="mbubble">${m.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="mtime">${m.time}</div></div></div>`;
+            }).join('');
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function sendMsg() {
+            const inp = document.getElementById('chatInput');
+            const txt = inp.value.trim();
+            if (!txt || !curChat) return;
+            const t = nowTime();
+            if (!chatHistory[curChat.name]) chatHistory[curChat.name] = [];
+            chatHistory[curChat.name].push({ text: txt, out: true, time: t });
+            if (curChat.saved) { S.savedMsgs.push({ text: txt, time: t });
+                updateSavedUI(); }
+            inp.value = '';
+            renderChatMsgs();
+            if (!curChat.saved) {
+                setTimeout(() => {
+                    const replies = ['Понял! 👍', 'Отлично!', 'Хорошая идея 😊', 'Договорились!', 'Спасибо! 🙏', 'Ого! 🔥'];
+                    chatHistory[curChat.name].push({ text: replies[Math.floor(Math.random() * replies.length)], out: false,
+                        time: nowTime() });
+                    renderChatMsgs();
+                }, 600 + Math.random() * 1000);
+            }
+        }
+
+        // ── PROFILE ──
+        function openProfilePage() { showPageNoTab('pProfile');
+            updateProfilePage(); }
+
+        function updateProfilePage() {
+            document.getElementById('profName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
+            document.getElementById('profUsername').textContent = '@' + S.username;
+            document.getElementById('profBio').textContent = S.bio;
+            document.getElementById('profPhone').textContent = S.phone;
+            document.getElementById('profAva').childNodes[0].textContent = S.name[0];
+            renderOwnedGifts();
+        }
+
+        function switchPTab(tab) {
+            ['gifts', 'stories'].forEach(t => {
+                document.getElementById('ptab-' + t).classList.toggle('on', t === tab);
+                document.getElementById('ptab-content-' + t).style.display = t === tab ? '' : 'none';
+            });
+        }
+
+        function renderOwnedGifts() {
+            const el = document.getElementById('ownedGiftsGrid');
+            const nd = document.getElementById('noGifts');
+            if (S.ownedGifts.length === 0) { el.innerHTML = '';
+                nd.style.display = ''; return; }
+            nd.style.display = 'none';
+            el.innerHTML = S.ownedGifts.map((g, i) => `
+            <div class="gift-owned-card${g.nft?' nft-owned':''}" onclick="showGiftDetail(${i})">
+              <span class="gift-big-emoji">${g.e}</span>
+              <div style="font-size:13px;font-weight:600;">${g.n}</div>
+              ${g.nft?'<span class="nft-badge">NFT</span>':''}
+              <div style="font-size:11px;color:var(--text2);">⭐ ${g.p}</div>
+            </div>
+          `).join('');
+        }
+
+        function showGiftDetail(i) {
+            const g = S.ownedGifts[i];
+            document.getElementById('giftDetailTitle').textContent = `${g.e} ${g.n}`;
+            document.getElementById('giftDetailInfo').innerHTML = `
+            <div style="font-size:60px;">${g.e}</div>
+            <div style="font-size:20px;font-weight:700;">${g.n}</div>
+            <div style="color:var(--orange);font-size:16px;">⭐ ${g.p}</div>
+            ${g.nft?'<div style="margin-top:6px;"><span style="background:linear-gradient(135deg,#ff9500,#ff3b30);color:#fff;padding:4px 10px;border-radius:8px;font-weight:700;font-size:12px;">✨ Уникальный NFT</span></div>':''}
+            <div style="color:var(--text2);font-size:13px;margin-top:6px;">${g.nft?'Этот подарок — уникальный токен в блокчейне TON':'Обычный подарок'}</div>
+          `;
+            const actions = document.getElementById('giftDetailActions');
+            if (g.nft) {
+                actions.innerHTML = `
+              <button class="btn btn-primary" onclick="sellNFT(${i})">💰 Продать NFT (выкупаем за ${Math.floor(g.p*1.5)} ⭐)</button>
+              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать другому</button>
+            `;
+            } else {
+                actions.innerHTML = `
+              <button class="btn btn-green" onclick="upgradeToNFT(${i})">✨ Превратить в NFT (${Math.floor(g.p*2)} ⭐)</button>
+              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать другому</button>
+              <button class="btn btn-ghost" onclick="exchangeGift(${i})">🔄 Обменять</button>
+            `;
+            }
+            openOv('ovGiftDetail');
+        }
+
+        function upgradeToNFT(i) {
+            const g = S.ownedGifts[i];
+            const cost = Math.floor(g.p * 2);
+            if (S.stars < cost) { showToast('Недостаточно звёзд! ⭐'); return; }
+            if (!confirm(`Превратить ${g.n} в NFT за ${cost} ⭐?`)) return;
+            S.stars -= cost;
+            S.ownedGifts[i].nft = true;
+            S.starsHistory.push({ t: 'nft_upgrade', g, cost, ts: nowTime() });
+            updateAllUI();
+            renderOwnedGifts();
+            closeOv('ovGiftDetail');
+            showToast(`${g.n} теперь NFT! ✨`);
+        }
+
+        function sellNFT(i) {
+            const g = S.ownedGifts[i];
+            const price = Math.floor(g.p * 1.5);
+            if (!confirm(`Продать NFT ${g.n} за ${price} ⭐?`)) return;
+            S.stars += price;
+            S.starsHistory.push({ t: 'nft_sell', g, price, ts: nowTime() });
+            S.ownedGifts.splice(i, 1);
+            updateAllUI();
+            renderOwnedGifts();
+            closeOv('ovGiftDetail');
+            showToast(`NFT продан за ${price} ⭐!`);
+        }
+
+        function transferGift(i) {
+            const to = prompt('Кому передать подарок? (введите имя)');
+            if (!to) return;
+            const g = S.ownedGifts.splice(i, 1)[0];
+            S.starsHistory.push({ t: 'transfer', g, to, ts: nowTime() });
+            updateAllUI();
+            renderOwnedGifts();
+            closeOv('ovGiftDetail');
+            showToast(`${g.n} передан → ${to}`);
+        }
+
+        function exchangeGift(i) {
+            const g = S.ownedGifts[i];
+            // Find random gift of similar value
+            const similar = GIFTS.filter(x => Math.abs(x.p - g.p) <= 20 && x.n !== g.n);
+            if (similar.length === 0) { showToast('Нет подарков для обмена'); return; }
+            const target = similar[Math.floor(Math.random() * similar.length)];
+            if (!confirm(`Обменять ${g.n} (⭐${g.p}) на ${target.e} ${target.n} (⭐${target.p})?`)) return;
+            S.ownedGifts[i] = { ...target, nft: false };
+            S.starsHistory.push({ t: 'exchange', from: g, to: target, ts: nowTime() });
+            updateAllUI();
+            renderOwnedGifts();
+            closeOv('ovGiftDetail');
+            showToast(`Обменяно на ${target.n}!`);
+        }
+
+        // ── GIFTS ──
+        function renderGiftsGrid(elId, handler) {
+            const el = document.getElementById(elId);
+            const filtered = giftFilter === 'all' ? GIFTS : giftFilter === 'nft' ? GIFTS.filter(g => g.nft) : GIFTS.filter(g =>
+                g.top);
+            el.innerHTML = filtered.map((g, i) => {
+                const origIdx = GIFTS.indexOf(g);
+                return `
+            <div class="gcard${g.nft?' nft':''}${g.top?' gift-popular':''}" onclick="${handler.name}(${origIdx})">
+              ${g.top?'<span class="gtop">TOP</span>':''}
+              ${g.nft?'<span class="gnft">NFT</span>':''}
+              <span class="gemoji">${g.e}</span>
+              <div class="gname">${g.n}${g.nft?' <span class="nft-badge">NFT</span>':''}</div>
+              <div class="gprice">⭐ ${g.p}</div>
+              <div class="gsent">${g.s}</div>
+            </div>`;
+            }).join('');
+        }
+
+        function filterGifts(type) {
+            giftFilter = type;
+            ['all', 'nft', 'popular'].forEach(t => {
+                const btn = document.getElementById('giftFilter' + (t === 'all' ? 'All' : t === 'nft' ? 'Nft' : 'Pop'));
+                if (btn) btn.className = t === type ? 'btn btn-primary' : 'btn btn-ghost';
+            });
+            renderGiftsGrid('giftsGrid', buyGift);
+        }
+
+        function openGiftsStore() { updateGiftsUI();
+            giftFilter = 'all';
+            filterGifts('all');
+            openOv('ovGifts'); }
+
+        function updateGiftsUI() { document.getElementById('giftsBal').textContent = S.stars + ' ★'; }
+
+        function buyGift(i) {
+            const g = GIFTS[i];
+            if (S.stars < g.p) { showToast('Недостаточно звёзд! ⭐'); return; }
+            S.stars -= g.p;
+            S.ownedGifts.push({ ...g, nft: !!g.nft });
+            S.starsHistory.push({ t: 'buy', g, ts: nowTime() });
+            updateAllUI();
+            renderOwnedGifts();
+            closeOv('ovGifts');
+            showToast(`Куплено ${g.e} ${g.n}!${g.nft?' ✨ NFT':''}`);
+        }
+
+        function sendGiftInChat() {
+            if (curChat?.saved) { showToast('Нельзя отправить себе'); return; }
+            document.getElementById('sendGiftTitle').textContent = `🎁 Подарок для ${curChat?.name}`;
+            giftFilter = 'all';
+            renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
+            openOv('ovSendGift');
+        }
+
+        function sendGiftFromChat(i) {
+            const g = GIFTS[i];
+            if (S.stars < g.p) { showToast('Недостаточно звёзд! ⭐'); return; }
+            S.stars -= g.p;
+            S.starsHistory.push({ t: 'send', g, to: curChat?.name, ts: nowTime() });
+            if (curChat && chatHistory[curChat.name]) {
+                chatHistory[curChat.name].push({ gift: g, out: true, time: nowTime() });
+                renderChatMsgs();
+            }
+            updateAllUI();
+            closeOv('ovSendGift');
+            showToast(`Подарок отправлен! ${g.e}`);
+        }
+
+        // ── STARS ──
+        function showStars() { updateStarsUI();
+            openOv('ovStars'); }
+
+        function updateStarsUI() {
+            document.getElementById('starsNum').textContent = S.stars;
+            const el = document.getElementById('starsHist');
+            if (S.starsHistory.length === 0) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:4px 0;">Нет операций</div>'; return; }
+            el.innerHTML = S.starsHistory.slice(-8).reverse().map(h => {
+                const icon = h.t === 'topup' ? '⬆️' : '⬇️';
+                let desc = '';
+                if (h.t === 'topup') desc = `Пополнение +${h.amt}★ (${h.price}₽)`;
+                else if (h.t === 'buy') desc = `Покупка ${h.g.e} ${h.g.n} −${h.g.p}★`;
+                else if (h.t === 'send') desc = `Подарок → ${h.to} ${h.g.e} −${h.g.p}★`;
+                else if (h.t === 'nft_upgrade') desc = `NFT улучшение ${h.g.n} −${h.cost}★`;
+                else if (h.t === 'nft_sell') desc = `Продажа NFT ${h.g.n} +${h.price}★`;
+                else if (h.t === 'exchange') desc = `Обмен ${h.from.n} → ${h.to.n}`;
+                else if (h.t === 'transfer') desc = `Передача ${h.g.n} → ${h.to}`;
+                return `<div style="font-size:12px;padding:5px 0;border-bottom:1px solid var(--divider);">${icon} ${desc} <span style="color:var(--text2);float:right;">${h.ts}</span></div>`;
+            }).join('');
+        }
+
+        function renderStarPkgs() {
+            document.getElementById('starPkgs').innerHTML = STAR_PKGS.map(p => `
+            <div class="spkg" onclick="buyStars(${p.s},${p.p})">
+              <span style="font-weight:700;font-size:17px;">⭐ ${p.s.toLocaleString()}</span>
+              <span style="color:var(--text2);">${p.p} ₽</span>
+            </div>
+          `).join('');
+        }
+
+        function buyStars(amt, price) {
+            if (!confirm(`Купить ${amt} звёзд за ${price} ₽?`)) return;
+            S.stars += amt;
+            S.starsHistory.push({ t: 'topup', amt, price, ts: nowTime() });
+            updateAllUI();
+            updateStarsUI();
+            showToast(`+${amt} ⭐ Баланс: ${S.stars}`);
+        }
+
+        // ── EDIT PROFILE ──
+        function showEditProfile() {
+            document.getElementById('editName').value = S.name;
+            document.getElementById('editLastName').value = S.lastName;
+            document.getElementById('editUsername').value = S.username;
+            document.getElementById('editBio').value = S.bio;
+            openOv('ovEditProfile');
+        }
+
+        function saveProfile() {
+            const n = document.getElementById('editName').value.trim();
+            if (!n) { showToast('Введите имя'); return; }
+            S.name = n;
+            S.lastName = document.getElementById('editLastName').value.trim();
+            S.username = document.getElementById('editUsername').value.trim().replace('@', '') || S.username;
+            S.bio = document.getElementById('editBio').value.trim();
+            updateAllUI();
+            updateProfilePage();
+            closeOv('ovEditProfile');
+            showToast('Профиль сохранён ✓');
+        }
+
+        // ── MODALS ──
+        function showPrivacy() { openOv('ovPrivacy'); }
+
+        function showData() { openOv('ovData'); }
+
+        function showAppearance() { openOv('ovAppearance'); }
+
+        function showLanguage() { openOv('ovLang'); }
+
+        function showDevices() { openOv('ovDevices'); }
+
+        function showNotifications() { openOv('ovNotif'); }
+
+        function showPassModal() { openOv('ovPass'); }
+
+        function savePass() {
+            const np = document.getElementById('newPassIn').value;
+            const cp = document.getElementById('confPassIn').value;
+            if (np.length < 4) { showToast('Минимум 4 символа'); return; }
+            if (np !== cp) { showToast('Пароли не совпадают'); return; }
+            S.password = np;
+            document.getElementById('newPassIn').value = '';
+            document.getElementById('confPassIn').value = '';
+            closeOv('ovPass');
+            showToast('Пароль установлен 🔒');
+        }
+
+        function showBlockedModal() { renderBlockedList();
+            openOv('ovBlocked'); }
+
+        function renderBlockedList() {
+            const el = document.getElementById('blockedListEl');
+            if (S.blocked.length === 0) { el.innerHTML = '<div style="color:var(--text2);text-align:center;padding:12px;">Список пуст</div>'; return; }
+            el.innerHTML = S.blocked.map(u =>
+                `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--surface2);border-radius:10px;margin:4px 0;"><span>🚫 ${u}</span><span style="color:var(--red);cursor:pointer;font-size:18px;" onclick="removeBlocked('${u}')">✕</span></div>`
+                ).join('');
+        }
+
+        function addBlocked() { const n = prompt('Имя пользователя:'); if (n && !S.blocked.includes(n)) { S.blocked.push(n);
+                renderBlockedList();
+                showToast(`${n} заблокирован 🚫`); } }
+
+        function removeBlocked(u) { S.blocked = S.blocked.filter(b => b !== u);
+            renderBlockedList();
+            showToast(`${u} разблокирован`); }
+
+        function clearCache() { closeOv('ovData');
+            showToast('Кэш очищен 🧹'); }
+
+        function setTheme(theme) {
+            if (theme === 'light') {
+                document.body.style.setProperty('--bg', '#f5f5f5');
+                document.body.style.setProperty('--surface', '#ffffff');
+                document.body.style.setProperty('--surface2', '#f0f0f0');
+                document.body.style.setProperty('--text', '#000000');
+                document.body.style.setProperty('--text2', '#999999');
+                document.body.style.setProperty('--bubble-out', '#007aff');
+                document.body.style.setProperty('--bubble-in', '#e9e9eb');
+                document.body.style.setProperty('--input-bg', '#e9e9eb');
+                document.getElementById('themeLabel').textContent = 'Светлая';
+            } else {
+                document.body.style.setProperty('--bg', '#000000');
+                document.body.style.setProperty('--surface', '#1c1c1e');
+                document.body.style.setProperty('--surface2', '#2c2c2e');
+                document.body.style.setProperty('--text', '#ffffff');
+                document.body.style.setProperty('--text2', '#8e8e93');
+                document.body.style.setProperty('--bubble-out', '#007aff');
+                document.body.style.setProperty('--bubble-in', '#1c1c1e');
+                document.body.style.setProperty('--input-bg', '#2c2c2e');
+                document.getElementById('themeLabel').textContent = 'Тёмная';
+            }
+            closeOv('ovAppearance');
+            showToast('Тема изменена 🎨');
+        }
+
+        function selectLang(lang) {
+            document.getElementById('lang-ru').style.display = lang === 'ru' ? '' : 'none';
+            document.getElementById('lang-en').style.display = lang === 'en' ? '' : 'none';
+            showToast(lang === 'ru' ? 'Язык: Русский' : 'Language: English');
+        }
+
+        function toggleToggle(el, e) { e.stopPropagation();
+            el.classList.toggle('on'); }
+
+        // ── NAVIGATION ──
+        function switchTab(pageId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+            document.getElementById(pageId).classList.add('on');
+            document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+            btn.classList.add('on');
+            prevPage = pageId;
+            document.getElementById('mainTabbar').style.display = '';
+        }
+
+        function showPageNoTab(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+            document.getElementById(pageId).classList.add('on');
+            document.getElementById('mainTabbar').style.display = ['pChat', 'pProfile'].includes(pageId) ? 'none' : '';
+        }
+
+        function goBack(to) {
+            showPageNoTab(to || prevPage);
+            if (!['pChat', 'pProfile'].includes(to)) document.getElementById('mainTabbar').style.display = '';
+        }
+
+        function openOv(id) { document.getElementById(id).classList.add('on'); }
+
+        function closeOv(id) { document.getElementById(id).classList.remove('on'); }
+
+        document.querySelectorAll('.overlay').forEach(ov => {
+            ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('on'); });
+        });
+
+        // ── UI ──
+        function updateAllUI() {
+            document.getElementById('starsMenuVal').textContent = S.stars + ' ★';
+            document.getElementById('setName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
+            document.getElementById('setPhone').textContent = S.phone;
+            document.getElementById('setUsername').textContent = '@' + S.username;
+            document.getElementById('setAva').textContent = S.name[0];
+            updateGiftsUI();
+            updateStarsUI();
+        }
+
+        function updateSavedUI() {
+            const last = S.savedMsgs[S.savedMsgs.length - 1];
+            document.getElementById('savedLast').textContent = last ? last.text : 'Сохраняйте важные сообщения';
+            document.getElementById('savedT').textContent = last ? last.time : '';
+        }
+
+        function showToast(txt) {
+            document.querySelectorAll('.toast').forEach(t => t.remove());
+            const d = document.createElement('div');
+            d.className = 'toast';
+            d.textContent = txt;
+            document.body.appendChild(d);
+            setTimeout(() => d.remove(), 2100);
+        }
+
+        function nowTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+
+        // Click on saved chat from settings
+        document.querySelector('.sitem[onclick*="openProfilePage"]')?.addEventListener('click', function(e) {
+            if (this.textContent.includes('Избранное')) { openChat('saved'); }
+        });
+
+        document.getElementById('chatList').addEventListener('click', e => {
+            const item = e.target.closest('.citem');
+            if (!item) return;
+            const ava = item.querySelector('.ava');
+            if (ava && ava.textContent.includes('⭐')) openChat('saved');
+        });
+    </script>
 </body>
 </html>
