@@ -2,1118 +2,735 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Telegram</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Telegram Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #000000;
-            --surface: #111111;
-            --surface2: #1a1a1a;
-            --surface3: #222222;
-            --border: rgba(255,255,255,0.08);
-            --border2: rgba(255,255,255,0.12);
-            --blue: #3b82f6;
-            --blue2: #60a5fa;
-            --text: #ffffff;
-            --text2: #6b6b7b;
-            --text3: #8e8e9a;
-            --green: #22c55e;
-            --red: #ef4444;
-            --orange: #f59e0b;
-            --purple: #8b5cf6;
-            --pink: #ec4899;
-            --bubble-out: #2563eb;
-            --bubble-in: #1c1c24;
-            --input-bg: #1a1a24;
-            --divider: rgba(255,255,255,0.05);
-            --tab-active: #3b82f6;
-            --tab-inactive: #5c5c6b;
-            --radius: 14px;
-            --radius-sm: 10px;
-            --tr: 0.18s ease;
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-        }
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Helvetica Neue', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            height: 100vh; height: 100dvh;
-            display: flex; flex-direction: column; overflow: hidden;
-        }
-        @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-        @keyframes fadeOut { to{opacity:0;transform:translateX(-50%) translateY(8px)} }
-        @keyframes scaleIn { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+        body { font-family: 'Roboto', sans-serif; background-color: #1c242f; color: white; overflow: hidden; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #1c242f; }
+        ::-webkit-scrollbar-thumb { background: #3b4a5c; border-radius: 3px; }
 
-        .app { display:flex; flex-direction:column; height:100%; height:100dvh; }
+        .tg-bg { background-color: #1c242f; }
+        .tg-card { background-color: #242f3d; }
+        .tg-hover:hover { background-color: #2b384a; }
+        .tg-active:active { background-color: #324156; }
+        
+        .tg-btn { background-color: #3390ec; transition: all 0.2s; }
+        .tg-btn:active { background-color: #287bc2; transform: scale(0.98); }
+        .tg-btn:disabled { background-color: #3b4a5c; cursor: not-allowed; opacity: 0.6; }
+        .tg-btn-red { background-color: #ef4444; }
+        .tg-btn-green { background-color: #22c55e; }
 
-        /* LOGIN */
-        .login-screen {
-            display:flex; flex-direction:column; align-items:center; justify-content:center;
-            height:100%; padding:32px 24px; text-align:center; background:var(--bg); animation:fadeIn .4s ease;
-        }
-        .login-screen.hidden { display:none; }
-        .login-icon { font-size:64px; margin-bottom:16px; }
-        .login-screen h1 { font-size:26px; font-weight:700; margin-bottom:6px; letter-spacing:-0.3px; }
-        .login-screen p { color:var(--text2); font-size:14px; margin-bottom:24px; line-height:1.4; }
-        .login-input {
-            width:100%; max-width:300px; background:var(--surface2); border:1px solid var(--border2);
-            border-radius:12px; padding:14px 16px; color:var(--text); font-size:17px; text-align:center;
-            outline:none; letter-spacing:1px; transition:border var(--tr); -webkit-user-select:auto; user-select:auto;
-        }
-        .login-input:focus { border-color:var(--blue); }
-        .sms-input {
-            width:100%; max-width:200px; background:var(--surface2); border:1px solid var(--border2);
-            border-radius:12px; padding:14px; color:var(--text); font-size:22px; text-align:center;
-            outline:none; letter-spacing:6px; transition:border var(--tr); -webkit-user-select:auto; user-select:auto;
-        }
-        .sms-input:focus { border-color:var(--blue); }
-        .btn {
-            width:100%; max-width:300px; padding:13px; border-radius:12px; font-size:15px;
-            font-weight:600; cursor:pointer; border:none; transition:all var(--tr); margin:3px 0;
-        }
-        .btn:active { transform:scale(0.97); }
-        .btn-primary { background:var(--blue); color:#fff; }
-        .btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border2); }
-        .btn-danger { background:var(--red); color:#fff; }
-        .btn-green { background:var(--green); color:#fff; }
+        .tg-input { background: transparent; border-bottom: 1px solid #3b4a5c; transition: border 0.2s; }
+        .tg-input:focus { border-bottom: 2px solid #3390ec; outline: none; }
 
-        /* HEADER */
-        .header {
-            background:var(--surface); border-bottom:1px solid var(--divider);
-            padding:10px 14px; padding-top:max(10px,var(--safe-top));
-            display:flex; align-items:center; gap:10px; z-index:10; flex-shrink:0;
-        }
-        .header-title { font-size:18px; font-weight:700; flex:1; letter-spacing:-0.2px; }
-        .hbtn {
-            background:none; border:none; color:var(--blue2); font-size:15px;
-            cursor:pointer; padding:6px 10px; border-radius:8px; transition:background var(--tr); font-weight:500;
-        }
-        .hbtn:active { background:var(--surface2); }
+        .msg-in { background-color: #2b5278; border-radius: 12px 12px 12px 0; }
+        .msg-out { background-color: #3390ec; border-radius: 12px 12px 0 12px; }
 
-        /* FOLDER BAR */
-        .folder-bar {
-            display:flex; gap:0; padding:8px 8px; background:var(--surface);
-            border-bottom:1px solid var(--divider); overflow-x:auto; flex-shrink:0;
-        }
-        .folder-bar::-webkit-scrollbar { display:none; }
-        .folder-tab {
-            padding:8px 14px; font-size:13px; font-weight:600; color:var(--text2);
-            cursor:pointer; white-space:nowrap; border-radius:20px; transition:all var(--tr);
-            background:var(--surface2); margin:0 3px;
-        }
-        .folder-tab.on { background:var(--blue); color:#fff; }
+        /* Animations */
+        .slide-up { animation: slideU 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideU { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .fade-in { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* TABS */
-        .tabbar {
-            background:var(--surface); border-top:1px solid var(--divider);
-            display:flex; justify-content:space-around; padding:6px 0;
-            padding-bottom:max(6px,var(--safe-bottom)); flex-shrink:0; z-index:10;
-        }
-        .tab {
-            display:flex; flex-direction:column; align-items:center; gap:3px;
-            font-size:10px; color:var(--tab-inactive); background:none; border:none;
-            padding:4px 14px; cursor:pointer; transition:color var(--tr); position:relative;
-        }
-        .tab.on { color:var(--tab-active); }
-        .tab-icon { font-size:24px; line-height:1; }
-        .tab-badge {
-            position:absolute; top:0; right:8px; background:var(--red); color:#fff;
-            font-size:10px; min-width:16px; height:16px; border-radius:8px;
-            display:flex; align-items:center; justify-content:center; padding:0 4px; font-weight:700;
-        }
+        .pulse-ring { animation: pulseRing 2s infinite; }
+        @keyframes pulseRing { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 0; } }
 
-        /* PAGES */
-        .page { display:none; flex-direction:column; flex:1; overflow:hidden; animation:fadeIn .12s ease; }
-        .page.on { display:flex; }
-        .scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
-
-        /* CHAT LIST — стиль как на первом скриншоте */
-        .section-label {
-            font-size:12px; font-weight:600; color:var(--text2); padding:14px 16px 6px;
-            text-transform:uppercase; letter-spacing:0.6px;
-        }
-        .citem {
-            display:flex; align-items:center; gap:12px; padding:10px 14px;
-            cursor:pointer; transition:background var(--tr); position:relative;
-        }
-        .citem:active { background:rgba(255,255,255,0.03); }
-        .citem.unread::before {
-            content:''; position:absolute; left:2px; top:50%; transform:translateY(-50%);
-            width:7px; height:7px; border-radius:50%; background:var(--blue);
-        }
-        .ava {
-            width:48px; height:48px; border-radius:14px; display:flex; align-items:center;
-            justify-content:center; font-weight:700; font-size:19px; color:#fff; flex-shrink:0;
-            position:relative; overflow:hidden;
-        }
-        .ava.blue { background:#2563eb; } .ava.green { background:#16a34a; }
-        .ava.orange { background:#ea580c; } .ava.purple { background:#7c3aed; }
-        .ava.red { background:#dc2626; } .ava.teal { background:#0d9488; }
-        .ava.pink { background:#db2777; }
-        .online {
-            width:11px; height:11px; background:var(--green); border-radius:50%;
-            border:2px solid var(--bg); position:absolute; bottom:0; right:0;
-        }
-        .cinfo { flex:1; min-width:0; }
-        .cname { font-weight:600; font-size:15px; display:flex; align-items:center; gap:4px; }
-        .clast { color:var(--text2); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
-        .cmeta { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
-        .ctime { color:var(--text2); font-size:11px; }
-        .cbadge {
-            background:var(--blue); color:#fff; font-size:10px; font-weight:700;
-            min-width:18px; height:18px; border-radius:9px; display:flex;
-            align-items:center; justify-content:center; padding:0 5px;
-        }
-        .pin-icon { font-size:11px; margin-left:4px; }
-        .pin-tag { font-size:10px; color:var(--text2); background:var(--surface2); padding:2px 6px; border-radius:8px; margin-right:4px; }
-        .muted-icon { font-size:12px; color:var(--text2); margin-left:4px; }
-
-        /* CHAT VIEW */
-        .chat-header {
-            background:var(--surface); border-bottom:1px solid var(--divider);
-            padding:10px 12px; padding-top:max(10px,var(--safe-top));
-            display:flex; align-items:center; gap:10px; z-index:10; flex-shrink:0;
-        }
-        .chat-ava-sm {
-            width:36px; height:36px; border-radius:50%; font-size:15px; font-weight:600;
-            color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;
-        }
-        .chat-name-h { font-weight:700; font-size:15px; }
-        .chat-status-h { font-size:11px; color:var(--green); }
-        .messages {
-            flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
-            padding:10px 12px; display:flex; flex-direction:column; gap:3px; background:var(--bg);
-        }
-        .mrow { display:flex; align-items:flex-end; gap:5px; max-width:82%; animation:slideUp .18s ease; }
-        .mrow.out { align-self:flex-end; flex-direction:row-reverse; }
-        .mrow.in { align-self:flex-start; }
-        .mbubble { padding:8px 13px; border-radius:18px; font-size:15px; line-height:1.4; word-break:break-word; }
-        .mrow.out .mbubble { background:var(--bubble-out); border-bottom-right-radius:4px; }
-        .mrow.in .mbubble { background:var(--bubble-in); border-bottom-left-radius:4px; }
-        .mtime { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; text-align:right; }
-        .day-divider { text-align:center; margin:8px 0; font-size:11px; color:var(--text2); }
-        .day-divider span { background:var(--surface2); padding:3px 10px; border-radius:10px; }
-        .cinput-bar {
-            background:var(--surface); border-top:1px solid var(--divider);
-            padding:8px 10px; display:flex; align-items:flex-end; gap:6px;
-            padding-bottom:max(8px,var(--safe-bottom)); flex-shrink:0;
-        }
-        .cinput {
-            flex:1; background:var(--input-bg); border:1px solid var(--border); border-radius:20px;
-            padding:9px 14px; color:var(--text); font-size:15px; outline:none; font-family:inherit;
-            -webkit-user-select:auto; user-select:auto;
-        }
-        .cinput:focus { border-color:var(--blue); }
-        .csend {
-            width:36px; height:36px; background:var(--blue); border:none; border-radius:50%;
-            color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center;
-            justify-content:center; flex-shrink:0; transition:all var(--tr);
-        }
-        .csend:active { transform:scale(0.9); }
-        .cico {
-            width:34px; height:34px; background:none; border:none; color:var(--text2);
-            font-size:20px; cursor:pointer; border-radius:50%; display:flex; align-items:center; justify-content:center;
-        }
-        .cico:active { background:var(--surface2); }
-        .back-btn {
-            background:none; border:none; color:var(--blue); font-size:26px;
-            cursor:pointer; line-height:1; padding:4px; display:flex; align-items:center;
-        }
-
-        /* PROFILE PAGE — стиль как на втором скриншоте */
-        .profile-container {
-            flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
-        }
-        .profile-card {
-            margin:12px; background:var(--surface); border-radius:16px;
-            border:1px solid var(--border); overflow:hidden;
-        }
-        .profile-card-top {
-            padding:20px 16px; display:flex; align-items:center; gap:14px;
-            background:linear-gradient(180deg, rgba(59,130,246,0.15) 0%, transparent 100%);
-        }
-        .profile-ava-lg {
-            width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#3b82f6,#8b5cf6);
-            display:flex; align-items:center; justify-content:center; font-size:26px;
-            font-weight:700; color:#fff; flex-shrink:0;
-        }
-        .profile-info-lg { flex:1; }
-        .profile-name-lg { font-size:18px; font-weight:700; display:flex; align-items:center; gap:6px; }
-        .profile-badge { font-size:12px; color:var(--blue); }
-        .profile-username-lg { color:var(--text2); font-size:14px; }
-        .profile-status-row {
-            display:flex; align-items:center; gap:8px; margin-top:4px;
-        }
-        .profile-status-dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
-        .profile-status-text { color:var(--text2); font-size:12px; }
-
-        .profile-actions {
-            display:flex; flex-direction:column; border-top:1px solid var(--divider);
-        }
-        .profile-action-item {
-            display:flex; align-items:center; gap:12px; padding:14px 16px;
-            cursor:pointer; transition:background var(--tr); font-size:15px;
-            border-bottom:1px solid var(--divider);
-        }
-        .profile-action-item:last-child { border-bottom:none; }
-        .profile-action-item:active { background:var(--surface2); }
-        .profile-action-icon {
-            width:32px; height:32px; border-radius:8px; display:flex; align-items:center;
-            justify-content:center; font-size:16px; flex-shrink:0;
-        }
-        .profile-action-icon.blue { background:rgba(59,130,246,0.2); }
-        .profile-action-icon.purple { background:rgba(139,92,246,0.2); }
-        .profile-action-icon.pink { background:rgba(236,72,153,0.2); }
-        .profile-action-icon.green { background:rgba(34,197,94,0.2); }
-        .profile-action-icon.orange { background:rgba(245,158,11,0.2); }
-        .profile-action-arrow { color:var(--text2); margin-left:auto; font-size:18px; }
-        .profile-action-right { color:var(--text2); font-size:13px; margin-left:auto; }
-
-        .profile-id-row {
-            display:flex; align-items:center; gap:8px; padding:14px 16px;
-            border-top:1px solid var(--divider); color:var(--text2); font-size:13px;
-        }
-        .profile-id-row span { color:var(--text3); }
-
-        .profile-stats {
-            display:flex; gap:0; padding:12px 16px; border-top:1px solid var(--divider);
-        }
-        .profile-stat {
-            flex:1; text-align:center; cursor:pointer; transition:opacity var(--tr);
-        }
-        .profile-stat:active { opacity:0.7; }
-        .profile-stat-num { font-size:16px; font-weight:700; }
-        .profile-stat-label { font-size:11px; color:var(--text2); margin-top:2px; }
-
-        .profile-bottom-actions {
-            padding:8px 12px; display:flex; flex-direction:column; gap:8px;
-        }
-        .profile-bottom-btn {
-            width:100%; padding:12px; text-align:center; font-size:14px; font-weight:600;
-            cursor:pointer; border-radius:12px; transition:all var(--tr);
-            background:var(--surface); border:1px solid var(--border); color:var(--text);
-        }
-        .profile-bottom-btn:active { background:var(--surface2); }
-        .profile-bottom-btn.blue { background:var(--blue); color:#fff; border:none; }
-        .profile-bottom-btn.blue:active { opacity:0.85; }
-
-        /* SETTINGS */
-        .sblock {
-            margin:0 0 20px; background:var(--surface);
-            border-top:1px solid var(--border); border-bottom:1px solid var(--border);
-        }
-        .sitem {
-            display:flex; align-items:center; gap:12px; padding:13px 16px;
-            cursor:pointer; border-bottom:1px solid var(--divider);
-            transition:background var(--tr); font-size:15px;
-        }
-        .sitem:last-child { border-bottom:none; }
-        .sitem:active { background:var(--surface2); }
-        .sicon { font-size:20px; width:28px; text-align:center; flex-shrink:0; }
-        .sarrow { color:var(--text2); margin-left:auto; font-size:18px; }
-        .sval { color:var(--text2); font-size:14px; margin-left:auto; }
-        .tag-new {
-            background:var(--blue); color:#fff; font-size:9px; font-weight:700;
-            padding:2px 5px; border-radius:5px; margin-left:auto;
-        }
-        .toggle {
-            margin-left:auto; width:48px; height:26px; background:var(--surface3);
-            border-radius:13px; cursor:pointer; position:relative; transition:background var(--tr); flex-shrink:0;
-        }
-        .toggle.on { background:var(--green); }
-        .toggle::after {
-            content:''; position:absolute; top:2px; left:2px; width:22px; height:22px;
-            background:#fff; border-radius:50%; transition:transform var(--tr); box-shadow:0 1px 3px rgba(0,0,0,.4);
-        }
-        .toggle.on::after { transform:translateX(22px); }
-
-        /* GIFTS / STARS */
-        .gift-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:8px 0; }
-        .gcard {
-            text-align:center; padding:12px 6px; background:var(--surface2);
-            border:1px solid var(--border); border-radius:12px; cursor:pointer;
-            transition:all var(--tr); position:relative;
-        }
-        .gcard:active { transform:scale(0.95); border-color:var(--blue); }
-        .gcard.nft { border-color:rgba(245,158,11,0.5); }
-        .gemoji { font-size:36px; display:block; margin-bottom:4px; }
-        .gname { font-size:11px; font-weight:600; margin-bottom:1px; }
-        .gprice { font-size:11px; color:var(--orange); font-weight:600; }
-        .gsent { font-size:9px; color:var(--text2); }
-        .gtop {
-            position:absolute; top:4px; right:6px; background:var(--orange);
-            color:#000; font-size:8px; font-weight:700; padding:1px 4px; border-radius:4px;
-        }
-        .gnft {
-            position:absolute; top:4px; left:6px; background:#f59e0b;
-            color:#000; font-size:8px; font-weight:700; padding:1px 4px; border-radius:4px;
-        }
-        .stars-big { text-align:center; padding:16px 12px 8px; }
-        .stars-big .snum { font-size:44px; font-weight:700; }
-        .spkg {
-            display:flex; align-items:center; justify-content:space-between;
-            padding:12px 14px; background:var(--surface2); border:1px solid var(--border);
-            border-radius:10px; margin:4px 0; cursor:pointer; transition:all var(--tr);
-        }
-        .spkg:active { background:var(--surface3); border-color:var(--blue); }
-
-        /* MODALS */
-        .overlay {
-            position:fixed; inset:0; background:rgba(0,0,0,0.65);
-            backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-            z-index:100; display:none; align-items:flex-end; justify-content:center;
-        }
-        .overlay.on { display:flex; animation:fadeIn .18s ease; }
-        .modal {
-            background:var(--surface); border-radius:16px 16px 0 0;
-            width:100%; max-width:500px; max-height:88vh; overflow-y:auto;
-            padding:6px 0 max(20px,var(--safe-bottom)); animation:slideUp .25s ease;
-        }
-        .mhandle { width:32px; height:5px; background:var(--surface3); border-radius:3px; margin:10px auto 12px; }
-        .mtitle { font-size:16px; font-weight:700; text-align:center; margin-bottom:14px; padding:0 18px; }
-        .minput {
-            width:100%; padding:12px 14px; background:var(--input-bg); border:1px solid var(--border);
-            border-radius:10px; color:var(--text); font-size:15px; outline:none; font-family:inherit;
-            -webkit-user-select:auto; user-select:auto;
-        }
-        .minput:focus { border-color:var(--blue); }
-        .mpad { padding:0 14px; }
-
-        .toast {
-            position:fixed; bottom:max(90px,calc(60px + var(--safe-bottom))); left:50%;
-            transform:translateX(-50%); background:rgba(30,30,40,0.95);
-            border:1px solid var(--border); backdrop-filter:blur(16px);
-            padding:10px 20px; border-radius:20px; font-weight:600; z-index:300;
-            animation:slideUp .25s ease, fadeOut .3s ease 1.6s forwards;
-            font-size:13px; white-space:nowrap; color:#fff; pointer-events:none;
-        }
-
-        /* SEARCH */
-        .search-results { margin-top:6px; }
-        .search-result-item {
-            display:flex; align-items:center; gap:10px; padding:10px 12px;
-            cursor:pointer; border-radius:10px; transition:background var(--tr);
-        }
-        .search-result-item:active { background:var(--surface2); }
-        .no-results { text-align:center; padding:16px; color:var(--text2); font-size:13px; }
+        .hidden-screen { display: none !important; }
+        .panel-hidden { transform: translateX(-100%) !important; }
+        .panel-hidden-right { transform: translateX(100%) !important; }
+        .panel-hidden-bottom { transform: translateY(100%) !important; }
     </style>
 </head>
-<body>
+<body class="h-screen w-screen flex flex-col relative">
 
-    <!-- STEP 1: PHONE -->
-    <div class="login-screen" id="regStep1">
-        <div class="login-icon">✈️</div>
-        <h1>Telegram</h1>
-        <p>Введите ваш номер телефона</p>
-        <input type="tel" class="login-input" id="regPhone" placeholder="+7 963 530-79-55" value="+7 963 530-79-55">
-        <button class="btn btn-primary" style="margin-top:14px;" onclick="sendSMS()">Получить код →</button>
-    </div>
-
-    <!-- STEP 2: SMS CODE -->
-    <div class="login-screen hidden" id="regStep2">
-        <div class="login-icon">📱</div>
-        <h1>Код из SMS</h1>
-        <p>4-значный код отправлен на<br><strong id="smsPhoneDisplay">+7 963 530-79-55</strong></p>
-        <input type="text" class="sms-input" id="smsCode" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]*">
-        <div style="color:var(--text2);font-size:12px;margin:6px 0;" id="codeHint"></div>
-        <button class="btn btn-primary" style="margin-top:10px;" onclick="verifySMS()">Подтвердить →</button>
-        <button class="btn btn-ghost" style="margin-top:6px;" onclick="resendSMS()">🔄 Отправить повторно</button>
-        <button class="btn btn-ghost" onclick="goBackToPhone()">← Другой номер</button>
-    </div>
-
-    <!-- STEP 3: USERNAME -->
-    <div class="login-screen hidden" id="regStep3">
-        <div class="login-icon">👤</div>
-        <h1>Выберите username</h1>
-        <p>Уникальное имя для поиска</p>
-        <div style="display:flex;align-items:center;gap:4px;max-width:300px;width:100%;">
-            <span style="color:var(--text2);font-size:17px;">@</span>
-            <input type="text" class="login-input" id="regUsername" placeholder="username" style="flex:1;text-align:left;letter-spacing:0;" autocomplete="off" autocorrect="off" autocapitalize="none">
+    <!-- CALL SCREEN OVERLAY -->
+    <div id="call-screen" class="fixed inset-0 z-[100] bg-[#0e1621] hidden flex-col items-center justify-between py-12">
+        <div class="flex flex-col items-center mt-10">
+            <div class="relative mb-6">
+                <div class="absolute inset-0 bg-blue-500 rounded-full pulse-ring"></div>
+                <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-5xl font-bold relative z-10 border-4 border-[#0e1621]" id="call-avatar">A</div>
+            </div>
+            <h2 class="text-2xl font-bold mb-2" id="call-name">User</h2>
+            <p class="text-gray-400" id="call-status">Вызов...</p>
         </div>
-        <div style="color:var(--red);font-size:12px;margin-top:5px;display:none;" id="usernameError"></div>
-        <button class="btn btn-primary" style="margin-top:14px;" onclick="finishRegistration()">Зарегистрироваться 🚀</button>
-        <button class="btn btn-ghost" onclick="skipUsername()">Пропустить →</button>
+        
+        <!-- Video Simulation Area -->
+        <div class="w-full max-w-md h-64 bg-gray-800 rounded-2xl overflow-hidden relative mb-8 shadow-2xl border border-gray-700">
+            <div class="absolute inset-0 flex items-center justify-center text-gray-500">
+                <svg class="w-16 h-16 opacity-20" fill="currentColor" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </div>
+            <!-- Self View PIP -->
+            <div class="absolute bottom-4 right-4 w-24 h-32 bg-black rounded-lg border border-gray-600 overflow-hidden">
+                 <div class="w-full h-full bg-gray-700 flex items-center justify-center"><span class="text-xs text-gray-400">You</span></div>
+            </div>
+        </div>
+
+        <div class="flex gap-8 mb-10">
+            <button class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m0 0a7 7 0 017-7m0 0a7 7 0 017 7m0 0h.01"></path></svg></button>
+            <button class="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center hover:bg-gray-600 transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
+            <button onclick="endCall()" class="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition shadow-lg shadow-red-500/30"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l2-2m0 0l2-2m0 0l-2 2m0 0l-2 2m0 0l-2-2m0 0l2 2m0 0l2-2m0 0l-2 2"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M6 10h12a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7a2 2 0 012-2z"></path></svg></button>
+        </div>
+    </div>
+
+    <!-- SMS TOAST -->
+    <div id="sms-toast" class="fixed top-[-80px] left-4 right-4 md:left-auto md:right-4 md:w-80 bg-[#242f3d] border border-gray-700 p-4 rounded-xl shadow-2xl z-[200] flex items-center gap-3 transition-all duration-500">
+        <div class="w-10 h-10 bg-[#3390ec] rounded-full flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        </div>
+        <div>
+            <div class="text-xs text-gray-400">Telegram • Сейчас</div>
+            <div class="text-sm font-medium text-white">Код: <span id="toast-code" class="text-[#3390ec] font-bold tracking-wider">----</span></div>
+        </div>
+    </div>
+
+    <!-- AUTH: LOGIN -->
+    <div id="screen-login" class="w-full h-full flex flex-col items-center justify-center absolute inset-0 z-50 fade-in bg-[#1c242f]">
+        <div class="w-20 h-20 bg-[#3390ec] rounded-full flex items-center justify-center mb-6 shadow-lg">
+            <svg class="w-10 h-10 text-white translate-x-0.5 -translate-y-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <h1 class="text-xl font-bold mb-6">Telegram</h1>
+        <p class="text-gray-400 text-center text-sm mb-8 max-w-[280px]">Введите номер телефона.<br>Поддерживаются анонимные +888.</p>
+        <div class="w-full max-w-xs px-6 space-y-4">
+            <input type="tel" id="phone-input" class="w-full tg-input py-2 text-center text-lg tracking-wide" value="+7 " placeholder="+7 999 000-00-00">
+            <button id="btn-get-code" class="w-full tg-btn text-white font-medium py-3 rounded-lg shadow-md uppercase text-sm tracking-wide">Получить код</button>
+        </div>
+    </div>
+
+    <!-- AUTH: CODE -->
+    <div id="screen-code" class="hidden-screen w-full h-full flex flex-col absolute inset-0 z-50 bg-[#1c242f]">
+        <div class="flex items-center p-4">
+            <button onclick="goToScreen('screen-login')" class="text-[#3390ec] flex items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                <span class="font-medium">Другой номер</span>
+            </button>
+        </div>
+        <div class="flex-1 flex flex-col items-center px-6 pt-8">
+            <h2 class="text-xl font-bold mb-2">Код из SMS</h2>
+            <p class="text-gray-400 text-sm text-center mb-6">Мы отправили код на <span id="display-phone" class="text-white"></span></p>
+            <input type="number" id="code-input" class="w-40 text-center text-4xl tracking-[0.5em] bg-transparent border-b-2 border-[#3390ec] focus:outline-none pb-2 font-bold mb-6" maxlength="5" placeholder="" autofocus>
+            <button id="btn-verify" class="w-full max-w-xs tg-btn text-white font-medium py-3 rounded-lg shadow-md uppercase text-sm tracking-wide disabled:opacity-50" disabled>Подтвердить</button>
+            <div id="timer-block" class="mt-6 text-sm text-gray-400 hidden">
+                <button onclick="resendCode()" class="text-[#3390ec] hover:underline">Отправить повторно</button>
+                <span id="countdown" class="ml-2 text-[#3390ec]">59</span> сек.
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH: USERNAME -->
+    <div id="screen-username" class="hidden-screen w-full h-full flex flex-col absolute inset-0 z-50 bg-[#1c242f]">
+        <div class="flex-1 flex flex-col items-center px-6 pt-16">
+            <div class="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center mb-4 text-2xl">👤</div>
+            <h2 class="text-xl font-bold mb-2">Выберите username</h2>
+            <p class="text-gray-400 text-sm mb-6">Минимум 4 символа. Вы сможете изменить его позже.</p>
+            <div class="w-full max-w-xs flex items-center border-b border-[#3390ec] py-2 mb-2">
+                <span class="text-gray-400 mr-2 text-xl">@</span>
+                <input type="text" id="username-input" class="w-full bg-transparent focus:outline-none text-xl" placeholder="username">
+            </div>
+            <div id="username-error" class="text-red-400 text-xs h-4 mb-6"></div>
+            <button id="btn-register" class="w-full max-w-xs tg-btn text-white font-medium py-3 rounded-lg shadow-md uppercase text-sm tracking-wide">Зарегистрироваться</button>
+            <button onclick="finishSetup()" class="w-full max-w-xs mt-4 text-[#3390ec] font-medium py-3 uppercase text-sm tracking-wide hover:bg-[#242f3d] rounded-lg transition">Пропустить</button>
+        </div>
     </div>
 
     <!-- MAIN APP -->
-    <div class="app" id="mainApp" style="display:none;">
-
-        <!-- CHATS PAGE -->
-        <div class="page on" id="pChats">
-            <div class="header">
-                <span class="header-title">Чаты</span>
-                <button class="hbtn" onclick="openGlobalSearch()">🔍</button>
-                <button class="hbtn" onclick="showToast('Новое сообщение')">✏️</button>
-            </div>
-            <div class="folder-bar">
-                <div class="folder-tab on">Все</div>
-                <div class="folder-tab">Личные</div>
-                <div class="folder-tab">Группы</div>
-                <div class="folder-tab">Каналы</div>
-            </div>
-            <div class="scroll" id="chatList">
-                <div class="section-label">Закреплённые</div>
-                <div class="citem" style="background:rgba(59,130,246,0.04);" onclick="openChat('saved')">
-                    <div class="ava orange">⭐</div>
-                    <div class="cinfo">
-                        <div class="cname">Избранное <span class="pin-icon">📌</span></div>
-                        <div class="clast" id="savedLast">Сохраняйте важное</div>
-                    </div>
-                    <div class="cmeta"><span class="ctime" id="savedT"></span></div>
+    <div id="screen-app" class="hidden-screen w-full h-full flex flex-col md:flex-row bg-[#1c242f]">
+        <!-- Sidebar -->
+        <div class="w-full md:w-[360px] h-full flex flex-col border-r border-[#101921] z-20">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 justify-between shrink-0">
+                <button id="menu-btn" class="p-2 rounded-full hover:bg-[#324156] transition"><svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                <div class="flex-1 mx-4 relative">
+                    <input type="text" id="main-search-input" onkeyup="handleGlobalSearch(this.value)" placeholder="Поиск" class="w-full bg-[#1c242f] text-sm rounded-lg py-1.5 pl-9 pr-4 focus:outline-none border border-transparent focus:border-[#3390ec] transition">
+                    <svg class="w-4 h-4 text-gray-500 absolute left-3 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <div class="section-label">Все чаты</div>
-                <div id="dynamicChats"></div>
+            </div>
+            <!-- Tabs -->
+            <div class="flex bg-[#242f3d] text-sm font-medium border-b border-[#101921] overflow-x-auto">
+                <button class="px-4 py-3 text-[#3390ec] border-b-2 border-[#3390ec] whitespace-nowrap">Все чаты</button>
+                <button class="px-4 py-3 text-gray-400 hover:text-white transition whitespace-nowrap">Личные</button>
+                <button class="px-4 py-3 text-gray-400 hover:text-white transition whitespace-nowrap">Группы</button>
+                <button class="px-4 py-3 text-gray-400 hover:text-white transition whitespace-nowrap">Каналы</button>
+            </div>
+            <div id="chat-list" class="flex-1 overflow-y-auto"></div>
+        </div>
+
+        <!-- Chat View (Desktop) -->
+        <div id="chat-view" class="hidden md:flex flex-1 flex-col bg-[#0e1621] relative">
+            <div class="flex-1 flex flex-col items-center justify-center text-gray-500">
+                <div class="w-20 h-20 bg-[#242f3d] rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                </div>
+                <p>Выберите чат, чтобы начать общение</p>
             </div>
         </div>
 
-        <!-- CALLS PAGE -->
-        <div class="page" id="pCalls">
-            <div class="header"><span class="header-title">Звонки</span><button class="hbtn" onclick="showToast('Новый звонок')">+</button></div>
-            <div class="scroll">
-                <div class="section-label">Недавние</div>
-                <div class="citem" onclick="showToast('📹 Звоним Алексею...')">
-                    <div class="ava blue">А</div>
-                    <div class="cinfo"><div class="cname">Алексей</div><div class="clast" style="color:var(--green);">Видеозвонок · 5 мин</div></div>
-                    <div class="cmeta"><span class="ctime">10:32</span></div>
+        <!-- Mobile Chat Overlay -->
+        <div id="mobile-chat-overlay" class="absolute inset-0 bg-[#0e1621] z-30 transform translate-x-full transition-transform duration-200 flex flex-col">
+             <div class="h-14 bg-[#242f3d] flex items-center px-3 border-b border-[#101921]">
+                <button id="back-to-list" class="mr-3 text-[#3390ec]"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <div class="flex-1 min-w-0 cursor-pointer" onclick="openUserProfile(state.activeChatId)">
+                    <span id="mobile-chat-name" class="font-medium text-white truncate block">User</span>
+                    <span class="text-xs text-gray-400">в сети</span>
                 </div>
-                <div class="citem" onclick="showToast('📞 Звоним Марии...')">
-                    <div class="ava green">М</div>
-                    <div class="cinfo"><div class="cname">Мария</div><div class="clast" style="color:var(--red);">Пропущенный</div></div>
-                    <div class="cmeta"><span class="ctime">вчера</span></div>
+                <div class="flex gap-4 text-[#3390ec]">
+                    <svg class="w-6 h-6 cursor-pointer" onclick="startCall('audio')" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    <svg class="w-6 h-6 cursor-pointer" onclick="startCall('video')" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                 </div>
-            </div>
+             </div>
+             <div id="mobile-chat-messages" class="flex-1 overflow-y-auto p-3 space-y-2 bg-[url('https://web.telegram.org/img/bg_0.png')] bg-repeat"></div>
+             <div class="h-12 bg-[#242f3d] flex items-center px-2 shrink-0">
+                <input type="text" id="mobile-msg-input" placeholder="Сообщение..." class="flex-1 bg-transparent px-2 focus:outline-none text-white">
+                <button id="mobile-send-btn" class="p-2 text-[#3390ec]"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+             </div>
         </div>
 
-        <!-- CONTACTS PAGE -->
-        <div class="page" id="pContacts">
-            <div class="header"><span class="header-title">Контакты</span><button class="hbtn" onclick="showToast('Добавить')">+</button></div>
-            <div class="scroll">
-                <div class="section-label">Мои контакты</div>
-                <div class="citem" onclick="openChatByUsername('alex_tg')"><div class="ava blue">А<div class="online"></div></div><div class="cinfo"><div class="cname">Алексей</div><div class="clast">@alex_tg · онлайн</div></div></div>
-                <div class="citem" onclick="openChatByUsername('maria_star')"><div class="ava green">М</div><div class="cinfo"><div class="cname">Мария</div><div class="clast">@maria_star</div></div></div>
-                <div class="citem" onclick="openChatByUsername('elena_v')"><div class="ava red">Е</div><div class="cinfo"><div class="cname">Елена</div><div class="clast">@elena_v</div></div></div>
-            </div>
-        </div>
-
-        <!-- SETTINGS PAGE -->
-        <div class="page" id="pSettings">
-            <div class="header"><span class="header-title">Настройки</span><button class="hbtn" onclick="showEditProfile()">Изм.</button></div>
-            <div class="scroll">
-                <div class="sblock" style="margin-bottom:0;">
-                    <div class="sitem" onclick="openProfilePage()">
-                        <div class="ava blue" style="width:48px;height:48px;font-size:20px;border-radius:50%;" id="setAva">М</div>
-                        <div style="flex:1;">
-                            <div style="font-weight:600;font-size:16px;" id="setName">Пользователь</div>
-                            <div style="font-size:13px;color:var(--text2);" id="setPhone">+7 963 530-79-55</div>
-                            <div style="font-size:12px;color:var(--blue);" id="setUsername">@username</div>
-                        </div>
-                        <span class="sarrow">›</span>
+        <!-- SETTINGS DRAWER -->
+        <div id="settings-modal" class="absolute inset-0 bg-black/60 z-40 hidden">
+            <div id="settings-panel" class="absolute top-0 left-0 w-[280px] h-full bg-[#242f3d] shadow-2xl transform -translate-x-full transition-transform duration-200 flex flex-col">
+                <div class="p-4 bg-[#1c242f] border-b border-[#101921] flex items-center gap-3 cursor-pointer" onclick="openUserProfile('me')">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-lg font-bold" id="settings-avatar">U</div>
+                    <div>
+                        <div class="font-bold" id="settings-name">User</div>
+                        <div class="text-xs text-gray-400" id="settings-phone">+7...</div>
                     </div>
                 </div>
-                <div style="margin:8px 12px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showToast('Telegram Premium — безлимитные файлы, реакции, стикеры')">
-                    <span style="font-size:28px;">⭐</span>
-                    <div><div style="font-weight:700;color:#fff;">Telegram Premium</div><div style="font-size:11px;color:rgba(255,255,255,.75);">Безлимитные файлы, реакции</div></div>
-                    <span style="color:#fff;font-size:18px;margin-left:auto;">›</span>
-                </div>
-                <div class="sblock">
-                    <div class="sitem" onclick="showNotifications()"><span class="sicon">🔔</span> Уведомления и звуки<span class="sarrow">›</span></div>
-                    <div class="sitem" onclick="showPrivacy()"><span class="sicon">🔒</span> Конфиденциальность<span class="sarrow">›</span></div>
-                    <div class="sitem" onclick="showData()"><span class="sicon">💾</span> Данные и память<span class="sarrow">›</span></div>
-                    <div class="sitem" onclick="showAppearance()"><span class="sicon">🎨</span> Оформление<span class="sval" id="themeLabel">Тёмная</span></div>
-                </div>
-                <div class="sblock">
-                    <div class="sitem" onclick="openProfilePage()"><span class="sicon">⭐</span> Избранное<span class="sarrow">›</span></div>
-                    <div class="sitem" onclick="openGiftsStore()"><span class="sicon">🎁</span> Подарки<span class="tag-new">NEW</span></div>
-                    <div class="sitem" onclick="showStars()"><span class="sicon">🌟</span> Звёзды Telegram<span class="sval" id="starsMenuVal">1000 ★</span></div>
+                <div class="flex-1 overflow-y-auto py-2">
+                    <div class="px-4 py-3 tg-active cursor-pointer flex items-center gap-3" onclick="openSettingsPanel('panel-stars')">
+                        <span class="text-yellow-400 text-xl">⭐</span><span>Звёзды Telegram</span><span class="ml-auto text-xs bg-yellow-500/20 text-yellow-400 px-2 py-0.5 rounded" id="sidebar-star-bal">0</span>
+                    </div>
+                    <div class="px-4 py-3 tg-active cursor-pointer flex items-center gap-3" onclick="openSettingsPanel('panel-notifications')"><span class="text-xl">🔔</span><span>Уведомления</span></div>
+                    <div class="px-4 py-3 tg-active cursor-pointer flex items-center gap-3" onclick="openSettingsPanel('panel-privacy')"><span class="text-xl">🔒</span><span>Конфиденциальность</span></div>
+                    <div class="px-4 py-3 tg-active cursor-pointer flex items-center gap-3" onclick="openSettingsPanel('panel-data')"><span class="text-xl">💾</span><span>Данные и память</span></div>
+                    <div class="px-4 py-3 tg-active cursor-pointer flex items-center gap-3" onclick="openSettingsPanel('panel-appearance')"><span class="text-xl">🎨</span><span>Оформление</span></div>
+                    <div class="border-t border-[#101921] my-1"></div>
+                    <div class="px-4 py-3 tg-active cursor-pointer flex items-center gap-3 text-red-400" onclick="location.reload()"><span class="text-xl">🚪</span><span>Выйти</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- PROFILE PAGE -->
-        <div class="page" id="pProfile">
-            <div class="header">
-                <button class="back-btn" onclick="goBack('pSettings')">‹</button>
-                <span class="header-title">Мой профиль</span>
-                <button class="hbtn" onclick="showToast('Поделиться')">📤</button>
+        <!-- SUB PANELS -->
+        <!-- Profile Panel -->
+        <div id="panel-profile" class="fixed inset-0 z-50 bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-profile')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3" id="profile-title">Профиль</span>
+                <button id="profile-edit-btn" onclick="openSettingsPanel('panel-edit-profile')" class="ml-auto text-[#3390ec] text-sm font-medium">Изменить</button>
             </div>
-            <div class="profile-container">
-                <div class="profile-card">
-                    <div class="profile-card-top">
-                        <div class="profile-ava-lg" id="profAvaLg">М</div>
-                        <div class="profile-info-lg">
-                            <div class="profile-name-lg" id="profNameLg">Пользователь <span class="profile-badge">✨</span></div>
-                            <div class="profile-username-lg" id="profUsernameLg">@username</div>
-                            <div class="profile-status-row">
-                                <div class="profile-status-dot"></div>
-                                <span class="profile-status-text">в сети</span>
-                            </div>
-                        </div>
+            <div class="flex-1 overflow-y-auto">
+                <div class="bg-[#242f3d] p-6 flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-4xl font-bold mb-4" id="profile-avatar-lg">U</div>
+                    <h2 class="text-xl font-bold" id="profile-name-lg">User</h2>
+                    <p class="text-sm text-gray-400" id="profile-status-lg">в сети</p>
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="bg-[#242f3d] rounded-xl p-3 cursor-pointer" onclick="promptCopy(document.getElementById('profile-user-lg').innerText)">
+                        <div class="text-xs text-[#3390ec] mb-1">Username</div>
+                        <div class="text-base font-medium" id="profile-user-lg">@user</div>
                     </div>
-                    <div class="profile-actions">
-                        <div class="profile-action-item" onclick="showToast('Эмодзи-статус установлен! 🏠')">
-                            <div class="profile-action-icon blue">🏠</div>
-                            <span>Установить эмодзи-статус</span>
-                            <span class="profile-action-arrow">›</span>
-                        </div>
-                        <div class="profile-action-item" onclick="changeProfileColor()">
-                            <div class="profile-action-icon purple">🎨</div>
-                            <span>Изменить цвет профиля</span>
-                            <span class="profile-action-arrow">›</span>
-                        </div>
-                        <div class="profile-action-item" onclick="showToast('Выберите новое фото 📷')">
-                            <div class="profile-action-icon pink">📷</div>
-                            <span>Изменить фотографию</span>
-                            <span class="profile-action-arrow">›</span>
-                        </div>
+                    <div class="bg-[#242f3d] rounded-xl p-3 cursor-pointer" id="profile-phone-block" onclick="promptCopy(document.getElementById('profile-phone-lg').innerText)">
+                        <div class="text-xs text-[#3390ec] mb-1">Телефон</div>
+                        <div class="text-base font-medium" id="profile-phone-lg">+7...</div>
                     </div>
-                    <div class="profile-id-row">
-                        ID: <span id="profId">7323296973</span>
+                    <div class="bg-[#242f3d] rounded-xl p-3 cursor-pointer">
+                        <div class="text-xs text-[#3390ec] mb-1">Bio</div>
+                        <div class="text-base font-medium" id="profile-bio-lg">Нет био</div>
                     </div>
-                    <div class="profile-stats">
-                        <div class="profile-stat" onclick="showToast('Подписчики: 15,2K')">
-                            <div class="profile-stat-num">15,2K</div>
-                            <div class="profile-stat-label">подписчиков</div>
-                        </div>
-                        <div class="profile-stat" onclick="showToast('Подписки: 6K')">
-                            <div class="profile-stat-num">6K</div>
-                            <div class="profile-stat-label">подписок</div>
-                        </div>
+                    <div class="bg-[#242f3d] rounded-xl p-3">
+                        <div class="text-xs text-gray-500 mb-1">ID</div>
+                        <div class="text-base font-mono text-gray-300" id="profile-id-lg">7323296973</div>
                     </div>
                 </div>
-                <div class="profile-bottom-actions">
-                    <button class="profile-bottom-btn blue" onclick="showToast('Аккаунт добавлен ✓')">Добавить аккаунт</button>
-                    <button class="profile-bottom-btn" onclick="openProfilePage()">Мой профиль</button>
+                <!-- Gifts Section -->
+                <div class="px-4 mt-2">
+                    <div class="flex justify-between items-center mb-3 px-1">
+                        <h3 class="font-bold text-gray-300">Подарки и NFT</h3>
+                        <span class="text-xs text-gray-500" id="gifts-count">0</span>
+                    </div>
+                    <div id="profile-gifts-grid" class="grid grid-cols-2 gap-2 pb-4">
+                        <div class="col-span-2 text-center text-gray-500 py-4 text-sm">Нет подарков</div>
+                    </div>
+                </div>
+            </div>
+            <div id="profile-actions" class="p-4 bg-[#242f3d] border-t border-[#101921] hidden">
+                <button onclick="openSendGiftModal(null, state.currentProfileId)" class="w-full tg-btn py-3 rounded-lg font-medium flex items-center justify-center gap-2">
+                    <span>🎁</span> Отправить подарок
+                </button>
+            </div>
+        </div>
+
+        <!-- Edit Profile -->
+        <div id="panel-edit-profile" class="fixed inset-0 z-[60] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-edit-profile')" class="text-[#3390ec] text-sm">Отмена</button>
+                <span class="font-medium flex-1 text-center">Редактировать профиль</span>
+                <button onclick="saveProfile()" class="text-[#3390ec] text-sm font-bold">Сохранить</button>
+            </div>
+            <div class="p-4 space-y-4">
+                <div class="bg-[#242f3d] rounded-xl p-3"><input type="text" id="edit-fname" class="w-full bg-transparent focus:outline-none text-white" placeholder="Имя"></div>
+                <div class="bg-[#242f3d] rounded-xl p-3"><input type="text" id="edit-lname" class="w-full bg-transparent focus:outline-none text-white" placeholder="Фамилия"></div>
+                <div class="bg-[#242f3d] rounded-xl p-3 flex items-center"><span class="text-gray-500 mr-2">@</span><input type="text" id="edit-user" class="w-full bg-transparent focus:outline-none text-white" placeholder="username"></div>
+                <div class="bg-[#242f3d] rounded-xl p-3"><input type="text" id="edit-bio" class="w-full bg-transparent focus:outline-none text-white" placeholder="Bio"></div>
+            </div>
+        </div>
+
+        <!-- Stars & Gifts -->
+        <div id="panel-stars" class="fixed inset-0 z-[60] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-stars')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3 flex items-center gap-2"><span class="text-yellow-400">⭐</span> Звёзды</span>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <div class="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl p-5 mb-6 text-center shadow-lg">
+                    <div class="text-sm opacity-90 mb-1">Баланс</div>
+                    <div class="text-4xl font-bold text-white flex items-center justify-center gap-2"><span id="star-balance-lg">0</span> ★</div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mb-8">
+                    <button onclick="buyStars(100)" class="bg-[#242f3d] p-4 rounded-xl hover:bg-[#324156] transition"><div class="font-bold text-xl text-yellow-400">100 ★</div><div class="text-xs text-gray-400">≈ 100 ₽</div></button>
+                    <button onclick="buyStars(500)" class="bg-[#242f3d] p-4 rounded-xl hover:bg-[#324156] transition"><div class="font-bold text-xl text-yellow-400">500 ★</div><div class="text-xs text-gray-400">≈ 500 ₽</div></button>
+                </div>
+                <h3 class="font-bold mb-3">Магазин подарков</h3>
+                <div class="grid grid-cols-3 gap-2" id="gift-shop-grid"></div>
+            </div>
+        </div>
+
+        <!-- Send Gift Modal -->
+        <div id="send-gift-modal" class="fixed inset-0 z-[70] bg-black/70 hidden flex items-end sm:items-center justify-center">
+            <div class="bg-[#242f3d] w-full sm:w-96 sm:rounded-2xl rounded-t-2xl p-5 shadow-2xl slide-up">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-lg">Отправить подарок</h3>
+                    <button onclick="document.getElementById('send-gift-modal').classList.add('hidden')" class="text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                </div>
+                <div class="flex items-center gap-4 mb-4 bg-[#1c242f] p-3 rounded-xl">
+                    <div id="modal-gift-icon" class="text-5xl">🎁</div>
+                    <div>
+                        <div class="font-bold" id="modal-gift-name">Gift</div>
+                        <div class="text-sm text-yellow-400"><span id="modal-gift-price">0</span> ★</div>
+                    </div>
+                </div>
+                <label class="text-xs text-gray-400 mb-1 block">Кому:</label>
+                <select id="gift-recipient-select" class="w-full bg-[#1c242f] rounded-xl p-3 mb-5 focus:outline-none border border-transparent focus:border-[#3390ec]"></select>
+                <button onclick="confirmSendGift()" class="w-full tg-btn py-3 rounded-xl font-bold text-lg shadow-lg">Отправить</button>
+            </div>
+        </div>
+
+        <!-- Privacy Panel -->
+        <div id="panel-privacy" class="fixed inset-0 z-[60] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-privacy')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3">Конфиденциальность</span>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-3">
+                <div class="bg-[#242f3d] rounded-xl overflow-hidden">
+                    <div class="p-4 border-b border-[#101921] flex justify-between items-center cursor-pointer"><span>Номер телефона</span><span class="text-[#3390ec]">Все</span></div>
+                    <div class="p-4 flex justify-between items-center cursor-pointer"><span>Последняя активность</span><span class="text-[#3390ec]">Все</span></div>
+                </div>
+                <div class="bg-[#242f3d] rounded-xl overflow-hidden">
+                    <div class="p-4 border-b border-[#101921] flex justify-between items-center cursor-pointer" onclick="openSettingsPanel('panel-password')"><span>Облачный пароль</span><span class="text-gray-400 text-sm">Выключен</span></div>
+                    <div class="p-4 flex justify-between items-center cursor-pointer" onclick="openSettingsPanel('panel-blocked')"><span>Чёрный список</span><span class="text-gray-400 text-sm" id="blocked-count-badge">0</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- CHAT PAGE -->
-        <div class="page" id="pChat">
-            <div class="chat-header">
-                <button class="back-btn" onclick="closeChat()">‹</button>
-                <div class="chat-ava-sm blue" id="chatAvaH">А</div>
-                <div style="flex:1;">
-                    <div class="chat-name-h" id="chatNameH">Алексей</div>
-                    <div class="chat-status-h" id="chatStatusH">онлайн</div>
-                </div>
-                <button class="cico" onclick="showToast('Поиск в чате')">🔍</button>
-                <button class="cico" onclick="sendGiftInChat()">🎁</button>
-                <button class="cico" onclick="showToast('Звонок')">📞</button>
+        <!-- Cloud Password -->
+        <div id="panel-password" class="fixed inset-0 z-[70] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-password')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3">Облачный пароль</span>
             </div>
-            <div class="messages" id="chatMsgs"></div>
-            <div class="cinput-bar">
-                <button class="cico" onclick="showToast('Прикрепить файл')">📎</button>
-                <input class="cinput" id="chatInput" placeholder="Сообщение...">
-                <button class="cico" onclick="showToast('Голосовое сообщение')">🎤</button>
-                <button class="csend" onclick="sendMsg()">↑</button>
+            <div class="p-4 space-y-4">
+                <p class="text-sm text-gray-400">Защитите аккаунт дополнительным паролем.</p>
+                <div class="bg-[#242f3d] rounded-xl p-3"><input type="password" id="cloud-pass-1" class="w-full bg-transparent focus:outline-none text-white" placeholder="Введите пароль"></div>
+                <div class="bg-[#242f3d] rounded-xl p-3"><input type="password" id="cloud-pass-2" class="w-full bg-transparent focus:outline-none text-white" placeholder="Подтвердите пароль"></div>
+                <button onclick="saveCloudPassword()" class="w-full tg-btn py-3 rounded-xl font-bold">Включить</button>
             </div>
         </div>
 
-        <!-- TAB BAR -->
-        <div class="tabbar" id="mainTabbar">
-            <button class="tab on" onclick="switchTab('pChats',this)"><span class="tab-icon">💬</span>Чаты<span class="tab-badge">5</span></button>
-            <button class="tab" onclick="switchTab('pCalls',this)"><span class="tab-icon">📞</span>Звонки</button>
-            <button class="tab" onclick="switchTab('pContacts',this)"><span class="tab-icon">👥</span>Контакты</button>
-            <button class="tab" onclick="switchTab('pSettings',this)"><span class="tab-icon">⚙️</span>Настройки</button>
+        <!-- Blocked List -->
+        <div id="panel-blocked" class="fixed inset-0 z-[70] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-blocked')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3">Чёрный список</span>
+            </div>
+            <div class="p-4">
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="block-input" placeholder="@username" class="flex-1 bg-[#242f3d] rounded-xl px-3 py-2 focus:outline-none">
+                    <button onclick="addToBlockedList()" class="tg-btn px-4 rounded-xl">+</button>
+                </div>
+                <div id="blocked-list-container" class="space-y-2"></div>
+            </div>
+        </div>
+
+        <!-- Data & Storage -->
+        <div id="panel-data" class="fixed inset-0 z-[60] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-data')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3">Данные и память</span>
+            </div>
+            <div class="p-4 space-y-3">
+                <div class="bg-[#242f3d] rounded-xl p-4 flex justify-between items-center">
+                    <span>Использовано</span><span class="text-gray-400">24.6 МБ</span>
+                </div>
+                <div class="bg-[#242f3d] rounded-xl p-4 flex justify-between items-center">
+                    <span>Кэш</span><span class="text-gray-400" id="cache-size">8.2 МБ</span>
+                </div>
+                <button onclick="clearCache()" class="w-full tg-btn py-3 rounded-xl font-bold">Очистить кэш</button>
+            </div>
+        </div>
+
+        <!-- Appearance -->
+        <div id="panel-appearance" class="fixed inset-0 z-[60] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-appearance')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3">Оформление</span>
+            </div>
+            <div class="p-4 space-y-2">
+                <div class="bg-[#242f3d] rounded-xl p-4">
+                    <div class="font-bold mb-3">Цвет акцента</div>
+                    <div class="flex gap-3 justify-center">
+                        <div class="w-10 h-10 rounded-full bg-[#3390ec] cursor-pointer border-2 border-white ring-2 ring-transparent hover:ring-gray-400" onclick="setAccent('#3390ec')"></div>
+                        <div class="w-10 h-10 rounded-full bg-red-500 cursor-pointer border-2 border-transparent hover:border-white ring-2 ring-transparent hover:ring-gray-400" onclick="setAccent('#ef4444')"></div>
+                        <div class="w-10 h-10 rounded-full bg-green-500 cursor-pointer border-2 border-transparent hover:border-white ring-2 ring-transparent hover:ring-gray-400" onclick="setAccent('#22c55e')"></div>
+                        <div class="w-10 h-10 rounded-full bg-purple-500 cursor-pointer border-2 border-transparent hover:border-white ring-2 ring-transparent hover:ring-gray-400" onclick="setAccent('#a855f7')"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div id="panel-notifications" class="fixed inset-0 z-[60] bg-[#1c242f] transform -translate-x-full transition-transform duration-200 flex flex-col">
+            <div class="h-14 bg-[#242f3d] flex items-center px-4 border-b border-[#101921]">
+                <button onclick="closeSettingsPanel('panel-notifications')" class="text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
+                <span class="font-medium ml-3">Уведомления</span>
+            </div>
+            <div class="p-4 space-y-2">
+                <div class="bg-[#242f3d] rounded-xl overflow-hidden">
+                    <div class="p-4 border-b border-[#101921] flex justify-between items-center"><span>Звук</span><div class="w-10 h-6 bg-[#3390ec] rounded-full relative"><div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div></div></div>
+                    <div class="p-4 flex justify-between items-center"><span>Вибрация</span><div class="w-10 h-6 bg-[#3390ec] rounded-full relative"><div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div></div></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- MODALS -->
-    <div class="overlay" id="ovGlobalSearch"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔍 Поиск</div><div class="mpad"><div style="display:flex;align-items:center;gap:8px;background:var(--input-bg);border-radius:10px;padding:10px 14px;border:1px solid var(--border);"><span>🔍</span><input type="text" id="globalSearchInput" placeholder="@username или имя..." oninput="performSearch()" style="flex:1;background:transparent;border:none;color:var(--text);font-size:15px;outline:none;" autocomplete="off"></div><div id="searchResultsContainer" class="search-results"></div></div><div class="mpad" style="margin-top:10px;"><button class="btn btn-ghost" onclick="closeOv('ovGlobalSearch')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovPrivacy"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔒 Конфиденциальность</div><div class="sblock" style="margin:0 14px 10px;border-radius:12px;overflow:hidden;"><div class="sitem" onclick="showToast('Кто видит номер: Мои контакты')"><span>Номер телефона</span><span class="sval">Мои контакты</span></div><div class="sitem" onclick="showToast('Активность: Все')"><span>Последняя активность</span><span class="sval">Все</span></div><div class="sitem" onclick="showPassModal()"><span>🔑 Пароль</span><span class="sarrow">›</span></div><div class="sitem" onclick="showBlockedModal()"><span>🚫 Чёрный список</span><span class="sarrow">›</span></div></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovPrivacy')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovPass"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔑 Пароль</div><div class="mpad"><input type="password" class="minput" placeholder="Новый пароль" id="newPassIn" style="margin-bottom:8px;"><input type="password" class="minput" placeholder="Повторите пароль" id="confPassIn"><button class="btn btn-primary" style="margin-top:10px;" onclick="savePass()">Сохранить</button><button class="btn btn-ghost" onclick="closeOv('ovPass')">Отмена</button></div></div></div>
-
-    <div class="overlay" id="ovBlocked"><div class="modal"><div class="mhandle"></div><div class="mtitle">🚫 Чёрный список</div><div id="blockedListEl" class="mpad"></div><div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="addBlocked()">+ Добавить</button><button class="btn btn-ghost" onclick="closeOv('ovBlocked')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovData"><div class="modal"><div class="mhandle"></div><div class="mtitle">💾 Данные и память</div><div class="sblock" style="margin:0 14px 10px;border-radius:12px;overflow:hidden;"><div class="sitem"><span>Использовано</span><span class="sval">24.6 МБ</span></div><div class="sitem"><span>Кэш</span><span class="sval">8.2 МБ</span></div></div><div class="mpad"><button class="btn btn-primary" onclick="clearCache()">Очистить кэш</button><button class="btn btn-ghost" onclick="closeOv('ovData')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovAppearance"><div class="modal"><div class="mhandle"></div><div class="mtitle">🎨 Оформление</div><div class="mpad"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;"><div onclick="setTheme('dark')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:3px solid var(--blue);"><div style="height:36px;background:#000;"></div><div style="background:var(--surface2);padding:3px;text-align:center;font-size:11px;font-weight:600;">🌙 Тёмная</div></div><div onclick="setTheme('light')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:3px solid transparent;"><div style="height:36px;background:#fff;"></div><div style="background:#f0f0f0;padding:3px;text-align:center;font-size:11px;font-weight:600;color:#000;">☀️ Светлая</div></div></div><button class="btn btn-ghost" onclick="closeOv('ovAppearance')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovNotif"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔔 Уведомления</div><div class="sblock" style="margin:0 14px 10px;border-radius:12px;overflow:hidden;"><div class="sitem"><span>Уведомления</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div><div class="sitem"><span>Звук</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div><div class="sitem"><span>Вибрация</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovNotif')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovGifts"><div class="modal"><div class="mhandle"></div><div class="mtitle">🎁 Магазин подарков</div><div style="text-align:center;color:var(--text2);font-size:13px;margin:-6px 0 8px;">Баланс: <strong id="giftsBal">1000 ★</strong></div><div class="mpad"><div style="display:flex;gap:5px;margin-bottom:8px;"><button class="btn btn-primary" style="flex:1;font-size:12px;padding:8px;" onclick="filterGifts('all')">Все</button><button class="btn btn-ghost" style="flex:1;font-size:12px;padding:8px;" onclick="filterGifts('nft')">NFT</button><button class="btn btn-ghost" style="flex:1;font-size:12px;padding:8px;" onclick="filterGifts('popular')">TOP</button></div><div class="gift-grid" id="giftsGrid"></div></div><div class="mpad"><button class="btn btn-primary" onclick="showStars()">⭐ Пополнить</button><button class="btn btn-ghost" onclick="closeOv('ovGifts')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovStars"><div class="modal"><div class="mhandle"></div><div class="stars-big"><div style="font-size:48px;">⭐</div><div class="snum" id="starsNum">1000</div><div style="color:var(--text2);">Звёзд Telegram</div></div><div style="text-align:center;color:var(--text2);font-size:12px;margin-bottom:10px;">1⭐ ≈ 1₽</div><div class="mpad" id="starPkgs"></div><div style="color:var(--text2);font-size:12px;padding:10px 14px 4px;">История:</div><div id="starsHist" style="max-height:120px;overflow-y:auto;padding:0 14px;"></div><div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="closeOv('ovStars')">Закрыть</button></div></div></div>
-
-    <div class="overlay" id="ovSendGift"><div class="modal"><div class="mhandle"></div><div class="mtitle" id="sendGiftTitle">🎁 Отправить подарок</div><div class="mpad"><div class="gift-grid" id="sendGiftGrid"></div></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovSendGift')">Отмена</button></div></div></div>
-
-    <div class="overlay" id="ovEditProfile"><div class="modal"><div class="mhandle"></div><div class="mtitle">Редактировать профиль</div><div class="mpad"><input class="minput" id="editName" placeholder="Имя" style="margin-bottom:8px;"><input class="minput" id="editLastName" placeholder="Фамилия" style="margin-bottom:8px;"><div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;"><span style="color:var(--text2);">@</span><input class="minput" id="editUsername" placeholder="username" style="flex:1;" autocomplete="off"></div><div style="color:var(--red);font-size:11px;margin-bottom:6px;display:none;" id="editUsernameError"></div><input class="minput" id="editBio" placeholder="О себе" style="margin-bottom:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="saveProfile()">Сохранить</button><button class="btn btn-ghost" onclick="closeOv('ovEditProfile')">Отмена</button></div></div></div>
-
-    <div class="overlay" id="ovGiftDetail"><div class="modal"><div class="mhandle"></div><div class="mtitle" id="giftDetailTitle">🎁</div><div style="text-align:center;padding:10px;" id="giftDetailInfo"></div><div class="mpad" id="giftDetailActions"></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovGiftDetail')">Закрыть</button></div></div></div>
-
     <script>
-        // ══════════════════════════════ STATE ══════════════════════════════
-        let currentSMSCode = '1234';
-        let S = {
-            phone: '+7 963 530-79-55',
-            name: 'Макар',
-            lastName: '',
-            username: 'o_gem',
-            bio: '',
-            stars: 1000,
-            password: '',
-            blocked: ['spam_user'],
-            starsHistory: [],
-            savedMsgs: [],
-            ownedGifts: [
-                { e: '💎', n: 'Бриллиант', p: 500, nft: true },
-                { e: '❤️', n: 'Сердце', p: 30, nft: false }
+        // --- STATE ---
+        const state = {
+            phone: '', generatedCode: null, activeChatId: null, currentProfileId: null,
+            userProfile: { firstName: 'User', lastName: 'Name', username: 'username', bio: '', gifts: [], id: Math.floor(Math.random() * 9000000000) + 1000000000 },
+            chats: [
+                { id: 1, name: 'Алексей', avatar: 'A', msg: 'Привет!', time: '10:32', unread: 2, online: true, username: 'alex_tg', phone: '+7 999 123-45-67', gifts: [] },
+                { id: 2, name: 'Мария', avatar: 'M', msg: 'Файлы', time: 'Вчера', unread: 0, online: false, username: 'maria_star', phone: '+7 999 987-65-43', gifts: [] },
+                { id: 3, name: 'Аноним', avatar: '👻', msg: '...', time: '12:00', unread: 0, online: false, username: 'anon_888', phone: '+888 000 00-00-00', gifts: [] }
             ],
-            profileColor: 'blue'
+            messages: { 1: [{ text: 'Привет!', fromMe: false, time: '10:30' }, { text: 'Как дела?', fromMe: true, time: '10:32' }] },
+            stars: 1000, blocked: [],
+            giftCatalog: [
+                { id: 'g1', icon: '🎁', name: 'Коробка', price: 50, isNft: false },
+                { id: 'g2', icon: '🌹', name: 'Роза', price: 100, isNft: false },
+                { id: 'g3', icon: '💎', name: 'Кристалл', price: 250, isNft: false },
+                { id: 'g4', icon: '🚀', name: 'Ракета', price: 500, isNft: false },
+                { id: 'g5', icon: '👑', name: 'Корона', price: 1000, isNft: false },
+                { id: 'g6', icon: '🦄', name: 'Единорог', price: 2500, isNft: false }
+            ]
         };
 
-        const USERS_DB = new Map();
-        USERS_DB.set('alex_tg', { name: 'Алексей', username: 'alex_tg', phone: '+79001234567', avatar: 'А', color: 'blue', online: true });
-        USERS_DB.set('maria_star', { name: 'Мария', username: 'maria_star', phone: '+79002345678', avatar: 'М', color: 'green', online: false });
-        USERS_DB.set('elena_v', { name: 'Елена', username: 'elena_v', phone: '+79003456789', avatar: 'Е', color: 'red', online: false });
-        USERS_DB.set('o_gem', { name: 'Макар', username: 'o_gem', phone: '+79635307955', avatar: 'М', color: 'blue', online: true });
+        // --- DOM ---
+        const screens = { login: document.getElementById('screen-login'), code: document.getElementById('screen-code'), username: document.getElementById('screen-username'), app: document.getElementById('screen-app') };
+        const phoneInput = document.getElementById('phone-input');
+        const btnGetCode = document.getElementById('btn-get-code');
+        const codeInput = document.getElementById('code-input');
+        const btnVerify = document.getElementById('btn-verify');
+        const chatListEl = document.getElementById('chat-list');
+        const menuBtn = document.getElementById('menu-btn');
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsPanel = document.getElementById('settings-panel');
+        const toast = document.getElementById('sms-toast');
+        const mobileOverlay = document.getElementById('mobile-chat-overlay');
+        let selectedGift = null;
 
-        const CHATS = [
-            { name: 'Алексей', a: 'А', c: 'blue', last: 'Привет! Как дела?', time: '10:32', badge: 3, online: true, username: 'alex_tg' },
-            { name: 'Мария', a: 'М', c: 'green', last: 'Отправила подарок 🎁', time: '9:15', badge: 0, online: false, username: 'maria_star' },
-            { name: 'Елена', a: 'Е', c: 'red', last: 'До встречи! 👋', time: 'вчера', badge: 0, online: false, username: 'elena_v' },
-            { name: 'Команда', a: 'К', c: 'purple', last: 'Иван: Отличная работа!', time: 'пн', badge: 5, online: false, username: 'team_group', isGroup: true },
-            { name: 'Telegram', a: '✈', c: 'blue', last: 'Вход с нового устройства', time: '25.04', badge: 0, online: false, isChannel: true },
-        ];
+        // --- NAV ---
+        function goToScreen(id) { Object.values(screens).forEach(s => s.classList.add('hidden-screen')); screens[id.replace('screen-','')].classList.remove('hidden-screen'); screens[id.replace('screen-','')].classList.add('fade-in'); }
+        
+        // --- AUTH ---
+        btnGetCode.onclick = () => {
+            if(phoneInput.value.length < 10) return alert('Введите корректный номер (+7... или +888...)');
+            state.phone = phoneInput.value;
+            btnGetCode.innerHTML = '<div class="loader mx-auto w-5 h-5 border-2 border-white/20 border-l-white rounded-full animate-spin"></div>';
+            setTimeout(() => {
+                state.generatedCode = Math.floor(10000 + Math.random() * 90000).toString();
+                document.getElementById('toast-code').textContent = state.generatedCode;
+                document.getElementById('display-phone').textContent = state.phone;
+                toast.classList.remove('top-[-80px]'); toast.classList.add('top-4');
+                setTimeout(() => { toast.classList.remove('top-4'); toast.classList.add('top-[-80px]'); }, 6000);
+                goToScreen('screen-code');
+                btnGetCode.innerHTML = 'Получить код';
+                setTimeout(() => codeInput.focus(), 100);
+                startTimer();
+            }, 1500);
+        };
 
-        const GIFTS = [
-            { e: '🧸', n: 'Мишка', p: 50, s: '12.5K' }, { e: '❤️', n: 'Сердце', p: 30, s: '45.2K', top: true },
-            { e: '🌹', n: 'Роза', p: 25, s: '38.1K', top: true }, { e: '🎁', n: 'Подарок', p: 75, s: '8.3K' },
-            { e: '💎', n: 'Бриллиант', p: 500, s: '1.2K', nft: true }, { e: '💍', n: 'Кольцо', p: 300, s: '3.4K', nft: true },
-            { e: '🌸', n: 'Цветы', p: 20, s: '52.3K', top: true }, { e: '🏆', n: 'Кубок', p: 200, s: '4.5K', nft: true },
-        ];
-
-        const STAR_PKGS = [{ s: 50, p: 49 }, { s: 100, p: 99 }, { s: 250, p: 239 }, { s: 500, p: 459 }, { s: 1000, p: 899 }, { s: 2500, p: 2199 }];
-
-        let curChat = null;
-        let prevPage = 'pChats';
-        let chatHistory = {};
-        let giftFilter = 'all';
-        let currentSMSCodeSent = '';
-
-        // ═══════════════ REGISTRATION ═══════════════
-        function generateSMSCode() {
-            return Math.floor(1000 + Math.random() * 9000).toString();
-        }
-
-        function sendSMS() {
-            const phone = document.getElementById('regPhone').value.replace(/\s/g, '').trim();
-            if (phone.length < 10) { showToast('Введите корректный номер'); return; }
-            S.phone = phone;
-            // Для админского номера код всегда 1234
-            const cleanPhone = phone.replace(/[^0-9]/g, '');
-            currentSMSCodeSent = cleanPhone === '79635307955' ? '1234' : generateSMSCode();
-
-            document.getElementById('smsPhoneDisplay').textContent = phone;
-            document.getElementById('codeHint').innerHTML = '📱 SMS отправлено! Код: <strong style="color:var(--blue);">' + currentSMSCodeSent + '</strong>';
-            document.getElementById('smsCode').value = '';
-            document.getElementById('regStep1').classList.add('hidden');
-            document.getElementById('regStep2').classList.remove('hidden');
-            showToast('SMS отправлено 📱');
-        }
-
-        function resendSMS() {
-            const cleanPhone = S.phone.replace(/[^0-9]/g, '');
-            currentSMSCodeSent = cleanPhone === '79635307955' ? '1234' : generateSMSCode();
-            document.getElementById('codeHint').innerHTML = '📱 Новый код: <strong style="color:var(--blue);">' + currentSMSCodeSent + '</strong>';
-            showToast('Новый код отправлен 🔄');
-        }
-
-        function goBackToPhone() {
-            document.getElementById('regStep2').classList.add('hidden');
-            document.getElementById('regStep1').classList.remove('hidden');
-        }
-
-        function verifySMS() {
-            const code = document.getElementById('smsCode').value.trim();
-            if (code !== currentSMSCodeSent) {
-                showToast('Неверный код!');
-                return;
+        function handleVerify() {
+            if(codeInput.value === state.generatedCode) {
+                btnVerify.innerHTML = '<div class="loader mx-auto w-5 h-5 border-2 border-white/20 border-l-white rounded-full animate-spin"></div>';
+                setTimeout(() => goToScreen('screen-username'), 800);
+            } else {
+                codeInput.classList.add('border-red-500'); setTimeout(() => codeInput.classList.remove('border-red-500'), 500);
             }
-            document.getElementById('regStep2').classList.add('hidden');
-            document.getElementById('regStep3').classList.remove('hidden');
-            document.getElementById('regUsername').value = 'o_gem';
-            S.username = 'o_gem';
         }
+        btnVerify.onclick = handleVerify;
+        codeInput.onkeypress = (e) => { if(e.key === 'Enter') handleVerify(); };
+        
+        document.getElementById('btn-register').onclick = () => { 
+            const u = document.getElementById('username-input').value;
+            if(u.length < 4) { document.getElementById('username-error').textContent = 'Минимум 4 символа'; return; }
+            state.userProfile.username = u; 
+            finishSetup(); 
+        };
 
-        function finishRegistration() {
-            const username = document.getElementById('regUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
-            if (!username || username.length < 3) {
-                document.getElementById('usernameError').textContent = 'Минимум 3 символа';
-                document.getElementById('usernameError').style.display = ''; return;
-            }
-            if (USERS_DB.has(username) && username !== 'o_gem') {
-                document.getElementById('usernameError').textContent = 'Занят!';
-                document.getElementById('usernameError').style.display = ''; return;
-            }
-            S.username = username;
-            completeRegistration();
+        function startTimer() {
+            let t = 59; btnVerify.disabled = true; btnVerify.classList.add('opacity-50');
+            document.getElementById('timer-block').classList.remove('hidden');
+            const i = setInterval(() => {
+                t--; document.getElementById('countdown').textContent = t;
+                if(t<=0) { clearInterval(i); btnVerify.disabled=false; btnVerify.classList.remove('opacity-50'); btnVerify.textContent='Подтвердить'; btnVerify.onclick=handleVerify; document.getElementById('timer-block').classList.add('hidden'); }
+            }, 1000);
         }
+        function resendCode() { state.generatedCode = Math.floor(10000 + Math.random() * 90000).toString(); document.getElementById('toast-code').textContent = state.generatedCode; toast.classList.remove('top-[-80px]'); toast.classList.add('top-4'); setTimeout(()=>{toast.classList.remove('top-4'); toast.classList.add('top-[-80px]');}, 6000); startTimer(); }
 
-        function skipUsername() {
-            S.username = 'o_gem';
-            completeRegistration();
-        }
+        function finishSetup() { updateProfileUI(); renderChatList(); renderGiftShop(); updateStarBal(); goToScreen('screen-app'); }
 
-        function completeRegistration() {
-            USERS_DB.set(S.username, { name: S.name, username: S.username, phone: S.phone, avatar: S.name[0].toUpperCase(), color: 'blue', online: true });
-            document.getElementById('regStep3').classList.add('hidden');
-            document.getElementById('mainApp').style.display = 'flex';
-            init();
-            updateAllUI();
-            showToast('Добро пожаловать, @' + S.username + '! 🎉');
-        }
-
-        // ═══════════════ INIT ═══════════════
-        function init() {
-            renderDynamicChats();
-            renderGiftsGrid('giftsGrid', buyGift);
-            renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
-            renderStarPkgs();
-            updateAllUI();
-            document.getElementById('chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault();
-                    sendMsg(); } });
-            document.querySelectorAll('.folder-tab').forEach(t => {
-                t.addEventListener('click', () => { document.querySelectorAll('.folder-tab').forEach(x => x.classList
-                        .remove('on'));
-                    t.classList.add('on'); });
-            });
-        }
-
-        // ═══════════════ SEARCH ═══════════════
-        function openGlobalSearch() { document.getElementById('globalSearchInput').value = '';
-            document.getElementById('searchResultsContainer').innerHTML = '';
-            openOv('ovGlobalSearch');
-            setTimeout(() => document.getElementById('globalSearchInput').focus(), 300); }
-
-        function performSearch() {
-            const q = document.getElementById('globalSearchInput').value.trim().toLowerCase();
-            const c = document.getElementById('searchResultsContainer');
-            if (!q) { c.innerHTML = '<div class="no-results">Введите @username</div>'; return; }
-            const r = [];
-            USERS_DB.forEach((u, un) => { if (un === S.username) return; if (un.includes(q) || u.name.toLowerCase().includes(
-                    q)) r.push({ ...u, username: un }); });
-            if (!r.length) { c.innerHTML = '<div class="no-results">Никого не найдено</div>'; return; }
-            c.innerHTML = r.map(u => `<div class="search-result-item" onclick="openChatByUsername('${u.username}')"><div class="ava ${u.color||'blue'}" style="width:38px;height:38px;font-size:14px;border-radius:50%;">${u.avatar}</div><div style="flex:1;"><div style="font-weight:600;">${u.name}</div><div style="color:var(--text2);font-size:12px;">@${u.username}</div></div><span style="color:var(--blue);">→</span></div>`).join('');
-        }
-
-        function openChatByUsername(username) {
-            const u = USERS_DB.get(username);
-            if (!u) { showToast('Не найден'); return; }
-            closeOv('ovGlobalSearch');
-            curChat = { name: u.name, a: u.avatar, c: u.color, online: u.online, username, isExternal: true };
-            if (!chatHistory[curChat.name]) chatHistory[curChat.name] = [
-                { text: 'Чат с @' + username, out: true, time: nowTime() }, { text: 'Привет! 👋', out: false, time: nowTime() }
-            ];
-            document.getElementById('chatNameH').textContent = curChat.name;
-            document.getElementById('chatAvaH').textContent = curChat.a;
-            document.getElementById('chatAvaH').className = 'chat-ava-sm ' + (curChat.c || 'blue');
-            document.getElementById('chatStatusH').textContent = curChat.online ? 'онлайн' : 'был(а) недавно';
-            renderChatMsgs();
-            showPageNoTab('pChat');
-        }
-
-        // ═══════════════ CHATS ═══════════════
-        function renderDynamicChats() {
-            document.getElementById('dynamicChats').innerHTML = CHATS.map((c, i) => `
-            <div class="citem${c.badge?' unread':''}" onclick="openChat(${i})">
-              <div class="ava ${c.c}">${c.a}${c.online?'<div class="online"></div>':''}</div>
-              <div class="cinfo"><div class="cname">${c.name}${c.isChannel?'<span style="font-size:10px;color:var(--text2);"> 📢</span>':''}</div><div class="clast">${c.last}</div></div>
-              <div class="cmeta"><span class="ctime">${c.time}</span>${c.badge?`<span class="cbadge">${c.badge}</span>`:''}</div>
-            </div>`).join('');
-        }
-
-        function openChat(idx) {
-            if (idx === 'saved') { curChat = { name: 'Избранное', a: '⭐', c: 'orange', saved: true }; } else { curChat = { ...CHATS[idx], idx }; }
-            if (!chatHistory[curChat.name]) chatHistory[curChat.name] = curChat.saved ? S.savedMsgs.map(m => ({ ...m, out: true })) : [
-                { text: 'Привет! 👋', out: false, time: nowTime() }
-            ];
-            document.getElementById('chatNameH').textContent = curChat.name;
-            document.getElementById('chatAvaH').textContent = curChat.a;
-            document.getElementById('chatAvaH').className = 'chat-ava-sm ' + (curChat.c || 'blue');
-            document.getElementById('chatStatusH').textContent = curChat.online ? 'онлайн' : 'был(а) недавно';
-            document.getElementById('chatStatusH').style.color = curChat.online ? 'var(--green)' : 'var(--text2)';
-            renderChatMsgs();
-            showPageNoTab('pChat');
-        }
-
-        function closeChat() { showPageNoTab(prevPage || 'pChats'); }
-
-        function renderChatMsgs() {
-            const msgs = chatHistory[curChat.name] || [];
-            document.getElementById('chatMsgs').innerHTML = '<div class="day-divider"><span>Сегодня</span></div>' + msgs.map(m => {
-                if (m.gift) return `<div class="mrow ${m.out?'out':'in'}"><div><div class="mbubble">🎁 ${m.gift.e} ${m.gift.n}</div><div class="mtime">${m.time}</div></div></div>`;
-                return `<div class="mrow ${m.out?'out':'in'}"><div><div class="mbubble">${m.text.replace(/</g,'&lt;')}</div><div class="mtime">${m.time}</div></div></div>`;
-            }).join('');
-            document.getElementById('chatMsgs').scrollTop = document.getElementById('chatMsgs').scrollHeight;
-        }
-
-        function sendMsg() {
-            const txt = document.getElementById('chatInput').value.trim();
-            if (!txt || !curChat) return;
-            const t = nowTime();
-            if (!chatHistory[curChat.name]) chatHistory[curChat.name] = [];
-            chatHistory[curChat.name].push({ text: txt, out: true, time: t });
-            if (curChat.saved) { S.savedMsgs.push({ text: txt, time: t });
-                updateSavedUI(); }
-            document.getElementById('chatInput').value = '';
-            renderChatMsgs();
-            if (!curChat.saved) setTimeout(() => {
-                const r = ['Понял! 👍', 'Отлично!', '😊', 'Договорились!', 'Спасибо!'];
-                chatHistory[curChat.name].push({ text: r[Math.floor(Math.random() * r.length)], out: false, time: nowTime() });
-                renderChatMsgs();
-            }, 500 + Math.random() * 800);
-        }
-
-        // ═══════════════ PROFILE ═══════════════
-        function openProfilePage() { showPageNoTab('pProfile');
-            updateProfileUI(); }
-
+        // --- PROFILE ---
         function updateProfileUI() {
-            document.getElementById('profAvaLg').textContent = S.name[0].toUpperCase();
-            document.getElementById('profNameLg').innerHTML = S.name + ' <span class="profile-badge">✨</span>';
-            document.getElementById('profUsernameLg').textContent = '@' + S.username;
-            document.getElementById('profId').textContent = Math.floor(Math.random() * 9000000000 + 1000000000);
-        }
-
-        function changeProfileColor() {
-            const colors = ['blue', 'purple', 'pink', 'green', 'orange'];
-            const cur = colors.indexOf(S.profileColor);
-            S.profileColor = colors[(cur + 1) % colors.length];
-            document.getElementById('profAvaLg').style.background = 'var(--' + S.profileColor + ')';
-            showToast('Цвет профиля изменён 🎨');
-        }
-
-        // ═══════════════ GIFTS ═══════════════
-        function renderGiftsGrid(elId, handler) {
-            const filtered = giftFilter === 'all' ? GIFTS : giftFilter === 'nft' ? GIFTS.filter(g => g.nft) : GIFTS.filter(g => g.top);
-            document.getElementById(elId).innerHTML = filtered.map((g, i) => {
-                const oi = GIFTS.indexOf(g);
-                return `<div class="gcard${g.nft?' nft':''}" onclick="${handler.name}(${oi})">${g.top?'<span class="gtop">TOP</span>':''}${g.nft?'<span class="gnft">NFT</span>':''}<span class="gemoji">${g.e}</span><div class="gname">${g.n}</div><div class="gprice">⭐ ${g.p}</div><div class="gsent">${g.s}</div></div>`;
-            }).join('');
-        }
-
-        function filterGifts(type) { giftFilter = type;
-            renderGiftsGrid('giftsGrid', buyGift); }
-
-        function openGiftsStore() { giftFilter = 'all';
-            renderGiftsGrid('giftsGrid', buyGift);
-            openOv('ovGifts'); }
-
-        function buyGift(i) {
-            const g = GIFTS[i];
-            if (S.stars < g.p) { showToast('Недостаточно звёзд!'); return; }
-            S.stars -= g.p;
-            S.ownedGifts.push({ ...g, nft: !!g.nft });
-            S.starsHistory.push({ t: 'buy', g, ts: nowTime() });
-            updateAllUI();
-            closeOv('ovGifts');
-            showToast('Куплено: ' + g.e + ' ' + g.n + '!');
-        }
-
-        function sendGiftInChat() {
-            if (curChat?.saved) { showToast('Нельзя себе'); return; }
-            document.getElementById('sendGiftTitle').textContent = '🎁 Подарок для ' + (curChat?.name || '');
-            giftFilter = 'all';
-            renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
-            openOv('ovSendGift');
-        }
-
-        function sendGiftFromChat(i) {
-            const g = GIFTS[i];
-            if (S.stars < g.p) { showToast('Недостаточно звёзд!'); return; }
-            S.stars -= g.p;
-            S.starsHistory.push({ t: 'send', g, to: curChat?.name, ts: nowTime() });
-            if (curChat && chatHistory[curChat.name]) { chatHistory[curChat.name].push({ gift: g, out: true, time: nowTime() });
-                renderChatMsgs(); }
-            updateAllUI();
-            closeOv('ovSendGift');
-            showToast('Подарок отправлен! 🎁');
-        }
-
-        function showGiftDetail(i) {
-            const g = S.ownedGifts[i];
-            document.getElementById('giftDetailTitle').textContent = g.e + ' ' + g.n;
-            document.getElementById('giftDetailInfo').innerHTML = `<div style="font-size:54px;">${g.e}</div><div style="font-weight:700;">${g.n}</div><div style="color:var(--orange);">⭐ ${g.p}</div>${g.nft?'<div style="margin-top:4px;"><span style="background:var(--orange);color:#000;padding:3px 8px;border-radius:6px;font-weight:700;font-size:11px;">✨ NFT</span></div>':''}`;
-            document.getElementById('giftDetailActions').innerHTML = g.nft ?
-                `<button class="btn btn-primary" onclick="sellNFT(${i})">💰 Продать (${Math.floor(g.p*1.5)}⭐)</button><button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>` :
-                `<button class="btn btn-green" onclick="upgradeToNFT(${i})">✨ В NFT (${Math.floor(g.p*2)}⭐)</button><button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>`;
-            openOv('ovGiftDetail');
-        }
-
-        function upgradeToNFT(i) { const c = Math.floor(S.ownedGifts[i].p * 2); if (S.stars < c) { showToast(
-                'Недостаточно звёзд!'); return; } if (!confirm('Превратить в NFT за ' + c + '⭐?')) return;
-            S.stars -= c;
-            S.ownedGifts[i].nft = true;
-            S.starsHistory.push({ t: 'nft', g: S.ownedGifts[i], cost: c, ts: nowTime() });
-            updateAllUI();
-            closeOv('ovGiftDetail');
-            showToast('NFT! ✨'); }
-
-        function sellNFT(i) { const g = S.ownedGifts[i];
-            const p = Math.floor(g.p * 1.5);
-            S.stars += p;
-            S.ownedGifts.splice(i, 1);
-            S.starsHistory.push({ t: 'sell', g, price: p, ts: nowTime() });
-            updateAllUI();
-            closeOv('ovGiftDetail');
-            showToast('Продано за ' + p + '⭐'); }
-
-        function transferGift(i) { const t = prompt('Кому передать? (@username)'); if (!t) return;
-            S.ownedGifts.splice(i, 1);
-            S.starsHistory.push({ t: 'transfer', ts: nowTime() });
-            updateAllUI();
-            closeOv('ovGiftDetail');
-            showToast('Передано → ' + t); }
-
-        // ═══════════════ STARS ═══════════════
-        function showStars() { updateStarsUI();
-            openOv('ovStars'); }
-
-        function updateStarsUI() {
-            document.getElementById('starsNum').textContent = S.stars;
-            document.getElementById('starsHist').innerHTML = S.starsHistory.length ? S.starsHistory.slice(-6).reverse().map(h => `<div style="font-size:11px;padding:4px 0;border-bottom:1px solid var(--divider);">${h.t==='topup'?'⬆️ Пополнение +'+h.amt+'⭐':h.t==='buy'?'⬇️ Покупка '+h.g.e+' −'+h.g.p+'⭐':h.t==='send'?'⬇️ Подарок −'+h.g.p+'⭐':'⭐ Операция'}</div>`).join('') : '<div style="color:var(--text2);font-size:12px;">Нет операций</div>';
-        }
-
-        function renderStarPkgs() { document.getElementById('starPkgs').innerHTML = STAR_PKGS.map(p => `<div class="spkg" onclick="buyStars(${p.s},${p.p})"><span style="font-weight:700;">⭐ ${p.s.toLocaleString()}</span><span style="color:var(--text2);">${p.p} ₽</span></div>`).join(''); }
-
-        function buyStars(a, p) { if (!confirm('Купить ' + a + '⭐ за ' + p + '₽?')) return;
-            S.stars += a;
-            S.starsHistory.push({ t: 'topup', amt: a, price: p, ts: nowTime() });
-            updateAllUI();
-            updateStarsUI();
-            showToast('+' + a + '⭐'); }
-
-        // ═══════════════ EDIT PROFILE ═══════════════
-        function showEditProfile() {
-            document.getElementById('editName').value = S.name;
-            document.getElementById('editLastName').value = S.lastName;
-            document.getElementById('editUsername').value = S.username;
-            document.getElementById('editBio').value = S.bio;
-            document.getElementById('editUsernameError').style.display = 'none';
-            openOv('ovEditProfile');
+            const fn = state.userProfile.firstName || 'User';
+            document.getElementById('settings-name').textContent = `${fn} ${state.userProfile.lastName}`;
+            document.getElementById('settings-phone').textContent = state.phone;
+            document.getElementById('settings-avatar').textContent = fn[0].toUpperCase();
+            document.getElementById('edit-fname').value = state.userProfile.firstName;
+            document.getElementById('edit-lname').value = state.userProfile.lastName;
+            document.getElementById('edit-user').value = state.userProfile.username;
+            document.getElementById('edit-bio').value = state.userProfile.bio;
         }
 
         function saveProfile() {
-            const n = document.getElementById('editName').value.trim();
-            if (!n) { showToast('Введите имя'); return; }
-            const nu = document.getElementById('editUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
-            if (nu && nu !== S.username && USERS_DB.has(nu)) { showToast('Username занят!'); return; }
-            if (S.username) USERS_DB.delete(S.username);
-            S.name = n;
-            S.lastName = document.getElementById('editLastName').value.trim();
-            S.username = nu || S.username;
-            S.bio = document.getElementById('editBio').value.trim();
-            USERS_DB.set(S.username, { name: S.name, username: S.username, phone: S.phone, avatar: S.name[0].toUpperCase(), color: 'blue', online: true });
-            updateAllUI();
-            updateProfileUI();
-            closeOv('ovEditProfile');
-            showToast('Сохранено ✓');
+            state.userProfile.firstName = document.getElementById('edit-fname').value;
+            state.userProfile.lastName = document.getElementById('edit-lname').value;
+            state.userProfile.username = document.getElementById('edit-user').value;
+            state.userProfile.bio = document.getElementById('edit-bio').value;
+            updateProfileUI(); closeSettingsPanel('panel-edit-profile');
         }
 
-        // ═══════════════ MODALS ═══════════════
-        function showPrivacy() { openOv('ovPrivacy'); }
+        function openProfileView(userId) {
+            const isMe = userId === 'me';
+            const u = isMe ? state.userProfile : state.chats.find(c => c.id === userId);
+            if(!u) return;
+            state.currentProfileId = userId;
+            document.getElementById('profile-title').textContent = isMe ? 'Мой профиль' : u.name;
+            document.getElementById('profile-avatar-lg').textContent = (isMe ? state.userProfile.firstName : u.name)[0].toUpperCase();
+            document.getElementById('profile-name-lg').textContent = isMe ? `${state.userProfile.firstName} ${state.userProfile.lastName}` : u.name;
+            document.getElementById('profile-user-lg').textContent = '@' + (isMe ? state.userProfile.username : u.username);
+            document.getElementById('profile-status-lg').textContent = isMe ? 'в сети' : (u.online ? 'в сети' : 'был(а) недавно');
+            document.getElementById('profile-bio-lg').textContent = (isMe ? state.userProfile.bio : u.bio) || 'Нет био';
+            document.getElementById('profile-id-lg').textContent = isMe ? state.userProfile.id : (u.id || '7323296973');
+            
+            const pBlock = document.getElementById('profile-phone-block');
+            if(isMe) {
+                document.getElementById('profile-phone-lg').textContent = state.phone;
+                document.getElementById('profile-edit-btn').classList.remove('hidden');
+                document.getElementById('profile-actions').classList.add('hidden');
+                pBlock.classList.remove('hidden');
+            } else {
+                document.getElementById('profile-phone-lg').textContent = u.phone || 'Скрыт';
+                document.getElementById('profile-edit-btn').classList.add('hidden');
+                document.getElementById('profile-actions').classList.remove('hidden');
+                pBlock.classList.toggle('hidden', !u.phone);
+            }
 
-        function showData() { openOv('ovData'); }
-
-        function showAppearance() { openOv('ovAppearance'); }
-
-        function showNotifications() { openOv('ovNotif'); }
-
-        function showPassModal() { openOv('ovPass'); }
-
-        function savePass() {
-            const np = document.getElementById('newPassIn').value;
-            const cp = document.getElementById('confPassIn').value;
-            if (np.length < 4) { showToast('Минимум 4 символа'); return; }
-            if (np !== cp) { showToast('Пароли не совпадают'); return; }
-            S.password = np;
-            document.getElementById('newPassIn').value = '';
-            document.getElementById('confPassIn').value = '';
-            closeOv('ovPass');
-            showToast('Пароль установлен 🔒');
+            // Render Gifts
+            const gGrid = document.getElementById('profile-gifts-grid');
+            const gifts = u.gifts || [];
+            document.getElementById('gifts-count').textContent = gifts.length;
+            if(gifts.length === 0) {
+                gGrid.innerHTML = '<div class="col-span-2 text-center text-gray-500 py-4 text-sm">Нет подарков</div>';
+            } else {
+                gGrid.innerHTML = '';
+                gifts.forEach((g, idx) => {
+                    gGrid.innerHTML += `
+                    <div class="bg-[#242f3d] p-3 rounded-xl flex flex-col items-center text-center relative group cursor-pointer" onclick="upgradeGift(${userId}, ${idx})">
+                        <div class="text-3xl mb-1">${g.icon}</div>
+                        <div class="text-xs font-bold truncate w-full">${g.name}</div>
+                        <div class="text-[10px] text-yellow-400">${g.price} ★</div>
+                        ${g.isNft ? '<div class="absolute top-1 right-1 text-[10px] bg-purple-500 px-1 rounded">NFT</div>' : ''}
+                        <div class="absolute inset-0 bg-black/80 rounded-xl opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center p-2">
+                            <div class="text-xs text-white font-bold">От: ${g.from}</div>
+                            <div class="text-[10px] text-gray-300">${g.time}</div>
+                            ${!g.isNft ? '<div class="text-[10px] text-purple-400 mt-1 font-bold">Нажми для NFT</div>' : ''}
+                        </div>
+                    </div>`;
+                });
+            }
+            document.getElementById('panel-profile').classList.remove('-translate-x-full');
         }
 
-        function showBlockedModal() { renderBlockedList();
-            openOv('ovBlocked'); }
+        function upgradeGift(userId, giftIdx) {
+            const u = userId === 'me' ? state.userProfile : state.chats.find(c => c.id === userId);
+            const g = u.gifts[giftIdx];
+            if(g && !g.isNft) {
+                if(confirm(`Улучшить "${g.name}" до NFT за 50 ★?`)) {
+                    if(state.stars >= 50) {
+                        state.stars -= 50; updateStarBal();
+                        g.isNft = true;
+                        openProfileView(userId); // Refresh
+                    } else { alert('Недостаточно звезд!'); }
+                }
+            }
+        }
 
+        // --- CHAT ---
+        function renderChatList() {
+            chatListEl.innerHTML = '';
+            state.chats.forEach(c => {
+                chatListEl.innerHTML += `
+                <div class="flex items-center px-4 py-3 tg-active cursor-pointer border-b border-[#101921]" onclick="openChat(${c.id})">
+                    <div class="relative mr-3"><div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-lg">${c.avatar}</div>${c.online ? '<div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-[#1c242f] rounded-full"></div>' : ''}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center mb-1"><h3 class="font-medium truncate">${c.name}</h3><span class="text-xs text-gray-400">${c.time}</span></div>
+                        <div class="flex justify-between items-center"><p class="text-sm text-gray-400 truncate pr-2">${c.msg}</p>${c.unread > 0 ? `<div class="bg-[#3390ec] text-white text-xs font-bold px-1.5 py-0.5 rounded-full">${c.unread}</div>` : ''}</div>
+                    </div>
+                </div>`;
+            });
+        }
+        function openChat(id) {
+            state.activeChatId = id;
+            const c = state.chats.find(x => x.id === id);
+            document.getElementById('mobile-chat-name').textContent = c.name;
+            const msgs = state.messages[id] || [];
+            document.getElementById('mobile-chat-messages').innerHTML = msgs.map(m => `<div class="max-w-[80%] p-2 px-3 text-sm ${m.fromMe ? 'self-end msg-out' : 'self-start msg-in'}">${m.text}<div class="text-[10px] text-right opacity-70 mt-1 float-right ml-2">${m.time}</div></div>`).join('') || '<div class="text-center text-gray-500 mt-10">Нет сообщений</div>';
+            mobileOverlay.classList.remove('translate-x-full');
+        }
+        document.getElementById('back-to-list').onclick = () => mobileOverlay.classList.add('translate-x-full');
+        document.getElementById('mobile-send-btn').onclick = () => {
+            const txt = document.getElementById('mobile-msg-input').value.trim(); if(!txt) return;
+            if(!state.messages[state.activeChatId]) state.messages[state.activeChatId] = [];
+            const now = new Date(); const t = `${now.getHours()}:${now.getMinutes().toString().padStart(2,'0')}`;
+            state.messages[state.activeChatId].push({text: txt, fromMe: true, time: t});
+            openChat(state.activeChatId); document.getElementById('mobile-msg-input').value = '';
+            const c = state.chats.find(x => x.id === state.activeChatId); c.msg = txt; c.time = t; renderChatList();
+        };
+
+        // --- CALLS ---
+        function startCall(type) {
+            const c = state.chats.find(x => x.id === state.activeChatId);
+            document.getElementById('call-name').textContent = c.name;
+            document.getElementById('call-avatar').textContent = c.avatar;
+            document.getElementById('call-status').textContent = type === 'video' ? 'Видеозвонок...' : 'Аудиозвонок...';
+            document.getElementById('call-screen').classList.remove('hidden');
+            document.getElementById('call-screen').classList.add('flex');
+        }
+        function endCall() {
+            document.getElementById('call-screen').classList.add('hidden');
+            document.getElementById('call-screen').classList.remove('flex');
+        }
+
+        // --- SETTINGS ---
+        menuBtn.onclick = () => { settingsModal.classList.remove('hidden'); setTimeout(() => settingsPanel.classList.remove('-translate-x-full'), 10); };
+        settingsModal.onclick = (e) => { if(e.target === settingsModal) closeAllSettings(); };
+        function closeAllSettings() { settingsPanel.classList.add('-translate-x-full'); setTimeout(() => settingsModal.classList.add('hidden'), 200); document.querySelectorAll('[id^="panel-"]').forEach(p => p.id !== 'panel-profile' && p.classList.add('-translate-x-full')); }
+        function openSettingsPanel(id) { document.getElementById(id).classList.remove('-translate-x-full'); }
+        function closeSettingsPanel(id) { document.getElementById(id).classList.add('-translate-x-full'); }
+        function setAccent(c) { document.documentElement.style.setProperty('--accent-color', c); document.querySelectorAll('.tg-btn:not(.tg-btn-red):not(.tg-btn-green)').forEach(b => b.style.backgroundColor = c); }
+
+        // --- STARS & GIFTS ---
+        function updateStarBal() { document.getElementById('star-balance-lg').textContent = state.stars; document.getElementById('sidebar-star-bal').textContent = state.stars + ' ★'; }
+        function buyStars(n) { state.stars += n; updateStarBal(); alert(`Куплено ${n} ★`); }
+        function renderGiftShop() {
+            const g = document.getElementById('gift-shop-grid'); g.innerHTML = '';
+            state.giftCatalog.forEach(item => {
+                g.innerHTML += `<div class="bg-[#242f3d] p-3 rounded-xl flex flex-col items-center gap-1 cursor-pointer tg-active" onclick="selectGiftForSend('${item.id}')">
+                    <div class="text-4xl">${item.icon}</div><div class="font-bold text-sm">${item.name}</div><div class="text-xs text-yellow-400 font-bold">${item.price} ★</div></div>`;
+            });
+        }
+
+        function selectGiftForSend(id) {
+            const item = state.giftCatalog.find(g => g.id === id);
+            selectedGift = item;
+            closeSettingsPanel('panel-stars');
+            openSendGiftModal(item, state.currentProfileId);
+        }
+
+        function openSendGiftModal(gift, preselectId) {
+            const g = gift || selectedGift;
+            selectedGift = g;
+            document.getElementById('modal-gift-icon').textContent = g.icon;
+            document.getElementById('modal-gift-name').textContent = g.name;
+            document.getElementById('modal-gift-price').textContent = g.price;
+            
+            const sel = document.getElementById('gift-recipient-select');
+            sel.innerHTML = '';
+            state.chats.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id; opt.textContent = c.name;
+                if(preselectId && c.id === preselectId) opt.selected = true;
+                sel.appendChild(opt);
+            });
+            document.getElementById('send-gift-modal').classList.remove('hidden');
+        }
+
+        function confirmSendGift() {
+            const recId = parseInt(document.getElementById('gift-recipient-select').value);
+            if(state.stars < selectedGift.price) return alert('Недостаточно звёзд!');
+            state.stars -= selectedGift.price; updateStarBal();
+            
+            const rec = state.chats.find(c => c.id === recId);
+            if(rec) {
+                if(!rec.gifts) rec.gifts = [];
+                const now = new Date(); const t = `${now.getDate()}.${now.getMonth()+1} ${now.getHours()}:${now.getMinutes().toString().padStart(2,'0')}`;
+                rec.gifts.push({ icon: selectedGift.icon, name: selectedGift.name, from: state.userProfile.firstName, time: t, price: selectedGift.price, isNft: false });
+                if(state.currentProfileId === recId) openProfileView(recId);
+            }
+            document.getElementById('send-gift-modal').classList.add('hidden');
+            alert(`Подарок ${selectedGift.icon} отправлен!`);
+        }
+
+        // --- SEARCH & GLOBAL FUNCTIONS ---
+        function handleGlobalSearch(query) {
+            if(!query) { renderChatList(); return; }
+            query = query.toLowerCase();
+            chatListEl.innerHTML = '';
+            const results = state.chats.filter(c => c.name.toLowerCase().includes(query) || (c.username && c.username.toLowerCase().includes(query)) || (c.phone && c.phone.includes(query)));
+            if(results.length === 0) chatListEl.innerHTML = '<div class="p-4 text-center text-gray-500">Ничего не найдено</div>';
+            else {
+                results.forEach(c => {
+                    chatListEl.innerHTML += `<div class="flex items-center px-4 py-3 tg-active cursor-pointer border-b border-[#101921]" onclick="openChat(${c.id})">
+                        <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-lg mr-3">${c.avatar}</div>
+                        <div><div class="font-medium">${c.name}</div><div class="text-xs text-gray-400">@${c.username}</div></div></div>`;
+                });
+            }
+        }
+
+        function promptCopy(txt) { navigator.clipboard.writeText(txt).then(() => alert('Скопировано: ' + txt)); }
+        
+        // Privacy Functions
+        function saveCloudPassword() {
+            const p1 = document.getElementById('cloud-pass-1').value;
+            const p2 = document.getElementById('cloud-pass-2').value;
+            if(p1 && p1 === p2) { alert('Облачный пароль установлен!'); closeSettingsPanel('panel-password'); }
+            else { alert('Пароли не совпадают'); }
+        }
+        function addToBlockedList() {
+            const u = document.getElementById('block-input').value;
+            if(u) { state.blocked.push(u); document.getElementById('blocked-count-badge').textContent = state.blocked.length; renderBlockedList(); document.getElementById('block-input').value = ''; }
+        }
         function renderBlockedList() {
-            const el = document.getElementById('blockedListEl');
-            el.innerHTML = S.blocked.length ? S.blocked.map(u => `<div style="display:flex;justify-content:space-between;padding:8px;background:var(--surface2);border-radius:8px;margin:4px 0;"><span>🚫 ${u}</span><span style="color:var(--red);cursor:pointer;" onclick="removeBlocked('${u}')">✕</span></div>`).join('') : '<div style="color:var(--text2);text-align:center;padding:12px;">Список пуст</div>';
+            const c = document.getElementById('blocked-list-container'); c.innerHTML = '';
+            state.blocked.forEach((u, i) => { c.innerHTML += `<div class="bg-[#242f3d] p-3 rounded-xl flex justify-between items-center"><span>${u}</span><button onclick="state.blocked.splice(${i},1); renderBlockedList(); document.getElementById('blocked-count-badge').textContent=state.blocked.length" class="text-red-400 text-sm">Разблокировать</button></div>`; });
         }
-
-        function addBlocked() { const n = prompt('Имя пользователя:'); if (n && !S.blocked.includes(n)) { S.blocked.push(n);
-                renderBlockedList();
-                showToast(n + ' заблокирован'); } }
-
-        function removeBlocked(u) { S.blocked = S.blocked.filter(b => b !== u);
-            renderBlockedList();
-            showToast(u + ' разблокирован'); }
-
-        function clearCache() { closeOv('ovData');
-            showToast('Кэш очищен 🧹'); }
-
-        function setTheme(t) {
-            if (t === 'light') { ['--bg', '#f5f5f5', '--surface', '#ffffff', '--surface2', '#f0f0f0', '--text', '#000000', '--text2', '#666', '--bubble-in', '#e9e9eb', '--input-bg', '#e9e9eb'].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
-                document.getElementById('themeLabel').textContent = 'Светлая'; } else { ['--bg', '#000000', '--surface', '#111111', '--surface2', '#1a1a1a', '--text', '#ffffff', '--text2', '#6b6b7b', '--bubble-in', '#1c1c24', '--input-bg', '#1a1a24'].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
-                document.getElementById('themeLabel').textContent = 'Тёмная'; }
-            closeOv('ovAppearance');
-            showToast('Тема: ' + (t === 'light' ? 'Светлая' : 'Тёмная'));
+        function clearCache() {
+            const btn = event.target; btn.textContent = 'Очистка...';
+            setTimeout(() => { document.getElementById('cache-size').textContent = '0 Б'; btn.textContent = 'Кэш очищен'; setTimeout(() => btn.textContent = 'Очистить кэш', 2000); }, 1000);
         }
-
-        function toggleToggle(el, e) { e.stopPropagation();
-            el.classList.toggle('on'); }
-
-        // ═══════════════ NAVIGATION ═══════════════
-        function switchTab(pid, btn) { document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-            document.getElementById(pid).classList.add('on');
-            document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
-            btn.classList.add('on');
-            prevPage = pid;
-            document.getElementById('mainTabbar').style.display = ''; }
-
-        function showPageNoTab(pid) { document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-            document.getElementById(pid).classList.add('on');
-            document.getElementById('mainTabbar').style.display = ['pChat', 'pProfile'].includes(pid) ? 'none' : ''; }
-
-        function goBack(to) { showPageNoTab(to || prevPage); if (!['pChat', 'pProfile'].includes(to)) document.getElementById(
-                'mainTabbar').style.display = ''; }
-
-        function openOv(id) { document.getElementById(id).classList.add('on'); }
-
-        function closeOv(id) { document.getElementById(id).classList.remove('on'); }
-
-        document.querySelectorAll('.overlay').forEach(ov => { ov.addEventListener('click', e => { if (e.target === ov) ov
-                    .classList.remove('on'); }); });
-
-        // ═══════════════ UI ═══════════════
-        function updateAllUI() {
-            document.getElementById('starsMenuVal').textContent = S.stars + ' ★';
-            document.getElementById('giftsBal').textContent = S.stars + ' ★';
-            document.getElementById('starsNum').textContent = S.stars;
-            document.getElementById('setName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
-            document.getElementById('setPhone').textContent = S.phone;
-            document.getElementById('setUsername').textContent = '@' + S.username;
-            document.getElementById('setAva').textContent = S.name[0].toUpperCase();
-        }
-
-        function updateSavedUI() { const l = S.savedMsgs[S.savedMsgs.length - 1];
-            document.getElementById('savedLast').textContent = l ? l.text : 'Сохраняйте важное';
-            document.getElementById('savedT').textContent = l ? l.time : ''; }
-
-        function showToast(t) { document.querySelectorAll('.toast').forEach(x => x.remove());
-            const d = document.createElement('div');
-            d.className = 'toast';
-            d.textContent = t;
-            document.body.appendChild(d);
-            setTimeout(() => d.remove(), 2000); }
-
-        function nowTime() { const n = new Date(); return n.getHours().toString().padStart(2, '0') + ':' + n.getMinutes().toString().padStart(2, '0'); }
     </script>
 </body>
 </html>
+
