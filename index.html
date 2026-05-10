@@ -12,10 +12,8 @@
             --surface3: #3a3a3c;
             --border: rgba(255,255,255,0.1);
             --blue: #007aff;
-            --blue2: #0a84ff;
             --text: #ffffff;
             --text2: #8e8e93;
-            --text3: #aeaeb2;
             --green: #34c759;
             --red: #ff3b30;
             --orange: #ff9500;
@@ -30,940 +28,411 @@
             --safe-top: env(safe-area-inset-top, 0px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none;
-            user-select: none;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             background: var(--bg);
             color: var(--text);
-            height: 100vh;
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
+            height: 100vh; height: 100dvh;
+            display: flex; flex-direction: column;
             overflow: hidden;
             transition: background var(--tr);
         }
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes fadeOut { to { opacity:0; transform:translateX(-50%) translateY(10px); } }
+        @keyframes scaleIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateX(-50%) translateY(10px); }
-        }
+        .app { display:flex; flex-direction:column; height:100%; height:100dvh; }
 
-        .app {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            height: 100dvh;
+        /* ── LOGIN / REGISTER ── */
+        .login-screen {
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            height:100%; padding:32px 28px; text-align:center; background:var(--bg);
+            animation:fadeIn .5s ease;
         }
-
-        /* LOGIN */
-        .login {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 32px 28px;
-            text-align: center;
-            animation: fadeIn .5s ease;
-            background: var(--bg);
-        }
-        .login-icon {
-            font-size: 80px;
-            margin-bottom: 24px;
-        }
-        .login h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        .login-sub {
-            color: var(--text2);
-            font-size: 15px;
-            margin-bottom: 32px;
-            line-height: 1.5;
-        }
+        .login-screen.hidden { display:none; }
+        .login-icon { font-size:80px; margin-bottom:24px; }
+        .login-screen h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+        .login-screen p { color:var(--text2); font-size:15px; margin-bottom:28px; line-height:1.5; }
         .login-input {
-            width: 100%;
-            max-width: 300px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px 18px;
-            color: var(--text);
-            font-size: 18px;
-            text-align: center;
-            outline: none;
-            letter-spacing: 1px;
-            transition: border var(--tr);
-            -webkit-user-select: auto;
-            user-select: auto;
+            width:100%; max-width:300px;
+            background:var(--surface); border:1px solid var(--border); border-radius:12px;
+            padding:15px 18px; color:var(--text); font-size:18px; text-align:center;
+            outline:none; letter-spacing:1px; transition:border var(--tr);
+            -webkit-user-select:auto; user-select:auto;
         }
-        .login-input:focus {
-            border-color: var(--blue);
+        .login-input:focus { border-color:var(--blue); }
+        .sms-input {
+            width:100%; max-width:240px;
+            background:var(--surface); border:1px solid var(--border); border-radius:12px;
+            padding:15px 18px; color:var(--text); font-size:24px; text-align:center;
+            outline:none; letter-spacing:8px; transition:border var(--tr);
+            -webkit-user-select:auto; user-select:auto;
         }
+        .sms-input:focus { border-color:var(--blue); }
         .btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: all var(--tr);
-            margin: 4px 0;
+            width:100%; max-width:300px; padding:14px; border-radius:12px;
+            font-size:16px; font-weight:600; cursor:pointer; border:none;
+            transition:all var(--tr); margin:4px 0;
         }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-primary {
-            background: var(--blue);
-            color: #fff;
-        }
-        .btn-danger {
-            background: var(--red);
-            color: #fff;
-        }
-        .btn-ghost {
-            background: transparent;
-            color: var(--text2);
-            border: 1px solid var(--border);
-        }
+        .btn:active { transform:scale(0.97); }
+        .btn-primary { background:var(--blue); color:#fff; }
+        .btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border); }
+        .btn-danger { background:var(--red); color:#fff; }
+        .btn-green { background:var(--green); color:#fff; }
 
-        /* HEADER */
+        /* ── HEADER ── */
         .header {
-            background: var(--surface);
-            border-bottom: 0.5px solid var(--border);
-            padding: 12px 16px;
-            padding-top: max(12px, var(--safe-top));
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 10;
-            flex-shrink: 0;
+            background:var(--surface); border-bottom:0.5px solid var(--border);
+            padding:12px 16px; padding-top:max(12px,var(--safe-top));
+            display:flex; align-items:center; gap:12px; z-index:10; flex-shrink:0;
         }
-        .header-title {
-            font-size: 20px;
-            font-weight: 700;
-            flex: 1;
-        }
+        .header-title { font-size:20px; font-weight:700; flex:1; }
         .hbtn {
-            background: none;
-            border: none;
-            color: var(--blue);
-            font-size: 16px;
-            cursor: pointer;
-            padding: 6px 8px;
-            border-radius: 8px;
-            transition: background var(--tr);
-            font-weight: 500;
+            background:none; border:none; color:var(--blue); font-size:16px;
+            cursor:pointer; padding:6px 8px; border-radius:8px; transition:background var(--tr);
         }
-        .hbtn:active {
-            background: var(--surface2);
-        }
+        .hbtn:active { background:var(--surface2); }
 
-        /* SEARCH */
+        /* ── SEARCH ── */
         .searchbar {
-            margin: 8px 12px;
-            background: var(--surface);
-            border-radius: 10px;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text2);
-            font-size: 16px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all var(--tr);
-            flex-shrink: 0;
+            margin:8px 12px; background:var(--surface); border-radius:10px;
+            padding:10px 14px; display:flex; align-items:center; gap:8px;
+            color:var(--text2); font-size:16px; cursor:pointer; border:1px solid transparent;
+            transition:all var(--tr); flex-shrink:0;
         }
-        .searchbar:active {
-            border-color: var(--blue);
+        .searchbar:active { border-color:var(--blue); }
+        .search-input {
+            flex:1; background:transparent; border:none; color:var(--text);
+            font-size:16px; outline:none; -webkit-user-select:auto; user-select:auto;
         }
+        .search-input::placeholder { color:var(--text2); }
 
-        /* TABS */
+        /* ── TABS ── */
         .tabbar {
-            background: var(--surface);
-            border-top: 0.5px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            padding: 6px 0;
-            padding-bottom: max(6px, var(--safe-bottom));
-            flex-shrink: 0;
-            z-index: 10;
+            background:var(--surface); border-top:0.5px solid var(--border);
+            display:flex; justify-content:space-around; padding:6px 0;
+            padding-bottom:max(6px,var(--safe-bottom)); flex-shrink:0; z-index:10;
         }
         .tab {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            font-size: 10px;
-            color: var(--tab-inactive);
-            background: none;
-            border: none;
-            padding: 5px 12px;
-            cursor: pointer;
-            transition: color var(--tr);
-            position: relative;
+            display:flex; flex-direction:column; align-items:center; gap:2px;
+            font-size:10px; color:var(--tab-inactive); background:none;
+            border:none; padding:5px 12px; cursor:pointer; transition:color var(--tr); position:relative;
         }
-        .tab.on {
-            color: var(--tab-active);
-        }
-        .tab-icon {
-            font-size: 24px;
-            line-height: 1;
-        }
+        .tab.on { color:var(--tab-active); }
+        .tab-icon { font-size:24px; line-height:1; }
         .tab-badge {
-            position: absolute;
-            top: 2px;
-            right: 8px;
-            background: var(--red);
-            color: #fff;
-            font-size: 10px;
-            min-width: 16px;
-            height: 16px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
-            font-weight: 700;
+            position:absolute; top:2px; right:8px; background:var(--red); color:#fff;
+            font-size:10px; min-width:16px; height:16px; border-radius:8px;
+            display:flex; align-items:center; justify-content:center; padding:0 4px; font-weight:700;
         }
 
-        /* PAGES */
-        .page {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            overflow: hidden;
-            animation: fadeIn .18s ease;
-        }
-        .page.on {
-            display: flex;
-        }
-        .scroll {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+        /* ── PAGES ── */
+        .page { display:none; flex-direction:column; flex:1; overflow:hidden; animation:fadeIn .18s ease; }
+        .page.on { display:flex; }
+        .scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 
-        /* CHAT LIST */
+        /* ── CHAT LIST ── */
         .citem {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 16px;
-            cursor: pointer;
-            transition: background var(--tr);
-            border-bottom: 0.5px solid var(--divider);
+            display:flex; align-items:center; gap:12px; padding:10px 16px;
+            cursor:pointer; transition:background var(--tr); border-bottom:0.5px solid var(--divider);
         }
-        .citem:active {
-            background: var(--surface);
-        }
+        .citem:active { background:var(--surface); }
         .ava {
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 21px;
-            color: #fff;
-            flex-shrink: 0;
-            position: relative;
+            width:54px; height:54px; border-radius:50%; display:flex; align-items:center;
+            justify-content:center; font-weight:600; font-size:21px; color:#fff; flex-shrink:0; position:relative;
         }
-        .ava.blue {
-            background: #007aff;
-        }
-        .ava.green {
-            background: #34c759;
-        }
-        .ava.orange {
-            background: #ff9500;
-        }
-        .ava.purple {
-            background: #af52de;
-        }
-        .ava.red {
-            background: #ff3b30;
-        }
-        .ava.teal {
-            background: #5ac8fa;
-        }
+        .ava.blue { background:#007aff; } .ava.green { background:#34c759; }
+        .ava.orange { background:#ff9500; } .ava.purple { background:#af52de; }
+        .ava.red { background:#ff3b30; } .ava.teal { background:#5ac8fa; }
         .online {
-            width: 13px;
-            height: 13px;
-            background: var(--green);
-            border-radius: 50%;
-            border: 2.5px solid var(--bg);
-            position: absolute;
-            bottom: 1px;
-            right: 1px;
+            width:13px; height:13px; background:var(--green); border-radius:50%;
+            border:2.5px solid var(--bg); position:absolute; bottom:1px; right:1px;
         }
-        .cinfo {
-            flex: 1;
-            min-width: 0;
-        }
-        .cname {
-            font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .clast {
-            color: var(--text2);
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 1px;
-        }
-        .cmeta {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-        .ctime {
-            color: var(--text2);
-            font-size: 12px;
-        }
+        .cinfo { flex:1; min-width:0; }
+        .cname { font-weight:600; font-size:16px; display:flex; align-items:center; gap:4px; }
+        .clast { color:var(--text2); font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
+        .cmeta { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+        .ctime { color:var(--text2); font-size:12px; }
         .cbadge {
-            background: var(--blue);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            min-width: 20px;
-            height: 20px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 6px;
-        }
-        .section-label {
-            font-size: 13px;
-            color: var(--text2);
-            padding: 12px 16px 6px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            background:var(--blue); color:#fff; font-size:11px; font-weight:700;
+            min-width:20px; height:20px; border-radius:10px; display:flex;
+            align-items:center; justify-content:center; padding:0 6px;
         }
 
-        /* SETTINGS */
+        /* ── SETTINGS ── */
         .sblock {
-            margin: 0 0 24px;
-            background: var(--surface);
-            border-top: 0.5px solid var(--border);
-            border-bottom: 0.5px solid var(--border);
+            margin:0 0 24px; background:var(--surface);
+            border-top:0.5px solid var(--border); border-bottom:0.5px solid var(--border);
         }
         .sitem {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 13px 16px;
-            cursor: pointer;
-            border-bottom: 0.5px solid var(--divider);
-            transition: background var(--tr);
-            font-size: 16px;
+            display:flex; align-items:center; gap:14px; padding:13px 16px;
+            cursor:pointer; border-bottom:0.5px solid var(--divider);
+            transition:background var(--tr); font-size:16px;
         }
-        .sitem:last-child {
-            border-bottom: none;
-        }
-        .sitem:active {
-            background: var(--surface2);
-        }
-        .sicon {
-            font-size: 22px;
-            width: 30px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-        .sarrow {
-            color: var(--text2);
-            margin-left: auto;
-            font-size: 20px;
-        }
-        .sval {
-            color: var(--text2);
-            font-size: 15px;
-            margin-left: auto;
-        }
-        .toggle {
-            margin-left: auto;
-            width: 50px;
-            height: 28px;
-            background: var(--surface3);
-            border-radius: 14px;
-            cursor: pointer;
-            position: relative;
-            transition: background var(--tr);
-            flex-shrink: 0;
-        }
-        .toggle.on {
-            background: var(--green);
-        }
-        .toggle::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 24px;
-            height: 24px;
-            background: #fff;
-            border-radius: 50%;
-            transition: transform var(--tr);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
-        }
-        .toggle.on::after {
-            transform: translateX(22px);
-        }
+        .sitem:last-child { border-bottom:none; }
+        .sitem:active { background:var(--surface2); }
+        .sicon { font-size:22px; width:30px; text-align:center; flex-shrink:0; }
+        .sarrow { color:var(--text2); margin-left:auto; font-size:20px; }
+        .sval { color:var(--text2); font-size:15px; margin-left:auto; }
         .tag-new {
-            background: var(--blue);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 6px;
-            margin-left: auto;
+            background:var(--blue); color:#fff; font-size:10px; font-weight:700;
+            padding:2px 6px; border-radius:6px; margin-left:auto;
         }
         .verified {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            background: var(--blue);
-            border-radius: 50%;
-            color: #fff;
-            font-size: 10px;
-            text-align: center;
-            line-height: 18px;
-            font-weight: 700;
-            flex-shrink: 0;
+            display:inline-block; width:18px; height:18px; background:var(--blue);
+            border-radius:50%; color:#fff; font-size:10px; text-align:center;
+            line-height:18px; font-weight:700; flex-shrink:0;
         }
+        .nft-badge {
+            display:inline-block; background:linear-gradient(135deg,#ff9500,#ff3b30);
+            color:#fff; font-size:9px; font-weight:800; padding:2px 6px;
+            border-radius:6px; margin-left:4px;
+        }
+        .toggle {
+            margin-left:auto; width:50px; height:28px; background:var(--surface3);
+            border-radius:14px; cursor:pointer; position:relative;
+            transition:background var(--tr); flex-shrink:0;
+        }
+        .toggle.on { background:var(--green); }
+        .toggle::after {
+            content:''; position:absolute; top:2px; left:2px; width:24px; height:24px;
+            background:#fff; border-radius:50%; transition:transform var(--tr);
+            box-shadow:0 2px 4px rgba(0,0,0,.3);
+        }
+        .toggle.on::after { transform:translateX(22px); }
 
-        /* PROFILE */
-        .profile-header {
-            background: var(--surface);
-            border-bottom: 0.5px solid var(--border);
-            padding: 30px 16px 20px;
-            text-align: center;
-        }
-        .profile-ava {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #007aff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 34px;
-            font-weight: 700;
-            color: #fff;
-            margin: 0 auto 12px;
-            position: relative;
-        }
-        .profile-ava .camera {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 26px;
-            height: 26px;
-            background: var(--blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            border: 2px solid var(--bg);
-        }
-        .pname {
-            font-size: 22px;
-            font-weight: 700;
-        }
-        .pphone {
-            color: var(--text2);
-            font-size: 15px;
-            margin-top: 4px;
-        }
-        .puser {
-            color: var(--blue);
-            font-size: 14px;
-            margin-top: 2px;
-        }
-
-        /* CHAT VIEW */
+        /* ── CHAT VIEW ── */
         .chat-header {
-            background: var(--surface);
-            border-bottom: 0.5px solid var(--border);
-            padding: 10px 12px;
-            padding-top: max(10px, var(--safe-top));
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 10;
-            flex-shrink: 0;
+            background:var(--surface); border-bottom:0.5px solid var(--border);
+            padding:10px 12px; padding-top:max(10px,var(--safe-top));
+            display:flex; align-items:center; gap:10px; z-index:10; flex-shrink:0;
         }
         .chat-ava-sm {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            width:38px; height:38px; border-radius:50%; font-size:16px;
+            font-weight:600; color:#fff; display:flex; align-items:center;
+            justify-content:center; flex-shrink:0;
         }
-        .chat-name-h {
-            font-weight: 700;
-            font-size: 16px;
-        }
-        .chat-status-h {
-            font-size: 12px;
-            color: var(--green);
-        }
+        .chat-name-h { font-weight:700; font-size:16px; }
+        .chat-status-h { font-size:12px; color:var(--green); }
         .messages {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 10px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            background: var(--bg);
+            flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
+            padding:10px 12px; display:flex; flex-direction:column; gap:3px; background:var(--bg);
         }
-        .mrow {
-            display: flex;
-            align-items: flex-end;
-            gap: 5px;
-            max-width: 82%;
-            animation: slideUp .2s ease;
-        }
-        .mrow.out {
-            align-self: flex-end;
-            flex-direction: row-reverse;
-        }
-        .mrow.in {
-            align-self: flex-start;
-        }
-        .mbubble {
-            padding: 8px 13px;
-            border-radius: 18px;
-            font-size: 16px;
-            line-height: 1.45;
-            word-break: break-word;
-        }
-        .mrow.out .mbubble {
-            background: var(--bubble-out);
-            border-bottom-right-radius: 4px;
-        }
-        .mrow.in .mbubble {
-            background: var(--bubble-in);
-            border-bottom-left-radius: 4px;
-        }
-        .mtime {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 2px;
-            text-align: right;
-        }
+        .mrow { display:flex; align-items:flex-end; gap:5px; max-width:82%; animation:slideUp .2s ease; }
+        .mrow.out { align-self:flex-end; flex-direction:row-reverse; }
+        .mrow.in { align-self:flex-start; }
+        .mbubble { padding:8px 13px; border-radius:18px; font-size:16px; line-height:1.45; word-break:break-word; }
+        .mrow.out .mbubble { background:var(--bubble-out); border-bottom-right-radius:4px; }
+        .mrow.in .mbubble { background:var(--bubble-in); border-bottom-left-radius:4px; }
+        .mtime { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; text-align:right; }
+        .day-divider { text-align:center; margin:8px 0; font-size:12px; color:var(--text2); }
+        .day-divider span { background:var(--surface); padding:4px 12px; border-radius:12px; }
         .cinput-bar {
-            background: var(--surface);
-            border-top: 0.5px solid var(--border);
-            padding: 8px 10px;
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            padding-bottom: max(8px, var(--safe-bottom));
-            flex-shrink: 0;
+            background:var(--surface); border-top:0.5px solid var(--border);
+            padding:8px 10px; display:flex; align-items:flex-end; gap:6px;
+            padding-bottom:max(8px,var(--safe-bottom)); flex-shrink:0;
         }
         .cinput {
-            flex: 1;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 10px 16px;
-            color: var(--text);
-            font-size: 16px;
-            outline: none;
-            font-family: inherit;
-            -webkit-user-select: auto;
-            user-select: auto;
-            transition: border var(--tr);
+            flex:1; background:var(--input-bg); border:1px solid var(--border);
+            border-radius:20px; padding:10px 16px; color:var(--text); font-size:16px;
+            outline:none; font-family:inherit; -webkit-user-select:auto; user-select:auto;
         }
-        .cinput:focus {
-            border-color: var(--blue);
-        }
+        .cinput:focus { border-color:var(--blue); }
         .csend {
-            width: 38px;
-            height: 38px;
-            background: var(--blue);
-            border: none;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all var(--tr);
+            width:38px; height:38px; background:var(--blue); border:none; border-radius:50%;
+            color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center;
+            justify-content:center; flex-shrink:0; transition:all var(--tr);
         }
-        .csend:active {
-            transform: scale(0.9);
-        }
+        .csend:active { transform:scale(0.9); }
         .cico {
-            width: 36px;
-            height: 36px;
-            background: none;
-            border: none;
-            color: var(--text2);
-            font-size: 22px;
-            cursor: pointer;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width:36px; height:36px; background:none; border:none; color:var(--text2);
+            font-size:22px; cursor:pointer; border-radius:50%; display:flex;
+            align-items:center; justify-content:center;
         }
-        .cico:active {
-            background: var(--surface2);
-        }
-        .day-divider {
-            text-align: center;
-            margin: 8px 0;
-            font-size: 12px;
-            color: var(--text2);
-        }
-        .day-divider span {
-            background: var(--surface);
-            padding: 4px 12px;
-            border-radius: 12px;
-        }
+        .cico:active { background:var(--surface2); }
         .back-btn {
-            background: none;
-            border: none;
-            color: var(--blue);
-            font-size: 28px;
-            cursor: pointer;
-            line-height: 1;
-            padding: 4px;
-            display: flex;
-            align-items: center;
+            background:none; border:none; color:var(--blue); font-size:28px;
+            cursor:pointer; line-height:1; padding:4px; display:flex; align-items:center;
         }
 
-        /* GIFTS */
-        .gift-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 10px 0;
-        }
+        /* ── GIFTS ── */
+        .gift-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:10px 0; }
         .gcard {
-            text-align: center;
-            padding: 14px 6px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all var(--tr);
-            position: relative;
+            text-align:center; padding:14px 6px; background:var(--surface);
+            border:1px solid var(--border); border-radius:14px; cursor:pointer;
+            transition:all var(--tr); position:relative;
         }
-        .gcard:active {
-            transform: scale(0.95);
-            border-color: var(--blue);
-        }
-        .gcard.nft {
-            border-color: rgba(255, 149, 0, 0.5);
-            background: linear-gradient(135deg, rgba(255, 149, 0, 0.1), rgba(255, 59, 48, 0.05));
-        }
-        .gemoji {
-            font-size: 40px;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .gname {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-        .gprice {
-            font-size: 12px;
-            color: var(--orange);
-            font-weight: 600;
-        }
-        .gsent {
-            font-size: 10px;
-            color: var(--text2);
-        }
+        .gcard:active { transform:scale(0.95); border-color:var(--blue); }
+        .gcard.nft { border-color:rgba(255,149,0,0.5); background:linear-gradient(135deg,rgba(255,149,0,0.1),rgba(255,59,48,0.05)); }
+        .gemoji { font-size:40px; display:block; margin-bottom:5px; }
+        .gname { font-size:12px; font-weight:600; margin-bottom:2px; }
+        .gprice { font-size:12px; color:var(--orange); font-weight:600; }
+        .gsent { font-size:10px; color:var(--text2); }
         .gtop {
-            position: absolute;
-            top: 5px;
-            right: 7px;
-            background: var(--orange);
-            color: #fff;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 5px;
-            border-radius: 5px;
+            position:absolute; top:5px; right:7px; background:var(--orange);
+            color:#fff; font-size:9px; font-weight:700; padding:2px 5px; border-radius:5px;
         }
         .gnft {
-            position: absolute;
-            top: 5px;
-            left: 7px;
-            background: #ff9500;
-            color: #fff;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 5px;
-            border-radius: 5px;
+            position:absolute; top:5px; left:7px; background:#ff9500;
+            color:#fff; font-size:9px; font-weight:700; padding:2px 5px; border-radius:5px;
         }
-        .gift-owned-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 12px;
-        }
+        .gift-owned-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:12px; }
         .gift-owned-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--tr);
-            position: relative;
+            background:var(--surface); border:1px solid var(--border);
+            border-radius:14px; padding:14px 8px; text-align:center; cursor:pointer;
+            transition:all var(--tr); position:relative;
         }
-        .gift-owned-card:active {
-            transform: scale(0.96);
-        }
-        .gift-owned-card.nft-owned {
-            border-color: #ff9500;
-            box-shadow: 0 0 12px rgba(255, 149, 0, 0.2);
-        }
-        .gift-big-emoji {
-            font-size: 36px;
-            display: block;
-            margin-bottom: 4px;
-        }
+        .gift-owned-card:active { transform:scale(0.96); }
+        .gift-owned-card.nft-owned { border-color:#ff9500; box-shadow:0 0 12px rgba(255,149,0,0.2); }
+        .gift-big-emoji { font-size:36px; display:block; margin-bottom:4px; }
 
-        /* STARS */
-        .stars-big {
-            text-align: center;
-            padding: 20px 16px 12px;
-        }
-        .stars-big .snum {
-            font-size: 48px;
-            font-weight: 700;
-        }
+        /* ── STARS ── */
+        .stars-big { text-align:center; padding:20px 16px 12px; }
+        .stars-big .snum { font-size:48px; font-weight:700; }
         .spkg {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin: 5px 0;
-            cursor: pointer;
-            transition: all var(--tr);
+            display:flex; align-items:center; justify-content:space-between;
+            padding:14px 16px; background:var(--surface); border:1px solid var(--border);
+            border-radius:12px; margin:5px 0; cursor:pointer; transition:all var(--tr);
         }
-        .spkg:active {
-            background: var(--surface2);
-            border-color: var(--blue);
-        }
+        .spkg:active { background:var(--surface2); border-color:var(--blue); }
 
-        /* MODALS */
+        /* ── MODALS ── */
         .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            z-index: 100;
-            display: none;
-            align-items: flex-end;
-            justify-content: center;
+            position:fixed; inset:0; background:rgba(0,0,0,0.6);
+            backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            z-index:100; display:none; align-items:flex-end; justify-content:center;
         }
-        .overlay.on {
-            display: flex;
-            animation: fadeIn .2s ease;
-        }
+        .overlay.on { display:flex; animation:fadeIn .2s ease; }
         .modal {
-            background: var(--surface);
-            border-radius: 14px 14px 0 0;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 6px 0 max(20px, var(--safe-bottom));
-            animation: slideUp .28s ease;
+            background:var(--surface); border-radius:14px 14px 0 0;
+            width:100%; max-width:500px; max-height:90vh; overflow-y:auto;
+            padding:6px 0 max(20px,var(--safe-bottom)); animation:slideUp .28s ease;
         }
-        .mhandle {
-            width: 36px;
-            height: 5px;
-            background: var(--surface3);
-            border-radius: 3px;
-            margin: 10px auto 14px;
-        }
-        .mtitle {
-            font-size: 17px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 16px;
-            padding: 0 20px;
-        }
+        .mhandle { width:36px; height:5px; background:var(--surface3); border-radius:3px; margin:10px auto 14px; }
+        .mtitle { font-size:17px; font-weight:700; text-align:center; margin-bottom:16px; padding:0 20px; }
         .minput {
-            width: 100%;
-            padding: 13px 16px;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-size: 16px;
-            outline: none;
-            font-family: inherit;
-            -webkit-user-select: auto;
-            user-select: auto;
-            transition: border var(--tr);
+            width:100%; padding:13px 16px; background:var(--input-bg);
+            border:1px solid var(--border); border-radius:10px; color:var(--text);
+            font-size:16px; outline:none; font-family:inherit; -webkit-user-select:auto; user-select:auto;
         }
-        .minput:focus {
-            border-color: var(--blue);
-        }
-        .mpad {
-            padding: 0 16px;
-        }
-        .btn-green {
-            background: var(--green);
-            color: #fff;
-        }
-        .empty-state {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            color: var(--text2);
-        }
-        .empty-icon {
-            font-size: 64px;
+        .minput:focus { border-color:var(--blue); }
+        .mpad { padding:0 16px; }
+        .section-label {
+            font-size:13px; color:var(--text); font-weight:600;
+            padding:12px 16px 6px; text-transform:uppercase; letter-spacing:0.5px;
         }
         .toast {
-            position: fixed;
-            bottom: max(100px, calc(70px + var(--safe-bottom)));
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(44, 44, 46, 0.95);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            padding: 11px 22px;
-            border-radius: 22px;
-            font-weight: 600;
-            z-index: 300;
-            animation: slideUp .28s ease, fadeOut .3s ease 1.7s forwards;
-            font-size: 14px;
-            white-space: nowrap;
-            color: #fff;
-            pointer-events: none;
+            position:fixed; bottom:max(100px,calc(70px + var(--safe-bottom))); left:50%;
+            transform:translateX(-50%); background:rgba(44,44,46,0.95);
+            border:1px solid var(--border); backdrop-filter:blur(20px);
+            padding:11px 22px; border-radius:22px; font-weight:600; z-index:300;
+            animation:slideUp .28s ease, fadeOut .3s ease 1.7s forwards;
+            font-size:14px; white-space:nowrap; color:#fff; pointer-events:none;
         }
 
-        /* NFT badge */
-        .nft-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #ff9500, #ff3b30);
-            color: #fff;
-            font-size: 9px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 6px;
-            margin-left: 4px;
+        /* ── SEARCH RESULTS ── */
+        .search-results {
+            position:absolute; top:100%; left:12px; right:12px;
+            background:var(--surface); border:1px solid var(--border);
+            border-radius:12px; max-height:300px; overflow-y:auto; z-index:50;
+            margin-top:4px; box-shadow:0 8px 30px rgba(0,0,0,0.5);
         }
-        .exchange-btn {
-            background: var(--orange);
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 6px;
-            width: 100%;
+        .search-result-item {
+            display:flex; align-items:center; gap:12px; padding:12px 14px;
+            cursor:pointer; border-bottom:0.5px solid var(--divider); transition:background var(--tr);
         }
-        .exchange-btn:active {
-            opacity: 0.8;
-        }
+        .search-result-item:last-child { border-bottom:none; }
+        .search-result-item:active { background:var(--surface2); }
+        .search-result-item .ava { width:40px; height:40px; font-size:16px; }
+        .no-results { text-align:center; padding:20px; color:var(--text2); font-size:14px; }
 
-        /* Profile tabs */
+        /* ── PROFILE PAGE ── */
+        .profile-header {
+            background:var(--surface); border-bottom:0.5px solid var(--border);
+            padding:30px 16px 20px; text-align:center;
+        }
+        .profile-ava {
+            width:80px; height:80px; border-radius:50%; background:#007aff;
+            display:flex; align-items:center; justify-content:center;
+            font-size:34px; font-weight:700; color:#fff; margin:0 auto 12px; position:relative;
+        }
+        .profile-ava .camera {
+            position:absolute; bottom:0; right:0; width:26px; height:26px;
+            background:var(--blue); border-radius:50%; display:flex; align-items:center;
+            justify-content:center; font-size:12px; border:2px solid var(--bg);
+        }
+        .pname { font-size:22px; font-weight:700; }
+        .pphone { color:var(--text2); font-size:15px; margin-top:4px; }
+        .puser { color:var(--blue); font-size:14px; margin-top:2px; }
         .profile-tabs {
-            display: flex;
-            border-bottom: 0.5px solid var(--border);
-            background: var(--surface);
+            display:flex; border-bottom:0.5px solid var(--border); background:var(--surface);
         }
         .profile-tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text2);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all var(--tr);
+            flex:1; padding:10px; text-align:center; font-size:13px; font-weight:600;
+            color:var(--text2); cursor:pointer; border-bottom:2px solid transparent; transition:all var(--tr);
         }
-        .profile-tab.on {
-            color: var(--blue);
-            border-color: var(--blue);
-        }
+        .profile-tab.on { color:var(--blue); border-color:var(--blue); }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN -->
-    <div class="app" id="loginApp">
-        <div class="login" id="loginScreen">
-            <div class="login-icon">✈️</div>
-            <h1>Telegram</h1>
-            <p class="login-sub">Введите ваш номер телефона</p>
-            <input type="tel" class="login-input" id="phoneIn" placeholder="+7 (999) 123-45-67" value="+7 (999) 123-45-67">
-            <button class="btn btn-primary" style="max-width:300px;margin-top:16px;" onclick="doLogin()">Продолжить →</button>
+    <!-- ── REGISTRATION FLOW ── -->
+
+    <!-- Step 1: Phone -->
+    <div class="login-screen" id="regStep1">
+        <div class="login-icon">✈️</div>
+        <h1>Telegram</h1>
+        <p>Введите ваш номер телефона</p>
+        <input type="tel" class="login-input" id="regPhone" placeholder="+7 (999) 123-45-67" value="+7 (999) 123-45-67">
+        <button class="btn btn-primary" style="margin-top:16px;" onclick="sendSMS()">Получить код →</button>
+        <div style="color:var(--text2);font-size:12px;margin-top:16px;max-width:260px;line-height:1.5;">
+            Войдя, вы соглашаетесь с условиями использования.
         </div>
     </div>
 
-    <!-- MAIN APP -->
+    <!-- Step 2: SMS Code -->
+    <div class="login-screen hidden" id="regStep2">
+        <div class="login-icon">📱</div>
+        <h1>Код подтверждения</h1>
+        <p>Мы отправили SMS с кодом на номер<br><strong id="smsPhoneDisplay">+7 (999) 123-45-67</strong></p>
+        <input type="text" class="sms-input" id="smsCode" placeholder="•••••" maxlength="5" inputmode="numeric" pattern="[0-9]*">
+        <div style="color:var(--text2);font-size:13px;margin:8px 0;">Код для демо: <strong style="color:var(--blue);">12345</strong></div>
+        <button class="btn btn-primary" style="margin-top:12px;" onclick="verifySMS()">Подтвердить →</button>
+        <button class="btn btn-ghost" style="margin-top:8px;" onclick="resendSMS()">🔄 Отправить повторно</button>
+        <button class="btn btn-ghost" onclick="goBackToPhone()">← Другой номер</button>
+    </div>
+
+    <!-- Step 3: Choose Username -->
+    <div class="login-screen hidden" id="regStep3">
+        <div class="login-icon">👤</div>
+        <h1>Выберите username</h1>
+        <p>Уникальное имя пользователя<br>для поиска друзей</p>
+        <div style="display:flex;align-items:center;gap:4px;max-width:300px;width:100%;">
+            <span style="color:var(--text2);font-size:18px;">@</span>
+            <input type="text" class="login-input" id="regUsername" placeholder="username" style="flex:1;text-align:left;letter-spacing:0;" autocomplete="off" autocorrect="off" autocapitalize="none">
+        </div>
+        <div style="color:var(--red);font-size:13px;margin-top:6px;display:none;" id="usernameError"></div>
+        <button class="btn btn-primary" style="margin-top:16px;" onclick="finishRegistration()">Зарегистрироваться 🚀</button>
+        <button class="btn btn-ghost" onclick="skipUsername()">Пропустить →</button>
+    </div>
+
+    <!-- ── MAIN APP ── -->
     <div class="app" id="mainApp" style="display:none;">
 
         <!-- CHATS PAGE -->
         <div class="page on" id="pChats">
             <div class="header">
                 <span class="header-title">Чаты</span>
-                <button class="hbtn" onclick="showToast('Поиск')">🔍</button>
+                <button class="hbtn" onclick="openGlobalSearch()">🔍</button>
                 <button class="hbtn" onclick="showToast('Новое сообщение')">✏️</button>
             </div>
-            <div class="searchbar" onclick="showToast('Поиск по чатам')">🔍 Поиск</div>
+            <!-- Global search bar -->
+            <div class="searchbar" onclick="openGlobalSearch()" style="position:relative;">
+                🔍 <span style="color:var(--text2);">Поиск пользователей по @username</span>
+            </div>
             <div class="scroll" id="chatList">
                 <div class="citem" style="background:var(--surface);" onclick="openChat('saved')">
                     <div class="ava orange">⭐</div>
@@ -987,30 +456,18 @@
                     <div class="cinfo"><div class="cname">Алексей</div><div class="clast" style="color:var(--green);">📹 Видеозвонок · 5 мин</div></div>
                     <div class="cmeta"><span class="ctime">10:32</span><span style="cursor:pointer;font-size:20px;">📞</span></div>
                 </div>
-                <div class="citem" onclick="showToast('Звоним Марии...')">
-                    <div class="ava green">М</div>
-                    <div class="cinfo"><div class="cname">Мария</div><div class="clast" style="color:var(--red);">📞 Исходящий · 2 мин</div></div>
-                    <div class="cmeta"><span class="ctime">вчера</span></div>
-                </div>
-                <div class="citem" onclick="showToast('Пропущенный от Елены')">
-                    <div class="ava red">Е</div>
-                    <div class="cinfo"><div class="cname">Елена</div><div class="clast" style="color:var(--red);">📞 Пропущенный</div></div>
-                    <div class="cmeta"><span class="ctime">пн</span><span class="cbadge">1</span></div>
-                </div>
             </div>
         </div>
 
         <!-- CONTACTS PAGE -->
         <div class="page" id="pContacts">
             <div class="header"><span class="header-title">Контакты</span><button class="hbtn" onclick="showToast('Добавить контакт')">+</button></div>
-            <div class="searchbar" onclick="showToast('Поиск контактов')">🔍 Поиск</div>
+            <div class="searchbar" onclick="openGlobalSearch()">🔍 Поиск по контактам</div>
             <div class="scroll">
                 <div class="section-label">Мои контакты</div>
-                <div class="citem" onclick="openChat(0)"><div class="ava blue">А<div class="online"></div></div><div class="cinfo"><div class="cname">Алексей <span class="verified">✓</span></div><div class="clast">@alex_tg · онлайн</div></div></div>
-                <div class="citem" onclick="openChat(1)"><div class="ava green">М</div><div class="cinfo"><div class="cname">Мария</div><div class="clast">@maria_star · была недавно</div></div></div>
-                <div class="citem" onclick="openChat(3)"><div class="ava red">Е</div><div class="cinfo"><div class="cname">Елена</div><div class="clast">@elena_v · была вчера</div></div></div>
-                <div class="citem" onclick="openChat(2)"><div class="ava purple">К</div><div class="cinfo"><div class="cname">Команда</div><div class="clast">@team_group · группа</div></div></div>
-                <div class="citem" onclick="openChat(4)"><div class="ava teal">Д</div><div class="cinfo"><div class="cname">Дмитрий</div><div class="clast">@dmitry_k · был давно</div></div></div>
+                <div class="citem" onclick="openChatByUsername('alex_tg')"><div class="ava blue">А<div class="online"></div></div><div class="cinfo"><div class="cname">Алексей <span class="verified">✓</span></div><div class="clast">@alex_tg · онлайн</div></div></div>
+                <div class="citem" onclick="openChatByUsername('maria_star')"><div class="ava green">М</div><div class="cinfo"><div class="cname">Мария</div><div class="clast">@maria_star · была недавно</div></div></div>
+                <div class="citem" onclick="openChatByUsername('elena_v')"><div class="ava red">Е</div><div class="cinfo"><div class="cname">Елена</div><div class="clast">@elena_v · была вчера</div></div></div>
             </div>
         </div>
 
@@ -1022,46 +479,31 @@
                     <div class="sitem" onclick="openProfilePage()">
                         <div class="ava blue" style="width:60px;height:60px;font-size:26px;font-weight:700;" id="setAva">М</div>
                         <div style="flex:1;">
-                            <div style="font-size:18px;font-weight:700;" id="setName">Макар</div>
+                            <div style="font-size:18px;font-weight:700;" id="setName">Пользователь</div>
                             <div style="font-size:14px;color:var(--text2);" id="setPhone">+7 (999) 123-45-67</div>
-                            <div style="font-size:13px;color:var(--blue);" id="setUsername">@wopst</div>
+                            <div style="font-size:13px;color:var(--blue);" id="setUsername">@username</div>
                         </div>
                         <span class="sarrow">›</span>
                     </div>
                 </div>
-
                 <div style="margin:8px 12px;background:linear-gradient(135deg,#007aff,#5856d6);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showToast('Telegram Premium')">
                     <span style="font-size:32px;">⭐</span>
-                    <div>
-                        <div style="font-weight:700;color:#fff;">Telegram Premium</div>
-                        <div style="font-size:12px;color:rgba(255,255,255,.8);">Безлимитные файлы, реакции</div>
-                    </div>
+                    <div><div style="font-weight:700;color:#fff;">Telegram Premium</div><div style="font-size:12px;color:rgba(255,255,255,.8);">Безлимитные файлы, реакции</div></div>
                     <span style="color:#fff;font-size:20px;margin-left:auto;">›</span>
                 </div>
-
                 <div class="sblock">
                     <div class="sitem" onclick="showNotifications()"><span class="sicon">🔔</span> Уведомления и звуки<span class="sarrow">›</span></div>
                     <div class="sitem" onclick="showPrivacy()"><span class="sicon">🔒</span> Конфиденциальность<span class="sarrow">›</span></div>
                     <div class="sitem" onclick="showData()"><span class="sicon">💾</span> Данные и память<span class="sarrow">›</span></div>
                     <div class="sitem" onclick="showAppearance()"><span class="sicon">🎨</span> Оформление<span class="sval" id="themeLabel">Тёмная</span></div>
-                    <div class="sitem" onclick="showLanguage()"><span class="sicon">🌐</span> Язык<span class="sval">Русский</span></div>
                 </div>
-
                 <div class="sblock">
                     <div class="sitem" onclick="openProfilePage()"><span class="sicon">⭐</span> Избранное<span class="sarrow">›</span></div>
                     <div class="sitem" onclick="openGiftsStore()"><span class="sicon">🎁</span> Подарки<span class="tag-new">NEW</span></div>
                     <div class="sitem" onclick="showStars()"><span class="sicon">🌟</span> Звёзды Telegram<span class="sval" id="starsMenuVal">50 ★</span></div>
-                    <div class="sitem" onclick="showDevices()"><span class="sicon">📱</span> Устройства<span class="sarrow">›</span></div>
-                    <div class="sitem" onclick="showToast('Стикеры')"><span class="sicon">😀</span> Стикеры и эмодзи<span class="sarrow">›</span></div>
                 </div>
-
-                <div class="sblock">
-                    <div class="sitem" onclick="showToast('Задать вопрос')"><span class="sicon">❓</span> Вопросы и ответы<span class="sarrow">›</span></div>
-                    <div class="sitem" onclick="showToast('О приложении')"><span class="sicon">ℹ️</span> О приложении<span class="sarrow">›</span></div>
-                </div>
-
                 <div style="text-align:center;color:var(--text2);font-size:13px;padding:20px 16px 30px;">
-                    Telegram Clone v3.0<br><span style="font-size:11px;">Сделано с ❤️</span>
+                    Telegram Clone v4.0<br><span style="font-size:11px;">С регистрацией и поиском</span>
                 </div>
             </div>
         </div>
@@ -1076,28 +518,25 @@
             <div class="scroll">
                 <div class="profile-header">
                     <div class="profile-ava" id="profAva" onclick="showToast('Изменить фото')">М<div class="camera">📷</div></div>
-                    <div class="pname" id="profName">Макар</div>
+                    <div class="pname" id="profName">Пользователь</div>
                     <div class="pphone" id="profPhone">+7 (999) 123-45-67</div>
-                    <div class="puser" id="profUsername">@wopst</div>
-                    <div style="color:var(--text2);font-size:13px;margin-top:4px;" id="profBio">Разработчик Telegram ботов 🤖</div>
+                    <div class="puser" id="profUsername">@username</div>
+                    <div style="color:var(--text2);font-size:13px;margin-top:4px;" id="profBio">Статус не установлен</div>
                 </div>
-
                 <div style="display:flex;gap:8px;padding:12px 16px;">
                     <button class="btn btn-primary" style="flex:1;" onclick="showToast('Написать себе')">✉️ Написать</button>
-                    <button class="btn btn-ghost" style="flex:1;" onclick="showToast('Поделиться')">📤 Поделиться</button>
+                    <button class="btn btn-ghost" style="flex:1;" onclick="showToast('Поделиться профилем')">📤 Поделиться</button>
                 </div>
-
                 <div class="profile-tabs">
                     <div class="profile-tab on" id="ptab-gifts" onclick="switchPTab('gifts')">🎁 Подарки</div>
                     <div class="profile-tab" id="ptab-stories" onclick="switchPTab('stories')">📖 Истории</div>
                 </div>
-
                 <div id="ptab-content-gifts">
                     <div class="gift-owned-grid" id="ownedGiftsGrid"></div>
                     <div id="noGifts" style="text-align:center;color:var(--text2);padding:32px;font-size:14px;">У вас пока нет подарков</div>
                 </div>
                 <div id="ptab-content-stories" style="display:none;">
-                    <div style="text-align:center;padding:32px;color:var(--text2);" onclick="showToast('Добавить историю')">+ Добавить историю</div>
+                    <div style="text-align:center;padding:32px;color:var(--text2);">+ Добавить историю</div>
                 </div>
             </div>
         </div>
@@ -1133,259 +572,297 @@
         </div>
     </div>
 
-    <!-- MODALS -->
+    <!-- ── MODALS ── -->
+
+    <!-- Global Search -->
+    <div class="overlay" id="ovGlobalSearch">
+        <div class="modal" style="padding-bottom:16px;">
+            <div class="mhandle"></div>
+            <div class="mtitle">🔍 Поиск пользователей</div>
+            <div style="position:relative;padding:0 16px;">
+                <div style="display:flex;align-items:center;gap:8px;background:var(--input-bg);border-radius:10px;padding:10px 14px;border:1px solid var(--border);">
+                    <span>🔍</span>
+                    <input type="text" class="search-input" id="globalSearchInput" placeholder="Введите @username или имя..." oninput="performSearch()" autocomplete="off" autocorrect="off">
+                </div>
+                <div id="searchResultsContainer" style="margin-top:8px;"></div>
+            </div>
+            <div class="mpad" style="margin-top:12px;"><button class="btn btn-ghost" onclick="closeOv('ovGlobalSearch')">Закрыть</button></div>
+        </div>
+    </div>
 
     <!-- Privacy -->
     <div class="overlay" id="ovPrivacy">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">🔒 Конфиденциальность</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">🔒 Конфиденциальность</div>
             <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-                <div class="sitem" onclick="showToast('Кто видит номер: Мои контакты')"><span>Номер телефона</span><span class="sval">Мои контакты</span></div>
-                <div class="sitem" onclick="showToast('Активность: Все')"><span>Последняя активность</span><span class="sval">Все</span></div>
+                <div class="sitem"><span>Номер телефона</span><span class="sval">Мои контакты</span></div>
+                <div class="sitem"><span>Последняя активность</span><span class="sval">Все</span></div>
                 <div class="sitem" onclick="showPassModal()"><span>🔑 Пароль</span><span class="sarrow">›</span></div>
                 <div class="sitem" onclick="showBlockedModal()"><span>🚫 Чёрный список</span><span class="sarrow">›</span></div>
-                <div class="sitem"><span>Двухэтапная проверка</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
             </div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovPrivacy')">Закрыть</button></div>
-        </div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovPrivacy')">Закрыть</button></div></div>
     </div>
 
     <!-- Password -->
     <div class="overlay" id="ovPass">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">🔑 Пароль входа</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">🔑 Пароль входа</div>
             <div class="mpad">
                 <input type="password" class="minput" placeholder="Новый пароль" id="newPassIn" style="margin-bottom:8px;">
                 <input type="password" class="minput" placeholder="Повторите пароль" id="confPassIn">
                 <button class="btn btn-primary" style="margin-top:12px;" onclick="savePass()">Сохранить</button>
                 <button class="btn btn-ghost" onclick="closeOv('ovPass')">Отмена</button>
-            </div>
-        </div>
+            </div></div>
     </div>
 
     <!-- Blocked -->
     <div class="overlay" id="ovBlocked">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">🚫 Чёрный список</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">🚫 Чёрный список</div>
             <div id="blockedListEl" style="padding:0 16px;"></div>
             <div class="mpad" style="margin-top:10px;">
                 <button class="btn btn-ghost" onclick="addBlocked()">+ Добавить</button>
                 <button class="btn btn-ghost" onclick="closeOv('ovBlocked')">Закрыть</button>
-            </div>
-        </div>
+            </div></div>
     </div>
 
     <!-- Data -->
     <div class="overlay" id="ovData">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">💾 Данные и память</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">💾 Данные и память</div>
             <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
                 <div class="sitem"><span>Использовано</span><span class="sval">24.6 МБ</span></div>
                 <div class="sitem"><span>Кэш</span><span class="sval">8.2 МБ</span></div>
-                <div class="sitem"><span>Автозагрузка фото</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
             </div>
-            <div class="mpad">
-                <button class="btn btn-primary" onclick="clearCache()">Очистить кэш</button>
-                <button class="btn btn-ghost" onclick="closeOv('ovData')">Закрыть</button>
-            </div>
-        </div>
+            <div class="mpad"><button class="btn btn-primary" onclick="clearCache()">Очистить кэш</button><button class="btn btn-ghost" onclick="closeOv('ovData')">Закрыть</button></div></div>
     </div>
 
     <!-- Appearance -->
     <div class="overlay" id="ovAppearance">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">🎨 Оформление</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">🎨 Оформление</div>
             <div class="mpad">
                 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;">
-                    <div onclick="setTheme('dark')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid var(--blue);" id="thcard-dark"><div style="height:40px;background:#000;"></div><div style="background:var(--surface);padding:4px;text-align:center;font-size:12px;font-weight:600;">🌙 Тёмная</div></div>
-                    <div onclick="setTheme('light')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid transparent;" id="thcard-light"><div style="height:40px;background:#fff;"></div><div style="background:#f0f0f0;padding:4px;text-align:center;font-size:12px;font-weight:600;color:#000;">☀️ Светлая</div></div>
+                    <div onclick="setTheme('dark')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid var(--blue);"><div style="height:40px;background:#000;"></div><div style="background:var(--surface);padding:4px;text-align:center;font-size:12px;font-weight:600;">🌙 Тёмная</div></div>
+                    <div onclick="setTheme('light')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid transparent;"><div style="height:40px;background:#fff;"></div><div style="background:#f0f0f0;padding:4px;text-align:center;font-size:12px;font-weight:600;color:#000;">☀️ Светлая</div></div>
                 </div>
                 <button class="btn btn-ghost" onclick="closeOv('ovAppearance')">Закрыть</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Language -->
-    <div class="overlay" id="ovLang">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">🌐 Язык</div>
-            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-                <div class="sitem" onclick="selectLang('ru')"><span>🇷🇺 Русский</span><span style="color:var(--blue);margin-left:auto;" id="lang-ru">✓</span></div>
-                <div class="sitem" onclick="selectLang('en')"><span>🇺🇸 English</span><span style="color:var(--blue);margin-left:auto;display:none;" id="lang-en">✓</span></div>
-            </div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovLang')">Закрыть</button></div>
-        </div>
-    </div>
-
-    <!-- Devices -->
-    <div class="overlay" id="ovDevices">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">📱 Устройства</div>
-            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-                <div class="sitem"><span>📱 iPhone (текущее)</span><span class="sval" style="color:var(--green);">активно</span></div>
-                <div class="sitem"><span>💻 MacBook Pro</span><span class="sval">2 дня назад</span></div>
-            </div>
-            <div class="mpad">
-                <button class="btn btn-danger" onclick="showToast('Все сессии завершены')">Завершить все сессии</button>
-                <button class="btn btn-ghost" onclick="closeOv('ovDevices')">Закрыть</button>
-            </div>
-        </div>
+            </div></div>
     </div>
 
     <!-- Notifications -->
     <div class="overlay" id="ovNotif">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">🔔 Уведомления и звуки</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">🔔 Уведомления и звуки</div>
             <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
                 <div class="sitem"><span>Уведомления</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
                 <div class="sitem"><span>Звук</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
                 <div class="sitem"><span>Вибрация</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
-                <div class="sitem"><span>Предпросмотр</span><span class="sval">Всегда</span></div>
             </div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovNotif')">Закрыть</button></div>
-        </div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovNotif')">Закрыть</button></div></div>
     </div>
 
     <!-- Gifts Store -->
     <div class="overlay" id="ovGifts">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">🎁 Магазин подарков</div>
-            <div style="text-align:center;color:var(--text2);font-size:14px;margin:-8px 0 8px;">Баланс: <strong id="giftsBal">50 ★</strong> | 1⭐ = 1₽</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">🎁 Магазин подарков</div>
+            <div style="text-align:center;color:var(--text2);font-size:14px;margin:-8px 0 8px;">Баланс: <strong id="giftsBal">50 ★</strong></div>
             <div class="mpad">
                 <div style="display:flex;gap:6px;margin-bottom:10px;">
-                    <button class="btn btn-primary" style="flex:1;font-size:13px;" onclick="filterGifts('all')" id="giftFilterAll">Все</button>
-                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('nft')" id="giftFilterNft">NFT ✨</button>
-                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('popular')" id="giftFilterPop">TOP</button>
+                    <button class="btn btn-primary" style="flex:1;font-size:13px;" onclick="filterGifts('all')">Все</button>
+                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('nft')">NFT ✨</button>
+                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('popular')">TOP</button>
                 </div>
                 <div class="gift-grid" id="giftsGrid"></div>
             </div>
             <div class="mpad">
                 <button class="btn btn-primary" onclick="showStars()">⭐ Пополнить звёзды</button>
                 <button class="btn btn-ghost" onclick="closeOv('ovGifts')">Закрыть</button>
-            </div>
-        </div>
+            </div></div>
     </div>
 
     <!-- Stars -->
     <div class="overlay" id="ovStars">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="stars-big">
-                <div style="font-size:54px;">⭐</div>
-                <div class="snum" id="starsNum">50</div>
-                <div style="color:var(--text2);">Звёзд Telegram</div>
-            </div>
+        <div class="modal"><div class="mhandle"></div>
+            <div class="stars-big"><div style="font-size:54px;">⭐</div><div class="snum" id="starsNum">50</div><div style="color:var(--text2);">Звёзд Telegram</div></div>
             <div style="text-align:center;color:var(--text2);font-size:13px;margin-bottom:12px;">1 звезда ≈ 1 ₽</div>
             <div class="mpad" id="starPkgs"></div>
             <div style="color:var(--text2);font-size:13px;padding:12px 16px 4px;">История:</div>
             <div id="starsHist" style="max-height:130px;overflow-y:auto;padding:0 16px;"></div>
-            <div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="closeOv('ovStars')">Закрыть</button></div>
-        </div>
+            <div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="closeOv('ovStars')">Закрыть</button></div></div>
     </div>
 
     <!-- Send Gift in Chat -->
     <div class="overlay" id="ovSendGift">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle" id="sendGiftTitle">🎁 Отправить подарок</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle" id="sendGiftTitle">🎁 Отправить подарок</div>
             <div class="mpad"><div class="gift-grid" id="sendGiftGrid"></div></div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovSendGift')">Отмена</button></div>
-        </div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovSendGift')">Отмена</button></div></div>
     </div>
 
     <!-- Edit Profile -->
     <div class="overlay" id="ovEditProfile">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle">Редактировать профиль</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle">Редактировать профиль</div>
             <div class="mpad">
                 <input class="minput" id="editName" placeholder="Имя" style="margin-bottom:8px;">
                 <input class="minput" id="editLastName" placeholder="Фамилия" style="margin-bottom:8px;">
                 <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
                     <span style="color:var(--text2);">@</span>
-                    <input class="minput" id="editUsername" placeholder="username" style="flex:1;">
+                    <input class="minput" id="editUsername" placeholder="username" style="flex:1;" autocomplete="off" autocorrect="off" autocapitalize="none">
                 </div>
+                <div style="color:var(--red);font-size:12px;margin-bottom:8px;display:none;" id="editUsernameError"></div>
                 <input class="minput" id="editBio" placeholder="О себе" style="margin-bottom:8px;">
                 <button class="btn btn-primary" style="margin-top:8px;" onclick="saveProfile()">Сохранить</button>
                 <button class="btn btn-ghost" onclick="closeOv('ovEditProfile')">Отмена</button>
-            </div>
-        </div>
+            </div></div>
     </div>
 
-    <!-- Gift Detail / Exchange / NFT -->
+    <!-- Gift Detail -->
     <div class="overlay" id="ovGiftDetail">
-        <div class="modal">
-            <div class="mhandle"></div>
-            <div class="mtitle" id="giftDetailTitle">🎁 Подарок</div>
+        <div class="modal"><div class="mhandle"></div><div class="mtitle" id="giftDetailTitle">🎁 Подарок</div>
             <div style="text-align:center;padding:12px;" id="giftDetailInfo"></div>
             <div class="mpad" id="giftDetailActions"></div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovGiftDetail')">Закрыть</button></div>
-        </div>
+            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovGiftDetail')">Закрыть</button></div></div>
     </div>
 
     <script>
-        // ── STATE ──
+        // ═══════════════════════════════════════
+        // STATE
+        // ═══════════════════════════════════════
+        const DEMO_SMS = '12345';
         let S = {
-            phone: '+7 (999) 123-45-67',
-            name: 'Макар',
+            phone: '',
+            name: '',
             lastName: '',
-            username: 'wopst',
-            bio: 'Разработчик Telegram ботов 🤖',
+            username: '',
+            bio: '',
             stars: 50,
             password: '',
-            blocked: ['spam_user', 'annoying_bot'],
+            blocked: ['spam_user'],
             starsHistory: [],
             savedMsgs: [],
             ownedGifts: [],
             stories: []
         };
 
+        // Registered users database (simulated)
+        const USERS_DB = new Map();
+        // Pre-register demo users
+        USERS_DB.set('alex_tg', { name: 'Алексей', username: 'alex_tg', phone: '+79001234567', avatar: 'А', color: 'blue',
+            online: true });
+        USERS_DB.set('maria_star', { name: 'Мария', username: 'maria_star', phone: '+79002345678', avatar: 'М', color: 'green',
+            online: false });
+        USERS_DB.set('elena_v', { name: 'Елена', username: 'elena_v', phone: '+79003456789', avatar: 'Е', color: 'red',
+            online: false });
+        USERS_DB.set('dmitry_k', { name: 'Дмитрий', username: 'dmitry_k', phone: '+79004567890', avatar: 'Д', color: 'teal',
+            online: true });
+        USERS_DB.set('team_group', { name: 'Команда', username: 'team_group', phone: '', avatar: 'К', color: 'purple',
+            online: false, isGroup: true });
+
         const CHATS = [
-            { name: 'Алексей', a: 'А', c: 'blue', last: 'Привет! Как дела?', time: '10:32', badge: 3, online: true },
-            { name: 'Мария', a: 'М', c: 'green', last: 'Отправила подарок 🎁', time: '9:15', badge: 0, online: false },
-            { name: 'Команда', a: 'К', c: 'purple', last: 'Иван: Отличная работа! 🔥', time: 'пн', badge: 7, online: false },
-            { name: 'Елена', a: 'Е', c: 'red', last: 'До встречи! 👋', time: 'вчера', badge: 0, online: false },
-            { name: 'Дмитрий', a: 'Д', c: 'teal', last: 'Ок, договорились', time: 'вс', badge: 0, online: true },
-            { name: 'Новости', a: '📢', c: 'orange', last: 'Обновление 3.0!', time: '2 дня', badge: 12, online: false, verified: true },
+            { name: 'Алексей', a: 'А', c: 'blue', last: 'Привет! Как дела?', time: '10:32', badge: 3, online: true,
+                username: 'alex_tg' },
+            { name: 'Мария', a: 'М', c: 'green', last: 'Отправила подарок 🎁', time: '9:15', badge: 0, online: false,
+                username: 'maria_star' },
+            { name: 'Елена', a: 'Е', c: 'red', last: 'До встречи! 👋', time: 'вчера', badge: 0, online: false,
+            username: 'elena_v' },
+            { name: 'Дмитрий', a: 'Д', c: 'teal', last: 'Ок, договорились', time: 'вс', badge: 0, online: true,
+                username: 'dmitry_k' },
+            { name: 'Команда', a: 'К', c: 'purple', last: 'Иван: Отличная работа! 🔥', time: 'пн', badge: 7, online: false,
+                username: 'team_group', isGroup: true },
         ];
 
         const GIFTS = [
-            { e: '🧸', n: 'Мишка', p: 50, s: '12.5K' },
-            { e: '❤️', n: 'Сердце', p: 30, s: '45.2K', top: true },
-            { e: '🌹', n: 'Роза', p: 25, s: '38.1K', top: true },
-            { e: '🎁', n: 'Подарок', p: 75, s: '8.3K' },
-            { e: '💎', n: 'Бриллиант', p: 500, s: '1.2K', nft: true },
-            { e: '🍰', n: 'Тортик', p: 40, s: '15.7K' },
-            { e: '💍', n: 'Кольцо', p: 300, s: '3.4K', nft: true },
-            { e: '🌸', n: 'Цветы', p: 20, s: '52.3K', top: true },
-            { e: '🍾', n: 'Шампанское', p: 100, s: '6.1K' },
-            { e: '☕', n: 'Кофе', p: 15, s: '28.4K' },
-            { e: '🎈', n: 'Шарик', p: 10, s: '33.9K' },
-            { e: '🏆', n: 'Кубок', p: 200, s: '4.5K', nft: true },
-            { e: '👑', n: 'Корона', p: 1000, s: '892', nft: true },
-            { e: '🎨', n: 'Шедевр', p: 250, s: '1.8K', nft: true },
-            { e: '🚀', n: 'Ракета', p: 150, s: '3.2K' },
+            { e: '🧸', n: 'Мишка', p: 50, s: '12.5K' }, { e: '❤️', n: 'Сердце', p: 30, s: '45.2K', top: true }, { e: '🌹',
+                n: 'Роза', p: 25, s: '38.1K', top: true }, { e: '🎁', n: 'Подарок', p: 75, s: '8.3K' }, { e: '💎', n: 'Бриллиант',
+                p: 500, s: '1.2K', nft: true }, { e: '🍰', n: 'Тортик', p: 40, s: '15.7K' }, { e: '💍', n: 'Кольцо', p: 300,
+                s: '3.4K', nft: true }, { e: '🌸', n: 'Цветы', p: 20, s: '52.3K', top: true }, { e: '🏆', n: 'Кубок', p: 200,
+                s: '4.5K', nft: true }, { e: '👑', n: 'Корона', p: 1000, s: '892', nft: true },
         ];
 
-        const STAR_PKGS = [
-            { s: 50, p: 49 }, { s: 100, p: 99 }, { s: 250, p: 239 }, { s: 500, p: 459 }, { s: 1000, p: 899 }, { s: 2500, p: 2199 }, { s: 5000, p: 4299 }
+        const STAR_PKGS = [{ s: 50, p: 49 }, { s: 100, p: 99 }, { s: 250, p: 239 }, { s: 500, p: 459 }, { s: 1000, p: 899 },
+            { s: 2500, p: 2199 }
         ];
 
         let curChat = null;
         let prevPage = 'pChats';
         let chatHistory = {};
         let giftFilter = 'all';
+        let registrationStep = 1;
 
-        // ── INIT ──
+        // ═══════════════════════════════════════
+        // REGISTRATION
+        // ═══════════════════════════════════════
+        function sendSMS() {
+            const phone = document.getElementById('regPhone').value.trim();
+            if (phone.length < 6) { showToast('Введите корректный номер'); return; }
+            S.phone = phone;
+            document.getElementById('smsPhoneDisplay').textContent = phone;
+            document.getElementById('regStep1').classList.add('hidden');
+            document.getElementById('regStep2').classList.remove('hidden');
+            showToast(`SMS отправлено на ${phone} 📱`);
+        }
+
+        function resendSMS() {
+            showToast('SMS отправлено повторно 📱');
+        }
+
+        function goBackToPhone() {
+            document.getElementById('regStep2').classList.add('hidden');
+            document.getElementById('regStep1').classList.remove('hidden');
+        }
+
+        function verifySMS() {
+            const code = document.getElementById('smsCode').value.trim();
+            if (code !== DEMO_SMS) {
+                showToast('Неверный код. Попробуйте 12345');
+                return;
+            }
+            document.getElementById('regStep2').classList.add('hidden');
+            document.getElementById('regStep3').classList.remove('hidden');
+            // Pre-fill suggested username
+            const suggested = 'user_' + Math.random().toString(36).substring(2, 8);
+            document.getElementById('regUsername').value = suggested;
+            S.username = suggested;
+        }
+
+        function finishRegistration() {
+            const username = document.getElementById('regUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+            if (!username || username.length < 3) {
+                document.getElementById('usernameError').textContent = 'Минимум 3 символа (буквы, цифры, _)';
+                document.getElementById('usernameError').style.display = '';
+                return;
+            }
+            if (USERS_DB.has(username)) {
+                document.getElementById('usernameError').textContent = 'Этот username уже занят!';
+                document.getElementById('usernameError').style.display = '';
+                return;
+            }
+            S.username = username;
+            S.name = 'Пользователь';
+            completeRegistration();
+        }
+
+        function skipUsername() {
+            S.username = 'user_' + Math.random().toString(36).substring(2, 8);
+            S.name = 'Пользователь';
+            completeRegistration();
+        }
+
+        function completeRegistration() {
+            // Register user in DB
+            USERS_DB.set(S.username, {
+                name: S.name || 'Пользователь',
+                username: S.username,
+                phone: S.phone,
+                avatar: (S.name || 'П')[0].toUpperCase(),
+                color: 'blue',
+                online: true
+            });
+
+            document.getElementById('regStep3').classList.add('hidden');
+            document.getElementById('mainApp').style.display = 'flex';
+            init();
+            updateAllUI();
+            updateProfilePage();
+            showToast(`Добро пожаловать, @${S.username}! 🎉`);
+        }
+
+        // ═══════════════════════════════════════
+        // INIT
+        // ═══════════════════════════════════════
         function init() {
             renderDynamicChats();
             renderGiftsGrid('giftsGrid', buyGift);
@@ -1396,25 +873,109 @@
                 if (e.key === 'Enter') { e.preventDefault();
                     sendMsg(); }
             });
+            // Live username validation
+            document.getElementById('regUsername').addEventListener('input', function() {
+                const val = this.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+                this.value = val;
+                const errEl = document.getElementById('usernameError');
+                if (val.length > 0 && val.length < 3) {
+                    errEl.textContent = 'Минимум 3 символа';
+                    errEl.style.display = '';
+                } else if (USERS_DB.has(val)) {
+                    errEl.textContent = 'Этот username уже занят!';
+                    errEl.style.display = '';
+                } else {
+                    errEl.style.display = 'none';
+                }
+            });
         }
 
-        function doLogin() {
-            const v = document.getElementById('phoneIn').value.trim();
-            if (v.length < 6) { showToast('Введите номер'); return; }
-            S.phone = v;
-            document.getElementById('loginApp').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'flex';
-            init();
-            showToast('Добро пожаловать! 🎉');
+        // ═══════════════════════════════════════
+        // GLOBAL SEARCH
+        // ═══════════════════════════════════════
+        function openGlobalSearch() {
+            document.getElementById('globalSearchInput').value = '';
+            document.getElementById('searchResultsContainer').innerHTML = '';
+            openOv('ovGlobalSearch');
+            setTimeout(() => document.getElementById('globalSearchInput').focus(), 300);
         }
 
-        // ── CHATS ──
+        function performSearch() {
+            const query = document.getElementById('globalSearchInput').value.trim().toLowerCase();
+            const container = document.getElementById('searchResultsContainer');
+
+            if (!query) {
+                container.innerHTML = '<div class="no-results">Введите @username или имя</div>';
+                return;
+            }
+
+            const results = [];
+            USERS_DB.forEach((user, username) => {
+                if (username === S.username) return; // skip self
+                if (username.includes(query) || user.name.toLowerCase().includes(query)) {
+                    results.push({ ...user, username });
+                }
+            });
+
+            if (results.length === 0) {
+                container.innerHTML = '<div class="no-results">Никого не найдено 😔</div>';
+                return;
+            }
+
+            container.innerHTML = results.map(u => `
+            <div class="search-result-item" onclick="openChatByUsername('${u.username}')">
+              <div class="ava ${u.color||'blue'}">${u.avatar||u.name[0]}</div>
+              <div style="flex:1;">
+                <div style="font-weight:600;">${u.name}</div>
+                <div style="color:var(--text2);font-size:13px;">@${u.username}${u.online?' · <span style="color:var(--green);">онлайн</span>':''}</div>
+              </div>
+              <span style="color:var(--blue);font-size:20px;">→</span>
+            </div>
+          `).join('');
+        }
+
+        function openChatByUsername(username) {
+            const user = USERS_DB.get(username);
+            if (!user) { showToast('Пользователь не найден'); return; }
+
+            closeOv('ovGlobalSearch');
+
+            // Create chat object
+            curChat = {
+                name: user.name,
+                a: user.avatar || user.name[0],
+                c: user.color || 'blue',
+                online: user.online || false,
+                username: username,
+                isExternal: true
+            };
+
+            if (!chatHistory[curChat.name]) {
+                chatHistory[curChat.name] = [
+                    { text: `Вы начали чат с @${username}`, out: true, time: nowTime() },
+                    { text: 'Привет! 👋', out: false, time: nowTime() }
+                ];
+            }
+
+            document.getElementById('chatNameH').textContent = curChat.name;
+            document.getElementById('chatAvaH').textContent = curChat.a;
+            document.getElementById('chatAvaH').className = 'chat-ava-sm ' + (curChat.c || 'blue');
+            document.getElementById('chatStatusH').textContent = curChat.online ? 'онлайн' : 'был(а) недавно';
+            document.getElementById('chatStatusH').style.color = curChat.online ? 'var(--green)' : 'var(--text2)';
+            renderChatMsgs();
+            showPageNoTab('pChat');
+            showToast(`Чат с @${username} открыт`);
+        }
+
+        // ═══════════════════════════════════════
+        // CHATS
+        // ═══════════════════════════════════════
         function renderDynamicChats() {
             document.getElementById('dynamicChats').innerHTML = CHATS.map((c, i) => `
             <div class="citem" onclick="openChat(${i})">
               <div class="ava ${c.c}">${c.a}${c.online?'<div class="online"></div>':''}</div>
               <div class="cinfo">
-                <div class="cname">${c.name}${c.verified?'<span class="verified">✓</span>':''}</div>
+                <div class="cname">${c.name}${c.isGroup?'<span style="color:var(--text2);font-size:11px;"> 👥</span>':''}</div>
                 <div class="clast">${c.last}</div>
               </div>
               <div class="cmeta">
@@ -1451,8 +1012,12 @@
             const el = document.getElementById('chatMsgs');
             const msgs = chatHistory[curChat.name] || [];
             el.innerHTML = `<div class="day-divider"><span>Сегодня</span></div>` + msgs.map(m => {
-                if (m.gift) return `<div class="mrow ${m.out?'out':'in'}">${m.out?'':'<div class="ava blue" style="width:28px;height:28px;font-size:12px;">'+curChat.a+'</div>'}<div><div class="mbubble">🎁 Подарок: ${m.gift.e} ${m.gift.n}${m.gift.nft?' <span class="nft-badge">NFT</span>':''} (⭐ ${m.gift.p})</div><div class="mtime">${m.time}</div></div></div>`;
-                return `<div class="mrow ${m.out?'out':'in'}">${!m.out?`<div class="ava ${curChat.c||'blue'}" style="width:28px;height:28px;font-size:12px;">${curChat.a}</div>`:''}<div><div class="mbubble">${m.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="mtime">${m.time}</div></div></div>`;
+                if (m.gift) return `<div class="mrow ${m.out?'out':'in'}">${
+              m.out?'':'<div class="ava '+(curChat.c||'blue')+'" style="width:28px;height:28px;font-size:12px;">'+curChat.a+'</div>'
+            }<div><div class="mbubble">🎁 Подарок: ${m.gift.e} ${m.gift.n}${m.gift.nft?' <span class="nft-badge">NFT</span>':''}</div><div class="mtime">${m.time}</div></div></div>`;
+                return `<div class="mrow ${m.out?'out':'in'}">${
+              !m.out?`<div class="ava ${curChat.c||'blue'}" style="width:28px;height:28px;font-size:12px;">${curChat.a}</div>`:''
+            }<div><div class="mbubble">${m.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="mtime">${m.time}</div></div></div>`;
             }).join('');
             el.scrollTop = el.scrollHeight;
         }
@@ -1478,16 +1043,18 @@
             }
         }
 
-        // ── PROFILE ──
+        // ═══════════════════════════════════════
+        // PROFILE
+        // ═══════════════════════════════════════
         function openProfilePage() { showPageNoTab('pProfile');
             updateProfilePage(); }
 
         function updateProfilePage() {
             document.getElementById('profName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
             document.getElementById('profUsername').textContent = '@' + S.username;
-            document.getElementById('profBio').textContent = S.bio;
+            document.getElementById('profBio').textContent = S.bio || 'Статус не установлен';
             document.getElementById('profPhone').textContent = S.phone;
-            document.getElementById('profAva').childNodes[0].textContent = S.name[0];
+            document.getElementById('profAva').childNodes[0].textContent = (S.name || 'П')[0].toUpperCase();
             renderOwnedGifts();
         }
 
@@ -1522,18 +1089,17 @@
             <div style="font-size:20px;font-weight:700;">${g.n}</div>
             <div style="color:var(--orange);font-size:16px;">⭐ ${g.p}</div>
             ${g.nft?'<div style="margin-top:6px;"><span style="background:linear-gradient(135deg,#ff9500,#ff3b30);color:#fff;padding:4px 10px;border-radius:8px;font-weight:700;font-size:12px;">✨ Уникальный NFT</span></div>':''}
-            <div style="color:var(--text2);font-size:13px;margin-top:6px;">${g.nft?'Этот подарок — уникальный токен в блокчейне TON':'Обычный подарок'}</div>
           `;
             const actions = document.getElementById('giftDetailActions');
             if (g.nft) {
                 actions.innerHTML = `
-              <button class="btn btn-primary" onclick="sellNFT(${i})">💰 Продать NFT (выкупаем за ${Math.floor(g.p*1.5)} ⭐)</button>
-              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать другому</button>
+              <button class="btn btn-primary" onclick="sellNFT(${i})">💰 Продать NFT (${Math.floor(g.p*1.5)} ⭐)</button>
+              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>
             `;
             } else {
                 actions.innerHTML = `
-              <button class="btn btn-green" onclick="upgradeToNFT(${i})">✨ Превратить в NFT (${Math.floor(g.p*2)} ⭐)</button>
-              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать другому</button>
+              <button class="btn btn-green" onclick="upgradeToNFT(${i})">✨ В NFT (${Math.floor(g.p*2)} ⭐)</button>
+              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>
               <button class="btn btn-ghost" onclick="exchangeGift(${i})">🔄 Обменять</button>
             `;
             }
@@ -1541,23 +1107,21 @@
         }
 
         function upgradeToNFT(i) {
-            const g = S.ownedGifts[i];
-            const cost = Math.floor(g.p * 2);
-            if (S.stars < cost) { showToast('Недостаточно звёзд! ⭐'); return; }
-            if (!confirm(`Превратить ${g.n} в NFT за ${cost} ⭐?`)) return;
+            const cost = Math.floor(S.ownedGifts[i].p * 2);
+            if (S.stars < cost) { showToast('Недостаточно звёзд!'); return; }
+            if (!confirm(`Превратить в NFT за ${cost} ⭐?`)) return;
             S.stars -= cost;
             S.ownedGifts[i].nft = true;
-            S.starsHistory.push({ t: 'nft_upgrade', g, cost, ts: nowTime() });
+            S.starsHistory.push({ t: 'nft_upgrade', g: S.ownedGifts[i], cost, ts: nowTime() });
             updateAllUI();
             renderOwnedGifts();
             closeOv('ovGiftDetail');
-            showToast(`${g.n} теперь NFT! ✨`);
+            showToast('Теперь это NFT! ✨');
         }
 
         function sellNFT(i) {
             const g = S.ownedGifts[i];
             const price = Math.floor(g.p * 1.5);
-            if (!confirm(`Продать NFT ${g.n} за ${price} ⭐?`)) return;
             S.stars += price;
             S.starsHistory.push({ t: 'nft_sell', g, price, ts: nowTime() });
             S.ownedGifts.splice(i, 1);
@@ -1568,7 +1132,7 @@
         }
 
         function transferGift(i) {
-            const to = prompt('Кому передать подарок? (введите имя)');
+            const to = prompt('Кому передать? (введите @username)');
             if (!to) return;
             const g = S.ownedGifts.splice(i, 1)[0];
             S.starsHistory.push({ t: 'transfer', g, to, ts: nowTime() });
@@ -1580,11 +1144,9 @@
 
         function exchangeGift(i) {
             const g = S.ownedGifts[i];
-            // Find random gift of similar value
             const similar = GIFTS.filter(x => Math.abs(x.p - g.p) <= 20 && x.n !== g.n);
-            if (similar.length === 0) { showToast('Нет подарков для обмена'); return; }
+            if (!similar.length) { showToast('Нет подарков для обмена'); return; }
             const target = similar[Math.floor(Math.random() * similar.length)];
-            if (!confirm(`Обменять ${g.n} (⭐${g.p}) на ${target.e} ${target.n} (⭐${target.p})?`)) return;
             S.ownedGifts[i] = { ...target, nft: false };
             S.starsHistory.push({ t: 'exchange', from: g, to: target, ts: nowTime() });
             updateAllUI();
@@ -1593,51 +1155,45 @@
             showToast(`Обменяно на ${target.n}!`);
         }
 
-        // ── GIFTS ──
+        // ═══════════════════════════════════════
+        // GIFTS
+        // ═══════════════════════════════════════
         function renderGiftsGrid(elId, handler) {
-            const el = document.getElementById(elId);
             const filtered = giftFilter === 'all' ? GIFTS : giftFilter === 'nft' ? GIFTS.filter(g => g.nft) : GIFTS.filter(g =>
                 g.top);
-            el.innerHTML = filtered.map((g, i) => {
+            document.getElementById(elId).innerHTML = filtered.map((g, i) => {
                 const origIdx = GIFTS.indexOf(g);
                 return `
             <div class="gcard${g.nft?' nft':''}${g.top?' gift-popular':''}" onclick="${handler.name}(${origIdx})">
               ${g.top?'<span class="gtop">TOP</span>':''}
               ${g.nft?'<span class="gnft">NFT</span>':''}
               <span class="gemoji">${g.e}</span>
-              <div class="gname">${g.n}${g.nft?' <span class="nft-badge">NFT</span>':''}</div>
+              <div class="gname">${g.n}</div>
               <div class="gprice">⭐ ${g.p}</div>
               <div class="gsent">${g.s}</div>
             </div>`;
             }).join('');
         }
 
-        function filterGifts(type) {
-            giftFilter = type;
-            ['all', 'nft', 'popular'].forEach(t => {
-                const btn = document.getElementById('giftFilter' + (t === 'all' ? 'All' : t === 'nft' ? 'Nft' : 'Pop'));
-                if (btn) btn.className = t === type ? 'btn btn-primary' : 'btn btn-ghost';
-            });
-            renderGiftsGrid('giftsGrid', buyGift);
-        }
-
+        function filterGifts(type) { giftFilter = type;
+            renderGiftsGrid('giftsGrid', buyGift); }
         function openGiftsStore() { updateGiftsUI();
             giftFilter = 'all';
-            filterGifts('all');
+            renderGiftsGrid('giftsGrid', buyGift);
             openOv('ovGifts'); }
 
         function updateGiftsUI() { document.getElementById('giftsBal').textContent = S.stars + ' ★'; }
 
         function buyGift(i) {
             const g = GIFTS[i];
-            if (S.stars < g.p) { showToast('Недостаточно звёзд! ⭐'); return; }
+            if (S.stars < g.p) { showToast('Недостаточно звёзд!'); return; }
             S.stars -= g.p;
             S.ownedGifts.push({ ...g, nft: !!g.nft });
             S.starsHistory.push({ t: 'buy', g, ts: nowTime() });
             updateAllUI();
             renderOwnedGifts();
             closeOv('ovGifts');
-            showToast(`Куплено ${g.e} ${g.n}!${g.nft?' ✨ NFT':''}`);
+            showToast(`Куплено ${g.e} ${g.n}!`);
         }
 
         function sendGiftInChat() {
@@ -1650,7 +1206,7 @@
 
         function sendGiftFromChat(i) {
             const g = GIFTS[i];
-            if (S.stars < g.p) { showToast('Недостаточно звёзд! ⭐'); return; }
+            if (S.stars < g.p) { showToast('Недостаточно звёзд!'); return; }
             S.stars -= g.p;
             S.starsHistory.push({ t: 'send', g, to: curChat?.name, ts: nowTime() });
             if (curChat && chatHistory[curChat.name]) {
@@ -1662,25 +1218,25 @@
             showToast(`Подарок отправлен! ${g.e}`);
         }
 
-        // ── STARS ──
+        // ═══════════════════════════════════════
+        // STARS
+        // ═══════════════════════════════════════
         function showStars() { updateStarsUI();
             openOv('ovStars'); }
 
         function updateStarsUI() {
             document.getElementById('starsNum').textContent = S.stars;
             const el = document.getElementById('starsHist');
-            if (S.starsHistory.length === 0) { el.innerHTML = '<div style="color:var(--text2);font-size:13px;padding:4px 0;">Нет операций</div>'; return; }
+            if (!S.starsHistory.length) { el.innerHTML =
+                '<div style="color:var(--text2);font-size:13px;padding:4px 0;">Нет операций</div>'; return; }
             el.innerHTML = S.starsHistory.slice(-8).reverse().map(h => {
                 const icon = h.t === 'topup' ? '⬆️' : '⬇️';
-                let desc = '';
-                if (h.t === 'topup') desc = `Пополнение +${h.amt}★ (${h.price}₽)`;
-                else if (h.t === 'buy') desc = `Покупка ${h.g.e} ${h.g.n} −${h.g.p}★`;
-                else if (h.t === 'send') desc = `Подарок → ${h.to} ${h.g.e} −${h.g.p}★`;
-                else if (h.t === 'nft_upgrade') desc = `NFT улучшение ${h.g.n} −${h.cost}★`;
-                else if (h.t === 'nft_sell') desc = `Продажа NFT ${h.g.n} +${h.price}★`;
-                else if (h.t === 'exchange') desc = `Обмен ${h.from.n} → ${h.to.n}`;
-                else if (h.t === 'transfer') desc = `Передача ${h.g.n} → ${h.to}`;
-                return `<div style="font-size:12px;padding:5px 0;border-bottom:1px solid var(--divider);">${icon} ${desc} <span style="color:var(--text2);float:right;">${h.ts}</span></div>`;
+                let desc = h.t === 'topup' ? `Пополнение +${h.amt}★ (${h.price}₽)` :
+                    h.t === 'buy' ? `Покупка ${h.g.e} ${h.g.n} −${h.g.p}★` :
+                    h.t === 'send' ? `Подарок → ${h.to} −${h.g.p}★` :
+                    h.t === 'nft_upgrade' ? `NFT ${h.g.n} −${h.cost}★` :
+                    h.t === 'nft_sell' ? `Продажа NFT +${h.price}★` : `${h.t}`;
+                return `<div style="font-size:12px;padding:5px 0;border-bottom:1px solid var(--divider);">${icon} ${desc}</div>`;
             }).join('');
         }
 
@@ -1689,8 +1245,7 @@
             <div class="spkg" onclick="buyStars(${p.s},${p.p})">
               <span style="font-weight:700;font-size:17px;">⭐ ${p.s.toLocaleString()}</span>
               <span style="color:var(--text2);">${p.p} ₽</span>
-            </div>
-          `).join('');
+            </div>`).join('');
         }
 
         function buyStars(amt, price) {
@@ -1699,41 +1254,68 @@
             S.starsHistory.push({ t: 'topup', amt, price, ts: nowTime() });
             updateAllUI();
             updateStarsUI();
-            showToast(`+${amt} ⭐ Баланс: ${S.stars}`);
+            showToast(`+${amt} ⭐`);
         }
 
-        // ── EDIT PROFILE ──
+        // ═══════════════════════════════════════
+        // EDIT PROFILE
+        // ═══════════════════════════════════════
         function showEditProfile() {
             document.getElementById('editName').value = S.name;
             document.getElementById('editLastName').value = S.lastName;
             document.getElementById('editUsername').value = S.username;
             document.getElementById('editBio').value = S.bio;
+            document.getElementById('editUsernameError').style.display = 'none';
             openOv('ovEditProfile');
         }
+
+        document.getElementById('editUsername')?.addEventListener('input', function() {
+            const val = this.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+            this.value = val;
+            const errEl = document.getElementById('editUsernameError');
+            if (val && val !== S.username && USERS_DB.has(val)) {
+                errEl.textContent = 'Этот username занят!';
+                errEl.style.display = '';
+            } else { errEl.style.display = 'none'; }
+        });
 
         function saveProfile() {
             const n = document.getElementById('editName').value.trim();
             if (!n) { showToast('Введите имя'); return; }
+            const newUsername = document.getElementById('editUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,
+            '');
+            if (newUsername && newUsername !== S.username && USERS_DB.has(newUsername)) {
+                showToast('Этот username занят!');
+                return;
+            }
+            // Update DB
+            if (S.username) USERS_DB.delete(S.username);
             S.name = n;
             S.lastName = document.getElementById('editLastName').value.trim();
-            S.username = document.getElementById('editUsername').value.trim().replace('@', '') || S.username;
+            S.username = newUsername || S.username;
             S.bio = document.getElementById('editBio').value.trim();
+            USERS_DB.set(S.username, {
+                name: S.name,
+                username: S.username,
+                phone: S.phone,
+                avatar: S.name[0].toUpperCase(),
+                color: 'blue',
+                online: true
+            });
             updateAllUI();
             updateProfilePage();
             closeOv('ovEditProfile');
             showToast('Профиль сохранён ✓');
         }
 
-        // ── MODALS ──
+        // ═══════════════════════════════════════
+        // MODALS
+        // ═══════════════════════════════════════
         function showPrivacy() { openOv('ovPrivacy'); }
 
         function showData() { openOv('ovData'); }
 
         function showAppearance() { openOv('ovAppearance'); }
-
-        function showLanguage() { openOv('ovLang'); }
-
-        function showDevices() { openOv('ovDevices'); }
 
         function showNotifications() { openOv('ovNotif'); }
 
@@ -1756,7 +1338,8 @@
 
         function renderBlockedList() {
             const el = document.getElementById('blockedListEl');
-            if (S.blocked.length === 0) { el.innerHTML = '<div style="color:var(--text2);text-align:center;padding:12px;">Список пуст</div>'; return; }
+            if (!S.blocked.length) { el.innerHTML =
+                '<div style="color:var(--text2);text-align:center;padding:12px;">Список пуст</div>'; return; }
             el.innerHTML = S.blocked.map(u =>
                 `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--surface2);border-radius:10px;margin:4px 0;"><span>🚫 ${u}</span><span style="color:var(--red);cursor:pointer;font-size:18px;" onclick="removeBlocked('${u}')">✕</span></div>`
                 ).join('');
@@ -1764,7 +1347,7 @@
 
         function addBlocked() { const n = prompt('Имя пользователя:'); if (n && !S.blocked.includes(n)) { S.blocked.push(n);
                 renderBlockedList();
-                showToast(`${n} заблокирован 🚫`); } }
+                showToast(`${n} заблокирован`); } }
 
         function removeBlocked(u) { S.blocked = S.blocked.filter(b => b !== u);
             renderBlockedList();
@@ -1775,40 +1358,26 @@
 
         function setTheme(theme) {
             if (theme === 'light') {
-                document.body.style.setProperty('--bg', '#f5f5f5');
-                document.body.style.setProperty('--surface', '#ffffff');
-                document.body.style.setProperty('--surface2', '#f0f0f0');
-                document.body.style.setProperty('--text', '#000000');
-                document.body.style.setProperty('--text2', '#999999');
-                document.body.style.setProperty('--bubble-out', '#007aff');
-                document.body.style.setProperty('--bubble-in', '#e9e9eb');
-                document.body.style.setProperty('--input-bg', '#e9e9eb');
+                ['--bg', '#f5f5f5', '--surface', '#ffffff', '--surface2', '#f0f0f0', '--text', '#000000', '--text2',
+                    '#999999', '--bubble-in', '#e9e9eb', '--input-bg', '#e9e9eb'
+                ].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
                 document.getElementById('themeLabel').textContent = 'Светлая';
             } else {
-                document.body.style.setProperty('--bg', '#000000');
-                document.body.style.setProperty('--surface', '#1c1c1e');
-                document.body.style.setProperty('--surface2', '#2c2c2e');
-                document.body.style.setProperty('--text', '#ffffff');
-                document.body.style.setProperty('--text2', '#8e8e93');
-                document.body.style.setProperty('--bubble-out', '#007aff');
-                document.body.style.setProperty('--bubble-in', '#1c1c1e');
-                document.body.style.setProperty('--input-bg', '#2c2c2e');
+                ['--bg', '#000000', '--surface', '#1c1c1e', '--surface2', '#2c2c2e', '--text', '#ffffff', '--text2',
+                    '#8e8e93', '--bubble-in', '#1c1c1e', '--input-bg', '#2c2c2e'
+                ].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
                 document.getElementById('themeLabel').textContent = 'Тёмная';
             }
             closeOv('ovAppearance');
             showToast('Тема изменена 🎨');
         }
 
-        function selectLang(lang) {
-            document.getElementById('lang-ru').style.display = lang === 'ru' ? '' : 'none';
-            document.getElementById('lang-en').style.display = lang === 'en' ? '' : 'none';
-            showToast(lang === 'ru' ? 'Язык: Русский' : 'Language: English');
-        }
-
         function toggleToggle(el, e) { e.stopPropagation();
             el.classList.toggle('on'); }
 
-        // ── NAVIGATION ──
+        // ═══════════════════════════════════════
+        // NAVIGATION
+        // ═══════════════════════════════════════
         function switchTab(pageId, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
             document.getElementById(pageId).classList.add('on');
@@ -1837,13 +1406,15 @@
             ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('on'); });
         });
 
-        // ── UI ──
+        // ═══════════════════════════════════════
+        // UI
+        // ═══════════════════════════════════════
         function updateAllUI() {
             document.getElementById('starsMenuVal').textContent = S.stars + ' ★';
             document.getElementById('setName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
             document.getElementById('setPhone').textContent = S.phone;
             document.getElementById('setUsername').textContent = '@' + S.username;
-            document.getElementById('setAva').textContent = S.name[0];
+            document.getElementById('setAva').textContent = (S.name || 'П')[0].toUpperCase();
             updateGiftsUI();
             updateStarsUI();
         }
@@ -1867,18 +1438,6 @@
             const now = new Date();
             return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         }
-
-        // Click on saved chat from settings
-        document.querySelector('.sitem[onclick*="openProfilePage"]')?.addEventListener('click', function(e) {
-            if (this.textContent.includes('Избранное')) { openChat('saved'); }
-        });
-
-        document.getElementById('chatList').addEventListener('click', e => {
-            const item = e.target.closest('.citem');
-            if (!item) return;
-            const ava = item.querySelector('.ava');
-            if (ava && ava.textContent.includes('⭐')) openChat('saved');
-        });
     </script>
 </body>
 </html>
