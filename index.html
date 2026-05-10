@@ -7,419 +7,438 @@
     <style>
         :root {
             --bg: #000000;
-            --surface: #1c1c1e;
-            --surface2: #2c2c2e;
-            --surface3: #3a3a3c;
-            --border: rgba(255,255,255,0.1);
-            --blue: #007aff;
+            --surface: #111111;
+            --surface2: #1a1a1a;
+            --surface3: #222222;
+            --border: rgba(255,255,255,0.08);
+            --border2: rgba(255,255,255,0.12);
+            --blue: #3b82f6;
+            --blue2: #60a5fa;
             --text: #ffffff;
-            --text2: #8e8e93;
-            --green: #34c759;
-            --red: #ff3b30;
-            --orange: #ff9500;
-            --bubble-out: #007aff;
-            --bubble-in: #1c1c1e;
-            --input-bg: #2c2c2e;
-            --divider: rgba(255,255,255,0.08);
-            --tab-active: #007aff;
-            --tab-inactive: #8e8e93;
-            --radius: 12px;
-            --tr: 0.2s ease;
+            --text2: #6b6b7b;
+            --text3: #8e8e9a;
+            --green: #22c55e;
+            --red: #ef4444;
+            --orange: #f59e0b;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+            --bubble-out: #2563eb;
+            --bubble-in: #1c1c24;
+            --input-bg: #1a1a24;
+            --divider: rgba(255,255,255,0.05);
+            --tab-active: #3b82f6;
+            --tab-inactive: #5c5c6b;
+            --radius: 14px;
+            --radius-sm: 10px;
+            --tr: 0.18s ease;
             --safe-top: env(safe-area-inset-top, 0px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Helvetica Neue', sans-serif;
             background: var(--bg);
             color: var(--text);
             height: 100vh; height: 100dvh;
-            display: flex; flex-direction: column;
-            overflow: hidden;
-            transition: background var(--tr);
+            display: flex; flex-direction: column; overflow: hidden;
         }
-        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-        @keyframes fadeOut { to { opacity:0; transform:translateX(-50%) translateY(10px); } }
-        @keyframes scaleIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
-        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+        @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes fadeOut { to{opacity:0;transform:translateX(-50%) translateY(8px)} }
+        @keyframes scaleIn { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
 
         .app { display:flex; flex-direction:column; height:100%; height:100dvh; }
 
-        /* ── LOGIN / REGISTER ── */
+        /* LOGIN */
         .login-screen {
             display:flex; flex-direction:column; align-items:center; justify-content:center;
-            height:100%; padding:32px 28px; text-align:center; background:var(--bg);
-            animation:fadeIn .5s ease;
+            height:100%; padding:32px 24px; text-align:center; background:var(--bg); animation:fadeIn .4s ease;
         }
         .login-screen.hidden { display:none; }
-        .login-icon { font-size:80px; margin-bottom:24px; }
-        .login-screen h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
-        .login-screen p { color:var(--text2); font-size:15px; margin-bottom:28px; line-height:1.5; }
+        .login-icon { font-size:64px; margin-bottom:16px; }
+        .login-screen h1 { font-size:26px; font-weight:700; margin-bottom:6px; letter-spacing:-0.3px; }
+        .login-screen p { color:var(--text2); font-size:14px; margin-bottom:24px; line-height:1.4; }
         .login-input {
-            width:100%; max-width:300px;
-            background:var(--surface); border:1px solid var(--border); border-radius:12px;
-            padding:15px 18px; color:var(--text); font-size:18px; text-align:center;
-            outline:none; letter-spacing:1px; transition:border var(--tr);
-            -webkit-user-select:auto; user-select:auto;
+            width:100%; max-width:300px; background:var(--surface2); border:1px solid var(--border2);
+            border-radius:12px; padding:14px 16px; color:var(--text); font-size:17px; text-align:center;
+            outline:none; letter-spacing:1px; transition:border var(--tr); -webkit-user-select:auto; user-select:auto;
         }
         .login-input:focus { border-color:var(--blue); }
         .sms-input {
-            width:100%; max-width:240px;
-            background:var(--surface); border:1px solid var(--border); border-radius:12px;
-            padding:15px 18px; color:var(--text); font-size:24px; text-align:center;
-            outline:none; letter-spacing:8px; transition:border var(--tr);
-            -webkit-user-select:auto; user-select:auto;
+            width:100%; max-width:200px; background:var(--surface2); border:1px solid var(--border2);
+            border-radius:12px; padding:14px; color:var(--text); font-size:22px; text-align:center;
+            outline:none; letter-spacing:6px; transition:border var(--tr); -webkit-user-select:auto; user-select:auto;
         }
         .sms-input:focus { border-color:var(--blue); }
         .btn {
-            width:100%; max-width:300px; padding:14px; border-radius:12px;
-            font-size:16px; font-weight:600; cursor:pointer; border:none;
-            transition:all var(--tr); margin:4px 0;
+            width:100%; max-width:300px; padding:13px; border-radius:12px; font-size:15px;
+            font-weight:600; cursor:pointer; border:none; transition:all var(--tr); margin:3px 0;
         }
         .btn:active { transform:scale(0.97); }
         .btn-primary { background:var(--blue); color:#fff; }
-        .btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border); }
+        .btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border2); }
         .btn-danger { background:var(--red); color:#fff; }
         .btn-green { background:var(--green); color:#fff; }
 
-        /* ── HEADER ── */
+        /* HEADER */
         .header {
-            background:var(--surface); border-bottom:0.5px solid var(--border);
-            padding:12px 16px; padding-top:max(12px,var(--safe-top));
-            display:flex; align-items:center; gap:12px; z-index:10; flex-shrink:0;
+            background:var(--surface); border-bottom:1px solid var(--divider);
+            padding:10px 14px; padding-top:max(10px,var(--safe-top));
+            display:flex; align-items:center; gap:10px; z-index:10; flex-shrink:0;
         }
-        .header-title { font-size:20px; font-weight:700; flex:1; }
+        .header-title { font-size:18px; font-weight:700; flex:1; letter-spacing:-0.2px; }
         .hbtn {
-            background:none; border:none; color:var(--blue); font-size:16px;
-            cursor:pointer; padding:6px 8px; border-radius:8px; transition:background var(--tr);
+            background:none; border:none; color:var(--blue2); font-size:15px;
+            cursor:pointer; padding:6px 10px; border-radius:8px; transition:background var(--tr); font-weight:500;
         }
         .hbtn:active { background:var(--surface2); }
 
-        /* ── SEARCH ── */
-        .searchbar {
-            margin:8px 12px; background:var(--surface); border-radius:10px;
-            padding:10px 14px; display:flex; align-items:center; gap:8px;
-            color:var(--text2); font-size:16px; cursor:pointer; border:1px solid transparent;
-            transition:all var(--tr); flex-shrink:0;
+        /* FOLDER BAR */
+        .folder-bar {
+            display:flex; gap:0; padding:8px 8px; background:var(--surface);
+            border-bottom:1px solid var(--divider); overflow-x:auto; flex-shrink:0;
         }
-        .searchbar:active { border-color:var(--blue); }
-        .search-input {
-            flex:1; background:transparent; border:none; color:var(--text);
-            font-size:16px; outline:none; -webkit-user-select:auto; user-select:auto;
+        .folder-bar::-webkit-scrollbar { display:none; }
+        .folder-tab {
+            padding:8px 14px; font-size:13px; font-weight:600; color:var(--text2);
+            cursor:pointer; white-space:nowrap; border-radius:20px; transition:all var(--tr);
+            background:var(--surface2); margin:0 3px;
         }
-        .search-input::placeholder { color:var(--text2); }
+        .folder-tab.on { background:var(--blue); color:#fff; }
 
-        /* ── TABS ── */
+        /* TABS */
         .tabbar {
-            background:var(--surface); border-top:0.5px solid var(--border);
+            background:var(--surface); border-top:1px solid var(--divider);
             display:flex; justify-content:space-around; padding:6px 0;
             padding-bottom:max(6px,var(--safe-bottom)); flex-shrink:0; z-index:10;
         }
         .tab {
-            display:flex; flex-direction:column; align-items:center; gap:2px;
-            font-size:10px; color:var(--tab-inactive); background:none;
-            border:none; padding:5px 12px; cursor:pointer; transition:color var(--tr); position:relative;
+            display:flex; flex-direction:column; align-items:center; gap:3px;
+            font-size:10px; color:var(--tab-inactive); background:none; border:none;
+            padding:4px 14px; cursor:pointer; transition:color var(--tr); position:relative;
         }
         .tab.on { color:var(--tab-active); }
         .tab-icon { font-size:24px; line-height:1; }
         .tab-badge {
-            position:absolute; top:2px; right:8px; background:var(--red); color:#fff;
+            position:absolute; top:0; right:8px; background:var(--red); color:#fff;
             font-size:10px; min-width:16px; height:16px; border-radius:8px;
             display:flex; align-items:center; justify-content:center; padding:0 4px; font-weight:700;
         }
 
-        /* ── PAGES ── */
-        .page { display:none; flex-direction:column; flex:1; overflow:hidden; animation:fadeIn .18s ease; }
+        /* PAGES */
+        .page { display:none; flex-direction:column; flex:1; overflow:hidden; animation:fadeIn .12s ease; }
         .page.on { display:flex; }
         .scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 
-        /* ── CHAT LIST ── */
+        /* CHAT LIST — стиль как на первом скриншоте */
+        .section-label {
+            font-size:12px; font-weight:600; color:var(--text2); padding:14px 16px 6px;
+            text-transform:uppercase; letter-spacing:0.6px;
+        }
         .citem {
-            display:flex; align-items:center; gap:12px; padding:10px 16px;
-            cursor:pointer; transition:background var(--tr); border-bottom:0.5px solid var(--divider);
+            display:flex; align-items:center; gap:12px; padding:10px 14px;
+            cursor:pointer; transition:background var(--tr); position:relative;
         }
-        .citem:active { background:var(--surface); }
+        .citem:active { background:rgba(255,255,255,0.03); }
+        .citem.unread::before {
+            content:''; position:absolute; left:2px; top:50%; transform:translateY(-50%);
+            width:7px; height:7px; border-radius:50%; background:var(--blue);
+        }
         .ava {
-            width:54px; height:54px; border-radius:50%; display:flex; align-items:center;
-            justify-content:center; font-weight:600; font-size:21px; color:#fff; flex-shrink:0; position:relative;
+            width:48px; height:48px; border-radius:14px; display:flex; align-items:center;
+            justify-content:center; font-weight:700; font-size:19px; color:#fff; flex-shrink:0;
+            position:relative; overflow:hidden;
         }
-        .ava.blue { background:#007aff; } .ava.green { background:#34c759; }
-        .ava.orange { background:#ff9500; } .ava.purple { background:#af52de; }
-        .ava.red { background:#ff3b30; } .ava.teal { background:#5ac8fa; }
+        .ava.blue { background:#2563eb; } .ava.green { background:#16a34a; }
+        .ava.orange { background:#ea580c; } .ava.purple { background:#7c3aed; }
+        .ava.red { background:#dc2626; } .ava.teal { background:#0d9488; }
+        .ava.pink { background:#db2777; }
         .online {
-            width:13px; height:13px; background:var(--green); border-radius:50%;
-            border:2.5px solid var(--bg); position:absolute; bottom:1px; right:1px;
+            width:11px; height:11px; background:var(--green); border-radius:50%;
+            border:2px solid var(--bg); position:absolute; bottom:0; right:0;
         }
         .cinfo { flex:1; min-width:0; }
-        .cname { font-weight:600; font-size:16px; display:flex; align-items:center; gap:4px; }
-        .clast { color:var(--text2); font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
+        .cname { font-weight:600; font-size:15px; display:flex; align-items:center; gap:4px; }
+        .clast { color:var(--text2); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
         .cmeta { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
-        .ctime { color:var(--text2); font-size:12px; }
+        .ctime { color:var(--text2); font-size:11px; }
         .cbadge {
-            background:var(--blue); color:#fff; font-size:11px; font-weight:700;
-            min-width:20px; height:20px; border-radius:10px; display:flex;
-            align-items:center; justify-content:center; padding:0 6px;
-        }
-
-        /* ── SETTINGS ── */
-        .sblock {
-            margin:0 0 24px; background:var(--surface);
-            border-top:0.5px solid var(--border); border-bottom:0.5px solid var(--border);
-        }
-        .sitem {
-            display:flex; align-items:center; gap:14px; padding:13px 16px;
-            cursor:pointer; border-bottom:0.5px solid var(--divider);
-            transition:background var(--tr); font-size:16px;
-        }
-        .sitem:last-child { border-bottom:none; }
-        .sitem:active { background:var(--surface2); }
-        .sicon { font-size:22px; width:30px; text-align:center; flex-shrink:0; }
-        .sarrow { color:var(--text2); margin-left:auto; font-size:20px; }
-        .sval { color:var(--text2); font-size:15px; margin-left:auto; }
-        .tag-new {
             background:var(--blue); color:#fff; font-size:10px; font-weight:700;
-            padding:2px 6px; border-radius:6px; margin-left:auto;
+            min-width:18px; height:18px; border-radius:9px; display:flex;
+            align-items:center; justify-content:center; padding:0 5px;
         }
-        .verified {
-            display:inline-block; width:18px; height:18px; background:var(--blue);
-            border-radius:50%; color:#fff; font-size:10px; text-align:center;
-            line-height:18px; font-weight:700; flex-shrink:0;
-        }
-        .nft-badge {
-            display:inline-block; background:linear-gradient(135deg,#ff9500,#ff3b30);
-            color:#fff; font-size:9px; font-weight:800; padding:2px 6px;
-            border-radius:6px; margin-left:4px;
-        }
-        .toggle {
-            margin-left:auto; width:50px; height:28px; background:var(--surface3);
-            border-radius:14px; cursor:pointer; position:relative;
-            transition:background var(--tr); flex-shrink:0;
-        }
-        .toggle.on { background:var(--green); }
-        .toggle::after {
-            content:''; position:absolute; top:2px; left:2px; width:24px; height:24px;
-            background:#fff; border-radius:50%; transition:transform var(--tr);
-            box-shadow:0 2px 4px rgba(0,0,0,.3);
-        }
-        .toggle.on::after { transform:translateX(22px); }
+        .pin-icon { font-size:11px; margin-left:4px; }
+        .pin-tag { font-size:10px; color:var(--text2); background:var(--surface2); padding:2px 6px; border-radius:8px; margin-right:4px; }
+        .muted-icon { font-size:12px; color:var(--text2); margin-left:4px; }
 
-        /* ── CHAT VIEW ── */
+        /* CHAT VIEW */
         .chat-header {
-            background:var(--surface); border-bottom:0.5px solid var(--border);
+            background:var(--surface); border-bottom:1px solid var(--divider);
             padding:10px 12px; padding-top:max(10px,var(--safe-top));
             display:flex; align-items:center; gap:10px; z-index:10; flex-shrink:0;
         }
         .chat-ava-sm {
-            width:38px; height:38px; border-radius:50%; font-size:16px;
-            font-weight:600; color:#fff; display:flex; align-items:center;
-            justify-content:center; flex-shrink:0;
+            width:36px; height:36px; border-radius:50%; font-size:15px; font-weight:600;
+            color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;
         }
-        .chat-name-h { font-weight:700; font-size:16px; }
-        .chat-status-h { font-size:12px; color:var(--green); }
+        .chat-name-h { font-weight:700; font-size:15px; }
+        .chat-status-h { font-size:11px; color:var(--green); }
         .messages {
             flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
             padding:10px 12px; display:flex; flex-direction:column; gap:3px; background:var(--bg);
         }
-        .mrow { display:flex; align-items:flex-end; gap:5px; max-width:82%; animation:slideUp .2s ease; }
+        .mrow { display:flex; align-items:flex-end; gap:5px; max-width:82%; animation:slideUp .18s ease; }
         .mrow.out { align-self:flex-end; flex-direction:row-reverse; }
         .mrow.in { align-self:flex-start; }
-        .mbubble { padding:8px 13px; border-radius:18px; font-size:16px; line-height:1.45; word-break:break-word; }
+        .mbubble { padding:8px 13px; border-radius:18px; font-size:15px; line-height:1.4; word-break:break-word; }
         .mrow.out .mbubble { background:var(--bubble-out); border-bottom-right-radius:4px; }
         .mrow.in .mbubble { background:var(--bubble-in); border-bottom-left-radius:4px; }
-        .mtime { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; text-align:right; }
-        .day-divider { text-align:center; margin:8px 0; font-size:12px; color:var(--text2); }
-        .day-divider span { background:var(--surface); padding:4px 12px; border-radius:12px; }
+        .mtime { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; text-align:right; }
+        .day-divider { text-align:center; margin:8px 0; font-size:11px; color:var(--text2); }
+        .day-divider span { background:var(--surface2); padding:3px 10px; border-radius:10px; }
         .cinput-bar {
-            background:var(--surface); border-top:0.5px solid var(--border);
+            background:var(--surface); border-top:1px solid var(--divider);
             padding:8px 10px; display:flex; align-items:flex-end; gap:6px;
             padding-bottom:max(8px,var(--safe-bottom)); flex-shrink:0;
         }
         .cinput {
-            flex:1; background:var(--input-bg); border:1px solid var(--border);
-            border-radius:20px; padding:10px 16px; color:var(--text); font-size:16px;
-            outline:none; font-family:inherit; -webkit-user-select:auto; user-select:auto;
+            flex:1; background:var(--input-bg); border:1px solid var(--border); border-radius:20px;
+            padding:9px 14px; color:var(--text); font-size:15px; outline:none; font-family:inherit;
+            -webkit-user-select:auto; user-select:auto;
         }
         .cinput:focus { border-color:var(--blue); }
         .csend {
-            width:38px; height:38px; background:var(--blue); border:none; border-radius:50%;
-            color:#fff; font-size:18px; cursor:pointer; display:flex; align-items:center;
+            width:36px; height:36px; background:var(--blue); border:none; border-radius:50%;
+            color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center;
             justify-content:center; flex-shrink:0; transition:all var(--tr);
         }
         .csend:active { transform:scale(0.9); }
         .cico {
-            width:36px; height:36px; background:none; border:none; color:var(--text2);
-            font-size:22px; cursor:pointer; border-radius:50%; display:flex;
-            align-items:center; justify-content:center;
+            width:34px; height:34px; background:none; border:none; color:var(--text2);
+            font-size:20px; cursor:pointer; border-radius:50%; display:flex; align-items:center; justify-content:center;
         }
         .cico:active { background:var(--surface2); }
         .back-btn {
-            background:none; border:none; color:var(--blue); font-size:28px;
+            background:none; border:none; color:var(--blue); font-size:26px;
             cursor:pointer; line-height:1; padding:4px; display:flex; align-items:center;
         }
 
-        /* ── GIFTS ── */
-        .gift-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:10px 0; }
+        /* PROFILE PAGE — стиль как на втором скриншоте */
+        .profile-container {
+            flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
+        }
+        .profile-card {
+            margin:12px; background:var(--surface); border-radius:16px;
+            border:1px solid var(--border); overflow:hidden;
+        }
+        .profile-card-top {
+            padding:20px 16px; display:flex; align-items:center; gap:14px;
+            background:linear-gradient(180deg, rgba(59,130,246,0.15) 0%, transparent 100%);
+        }
+        .profile-ava-lg {
+            width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+            display:flex; align-items:center; justify-content:center; font-size:26px;
+            font-weight:700; color:#fff; flex-shrink:0;
+        }
+        .profile-info-lg { flex:1; }
+        .profile-name-lg { font-size:18px; font-weight:700; display:flex; align-items:center; gap:6px; }
+        .profile-badge { font-size:12px; color:var(--blue); }
+        .profile-username-lg { color:var(--text2); font-size:14px; }
+        .profile-status-row {
+            display:flex; align-items:center; gap:8px; margin-top:4px;
+        }
+        .profile-status-dot { width:8px; height:8px; border-radius:50%; background:var(--green); }
+        .profile-status-text { color:var(--text2); font-size:12px; }
+
+        .profile-actions {
+            display:flex; flex-direction:column; border-top:1px solid var(--divider);
+        }
+        .profile-action-item {
+            display:flex; align-items:center; gap:12px; padding:14px 16px;
+            cursor:pointer; transition:background var(--tr); font-size:15px;
+            border-bottom:1px solid var(--divider);
+        }
+        .profile-action-item:last-child { border-bottom:none; }
+        .profile-action-item:active { background:var(--surface2); }
+        .profile-action-icon {
+            width:32px; height:32px; border-radius:8px; display:flex; align-items:center;
+            justify-content:center; font-size:16px; flex-shrink:0;
+        }
+        .profile-action-icon.blue { background:rgba(59,130,246,0.2); }
+        .profile-action-icon.purple { background:rgba(139,92,246,0.2); }
+        .profile-action-icon.pink { background:rgba(236,72,153,0.2); }
+        .profile-action-icon.green { background:rgba(34,197,94,0.2); }
+        .profile-action-icon.orange { background:rgba(245,158,11,0.2); }
+        .profile-action-arrow { color:var(--text2); margin-left:auto; font-size:18px; }
+        .profile-action-right { color:var(--text2); font-size:13px; margin-left:auto; }
+
+        .profile-id-row {
+            display:flex; align-items:center; gap:8px; padding:14px 16px;
+            border-top:1px solid var(--divider); color:var(--text2); font-size:13px;
+        }
+        .profile-id-row span { color:var(--text3); }
+
+        .profile-stats {
+            display:flex; gap:0; padding:12px 16px; border-top:1px solid var(--divider);
+        }
+        .profile-stat {
+            flex:1; text-align:center; cursor:pointer; transition:opacity var(--tr);
+        }
+        .profile-stat:active { opacity:0.7; }
+        .profile-stat-num { font-size:16px; font-weight:700; }
+        .profile-stat-label { font-size:11px; color:var(--text2); margin-top:2px; }
+
+        .profile-bottom-actions {
+            padding:8px 12px; display:flex; flex-direction:column; gap:8px;
+        }
+        .profile-bottom-btn {
+            width:100%; padding:12px; text-align:center; font-size:14px; font-weight:600;
+            cursor:pointer; border-radius:12px; transition:all var(--tr);
+            background:var(--surface); border:1px solid var(--border); color:var(--text);
+        }
+        .profile-bottom-btn:active { background:var(--surface2); }
+        .profile-bottom-btn.blue { background:var(--blue); color:#fff; border:none; }
+        .profile-bottom-btn.blue:active { opacity:0.85; }
+
+        /* SETTINGS */
+        .sblock {
+            margin:0 0 20px; background:var(--surface);
+            border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+        }
+        .sitem {
+            display:flex; align-items:center; gap:12px; padding:13px 16px;
+            cursor:pointer; border-bottom:1px solid var(--divider);
+            transition:background var(--tr); font-size:15px;
+        }
+        .sitem:last-child { border-bottom:none; }
+        .sitem:active { background:var(--surface2); }
+        .sicon { font-size:20px; width:28px; text-align:center; flex-shrink:0; }
+        .sarrow { color:var(--text2); margin-left:auto; font-size:18px; }
+        .sval { color:var(--text2); font-size:14px; margin-left:auto; }
+        .tag-new {
+            background:var(--blue); color:#fff; font-size:9px; font-weight:700;
+            padding:2px 5px; border-radius:5px; margin-left:auto;
+        }
+        .toggle {
+            margin-left:auto; width:48px; height:26px; background:var(--surface3);
+            border-radius:13px; cursor:pointer; position:relative; transition:background var(--tr); flex-shrink:0;
+        }
+        .toggle.on { background:var(--green); }
+        .toggle::after {
+            content:''; position:absolute; top:2px; left:2px; width:22px; height:22px;
+            background:#fff; border-radius:50%; transition:transform var(--tr); box-shadow:0 1px 3px rgba(0,0,0,.4);
+        }
+        .toggle.on::after { transform:translateX(22px); }
+
+        /* GIFTS / STARS */
+        .gift-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:8px 0; }
         .gcard {
-            text-align:center; padding:14px 6px; background:var(--surface);
-            border:1px solid var(--border); border-radius:14px; cursor:pointer;
+            text-align:center; padding:12px 6px; background:var(--surface2);
+            border:1px solid var(--border); border-radius:12px; cursor:pointer;
             transition:all var(--tr); position:relative;
         }
         .gcard:active { transform:scale(0.95); border-color:var(--blue); }
-        .gcard.nft { border-color:rgba(255,149,0,0.5); background:linear-gradient(135deg,rgba(255,149,0,0.1),rgba(255,59,48,0.05)); }
-        .gemoji { font-size:40px; display:block; margin-bottom:5px; }
-        .gname { font-size:12px; font-weight:600; margin-bottom:2px; }
-        .gprice { font-size:12px; color:var(--orange); font-weight:600; }
-        .gsent { font-size:10px; color:var(--text2); }
+        .gcard.nft { border-color:rgba(245,158,11,0.5); }
+        .gemoji { font-size:36px; display:block; margin-bottom:4px; }
+        .gname { font-size:11px; font-weight:600; margin-bottom:1px; }
+        .gprice { font-size:11px; color:var(--orange); font-weight:600; }
+        .gsent { font-size:9px; color:var(--text2); }
         .gtop {
-            position:absolute; top:5px; right:7px; background:var(--orange);
-            color:#fff; font-size:9px; font-weight:700; padding:2px 5px; border-radius:5px;
+            position:absolute; top:4px; right:6px; background:var(--orange);
+            color:#000; font-size:8px; font-weight:700; padding:1px 4px; border-radius:4px;
         }
         .gnft {
-            position:absolute; top:5px; left:7px; background:#ff9500;
-            color:#fff; font-size:9px; font-weight:700; padding:2px 5px; border-radius:5px;
+            position:absolute; top:4px; left:6px; background:#f59e0b;
+            color:#000; font-size:8px; font-weight:700; padding:1px 4px; border-radius:4px;
         }
-        .gift-owned-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:12px; }
-        .gift-owned-card {
-            background:var(--surface); border:1px solid var(--border);
-            border-radius:14px; padding:14px 8px; text-align:center; cursor:pointer;
-            transition:all var(--tr); position:relative;
-        }
-        .gift-owned-card:active { transform:scale(0.96); }
-        .gift-owned-card.nft-owned { border-color:#ff9500; box-shadow:0 0 12px rgba(255,149,0,0.2); }
-        .gift-big-emoji { font-size:36px; display:block; margin-bottom:4px; }
-
-        /* ── STARS ── */
-        .stars-big { text-align:center; padding:20px 16px 12px; }
-        .stars-big .snum { font-size:48px; font-weight:700; }
+        .stars-big { text-align:center; padding:16px 12px 8px; }
+        .stars-big .snum { font-size:44px; font-weight:700; }
         .spkg {
             display:flex; align-items:center; justify-content:space-between;
-            padding:14px 16px; background:var(--surface); border:1px solid var(--border);
-            border-radius:12px; margin:5px 0; cursor:pointer; transition:all var(--tr);
+            padding:12px 14px; background:var(--surface2); border:1px solid var(--border);
+            border-radius:10px; margin:4px 0; cursor:pointer; transition:all var(--tr);
         }
-        .spkg:active { background:var(--surface2); border-color:var(--blue); }
+        .spkg:active { background:var(--surface3); border-color:var(--blue); }
 
-        /* ── MODALS ── */
+        /* MODALS */
         .overlay {
-            position:fixed; inset:0; background:rgba(0,0,0,0.6);
-            backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+            position:fixed; inset:0; background:rgba(0,0,0,0.65);
+            backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
             z-index:100; display:none; align-items:flex-end; justify-content:center;
         }
-        .overlay.on { display:flex; animation:fadeIn .2s ease; }
+        .overlay.on { display:flex; animation:fadeIn .18s ease; }
         .modal {
-            background:var(--surface); border-radius:14px 14px 0 0;
-            width:100%; max-width:500px; max-height:90vh; overflow-y:auto;
-            padding:6px 0 max(20px,var(--safe-bottom)); animation:slideUp .28s ease;
+            background:var(--surface); border-radius:16px 16px 0 0;
+            width:100%; max-width:500px; max-height:88vh; overflow-y:auto;
+            padding:6px 0 max(20px,var(--safe-bottom)); animation:slideUp .25s ease;
         }
-        .mhandle { width:36px; height:5px; background:var(--surface3); border-radius:3px; margin:10px auto 14px; }
-        .mtitle { font-size:17px; font-weight:700; text-align:center; margin-bottom:16px; padding:0 20px; }
+        .mhandle { width:32px; height:5px; background:var(--surface3); border-radius:3px; margin:10px auto 12px; }
+        .mtitle { font-size:16px; font-weight:700; text-align:center; margin-bottom:14px; padding:0 18px; }
         .minput {
-            width:100%; padding:13px 16px; background:var(--input-bg);
-            border:1px solid var(--border); border-radius:10px; color:var(--text);
-            font-size:16px; outline:none; font-family:inherit; -webkit-user-select:auto; user-select:auto;
+            width:100%; padding:12px 14px; background:var(--input-bg); border:1px solid var(--border);
+            border-radius:10px; color:var(--text); font-size:15px; outline:none; font-family:inherit;
+            -webkit-user-select:auto; user-select:auto;
         }
         .minput:focus { border-color:var(--blue); }
-        .mpad { padding:0 16px; }
-        .section-label {
-            font-size:13px; color:var(--text); font-weight:600;
-            padding:12px 16px 6px; text-transform:uppercase; letter-spacing:0.5px;
-        }
+        .mpad { padding:0 14px; }
+
         .toast {
-            position:fixed; bottom:max(100px,calc(70px + var(--safe-bottom))); left:50%;
-            transform:translateX(-50%); background:rgba(44,44,46,0.95);
-            border:1px solid var(--border); backdrop-filter:blur(20px);
-            padding:11px 22px; border-radius:22px; font-weight:600; z-index:300;
-            animation:slideUp .28s ease, fadeOut .3s ease 1.7s forwards;
-            font-size:14px; white-space:nowrap; color:#fff; pointer-events:none;
+            position:fixed; bottom:max(90px,calc(60px + var(--safe-bottom))); left:50%;
+            transform:translateX(-50%); background:rgba(30,30,40,0.95);
+            border:1px solid var(--border); backdrop-filter:blur(16px);
+            padding:10px 20px; border-radius:20px; font-weight:600; z-index:300;
+            animation:slideUp .25s ease, fadeOut .3s ease 1.6s forwards;
+            font-size:13px; white-space:nowrap; color:#fff; pointer-events:none;
         }
 
-        /* ── SEARCH RESULTS ── */
-        .search-results {
-            position:absolute; top:100%; left:12px; right:12px;
-            background:var(--surface); border:1px solid var(--border);
-            border-radius:12px; max-height:300px; overflow-y:auto; z-index:50;
-            margin-top:4px; box-shadow:0 8px 30px rgba(0,0,0,0.5);
-        }
+        /* SEARCH */
+        .search-results { margin-top:6px; }
         .search-result-item {
-            display:flex; align-items:center; gap:12px; padding:12px 14px;
-            cursor:pointer; border-bottom:0.5px solid var(--divider); transition:background var(--tr);
+            display:flex; align-items:center; gap:10px; padding:10px 12px;
+            cursor:pointer; border-radius:10px; transition:background var(--tr);
         }
-        .search-result-item:last-child { border-bottom:none; }
         .search-result-item:active { background:var(--surface2); }
-        .search-result-item .ava { width:40px; height:40px; font-size:16px; }
-        .no-results { text-align:center; padding:20px; color:var(--text2); font-size:14px; }
-
-        /* ── PROFILE PAGE ── */
-        .profile-header {
-            background:var(--surface); border-bottom:0.5px solid var(--border);
-            padding:30px 16px 20px; text-align:center;
-        }
-        .profile-ava {
-            width:80px; height:80px; border-radius:50%; background:#007aff;
-            display:flex; align-items:center; justify-content:center;
-            font-size:34px; font-weight:700; color:#fff; margin:0 auto 12px; position:relative;
-        }
-        .profile-ava .camera {
-            position:absolute; bottom:0; right:0; width:26px; height:26px;
-            background:var(--blue); border-radius:50%; display:flex; align-items:center;
-            justify-content:center; font-size:12px; border:2px solid var(--bg);
-        }
-        .pname { font-size:22px; font-weight:700; }
-        .pphone { color:var(--text2); font-size:15px; margin-top:4px; }
-        .puser { color:var(--blue); font-size:14px; margin-top:2px; }
-        .profile-tabs {
-            display:flex; border-bottom:0.5px solid var(--border); background:var(--surface);
-        }
-        .profile-tab {
-            flex:1; padding:10px; text-align:center; font-size:13px; font-weight:600;
-            color:var(--text2); cursor:pointer; border-bottom:2px solid transparent; transition:all var(--tr);
-        }
-        .profile-tab.on { color:var(--blue); border-color:var(--blue); }
+        .no-results { text-align:center; padding:16px; color:var(--text2); font-size:13px; }
     </style>
 </head>
 <body>
 
-    <!-- ── REGISTRATION FLOW ── -->
-
-    <!-- Step 1: Phone -->
+    <!-- STEP 1: PHONE -->
     <div class="login-screen" id="regStep1">
         <div class="login-icon">✈️</div>
         <h1>Telegram</h1>
         <p>Введите ваш номер телефона</p>
-        <input type="tel" class="login-input" id="regPhone" placeholder="+7 (999) 123-45-67" value="+7 (999) 123-45-67">
-        <button class="btn btn-primary" style="margin-top:16px;" onclick="sendSMS()">Получить код →</button>
-        <div style="color:var(--text2);font-size:12px;margin-top:16px;max-width:260px;line-height:1.5;">
-            Войдя, вы соглашаетесь с условиями использования.
-        </div>
+        <input type="tel" class="login-input" id="regPhone" placeholder="+7 963 530-79-55" value="+7 963 530-79-55">
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="sendSMS()">Получить код →</button>
     </div>
 
-    <!-- Step 2: SMS Code -->
+    <!-- STEP 2: SMS CODE -->
     <div class="login-screen hidden" id="regStep2">
         <div class="login-icon">📱</div>
-        <h1>Код подтверждения</h1>
-        <p>Мы отправили SMS с кодом на номер<br><strong id="smsPhoneDisplay">+7 (999) 123-45-67</strong></p>
-        <input type="text" class="sms-input" id="smsCode" placeholder="•••••" maxlength="5" inputmode="numeric" pattern="[0-9]*">
-        <div style="color:var(--text2);font-size:13px;margin:8px 0;">Код для демо: <strong style="color:var(--blue);">12345</strong></div>
-        <button class="btn btn-primary" style="margin-top:12px;" onclick="verifySMS()">Подтвердить →</button>
-        <button class="btn btn-ghost" style="margin-top:8px;" onclick="resendSMS()">🔄 Отправить повторно</button>
+        <h1>Код из SMS</h1>
+        <p>4-значный код отправлен на<br><strong id="smsPhoneDisplay">+7 963 530-79-55</strong></p>
+        <input type="text" class="sms-input" id="smsCode" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+        <div style="color:var(--text2);font-size:12px;margin:6px 0;" id="codeHint"></div>
+        <button class="btn btn-primary" style="margin-top:10px;" onclick="verifySMS()">Подтвердить →</button>
+        <button class="btn btn-ghost" style="margin-top:6px;" onclick="resendSMS()">🔄 Отправить повторно</button>
         <button class="btn btn-ghost" onclick="goBackToPhone()">← Другой номер</button>
     </div>
 
-    <!-- Step 3: Choose Username -->
+    <!-- STEP 3: USERNAME -->
     <div class="login-screen hidden" id="regStep3">
         <div class="login-icon">👤</div>
         <h1>Выберите username</h1>
-        <p>Уникальное имя пользователя<br>для поиска друзей</p>
+        <p>Уникальное имя для поиска</p>
         <div style="display:flex;align-items:center;gap:4px;max-width:300px;width:100%;">
-            <span style="color:var(--text2);font-size:18px;">@</span>
+            <span style="color:var(--text2);font-size:17px;">@</span>
             <input type="text" class="login-input" id="regUsername" placeholder="username" style="flex:1;text-align:left;letter-spacing:0;" autocomplete="off" autocorrect="off" autocapitalize="none">
         </div>
-        <div style="color:var(--red);font-size:13px;margin-top:6px;display:none;" id="usernameError"></div>
-        <button class="btn btn-primary" style="margin-top:16px;" onclick="finishRegistration()">Зарегистрироваться 🚀</button>
+        <div style="color:var(--red);font-size:12px;margin-top:5px;display:none;" id="usernameError"></div>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="finishRegistration()">Зарегистрироваться 🚀</button>
         <button class="btn btn-ghost" onclick="skipUsername()">Пропустить →</button>
     </div>
 
-    <!-- ── MAIN APP ── -->
+    <!-- MAIN APP -->
     <div class="app" id="mainApp" style="display:none;">
 
         <!-- CHATS PAGE -->
@@ -429,45 +448,53 @@
                 <button class="hbtn" onclick="openGlobalSearch()">🔍</button>
                 <button class="hbtn" onclick="showToast('Новое сообщение')">✏️</button>
             </div>
-            <!-- Global search bar -->
-            <div class="searchbar" onclick="openGlobalSearch()" style="position:relative;">
-                🔍 <span style="color:var(--text2);">Поиск пользователей по @username</span>
+            <div class="folder-bar">
+                <div class="folder-tab on">Все</div>
+                <div class="folder-tab">Личные</div>
+                <div class="folder-tab">Группы</div>
+                <div class="folder-tab">Каналы</div>
             </div>
             <div class="scroll" id="chatList">
-                <div class="citem" style="background:var(--surface);" onclick="openChat('saved')">
+                <div class="section-label">Закреплённые</div>
+                <div class="citem" style="background:rgba(59,130,246,0.04);" onclick="openChat('saved')">
                     <div class="ava orange">⭐</div>
                     <div class="cinfo">
-                        <div class="cname">Избранное <span style="color:var(--text2);font-size:12px;">📌</span></div>
-                        <div class="clast" id="savedLast">Сохраняйте важные сообщения</div>
+                        <div class="cname">Избранное <span class="pin-icon">📌</span></div>
+                        <div class="clast" id="savedLast">Сохраняйте важное</div>
                     </div>
                     <div class="cmeta"><span class="ctime" id="savedT"></span></div>
                 </div>
+                <div class="section-label">Все чаты</div>
                 <div id="dynamicChats"></div>
             </div>
         </div>
 
         <!-- CALLS PAGE -->
         <div class="page" id="pCalls">
-            <div class="header"><span class="header-title">Звонки</span><button class="hbtn" onclick="showToast('Новый звонок')">➕</button></div>
+            <div class="header"><span class="header-title">Звонки</span><button class="hbtn" onclick="showToast('Новый звонок')">+</button></div>
             <div class="scroll">
                 <div class="section-label">Недавние</div>
-                <div class="citem" onclick="showToast('Звоним Алексею...')">
+                <div class="citem" onclick="showToast('📹 Звоним Алексею...')">
                     <div class="ava blue">А</div>
-                    <div class="cinfo"><div class="cname">Алексей</div><div class="clast" style="color:var(--green);">📹 Видеозвонок · 5 мин</div></div>
-                    <div class="cmeta"><span class="ctime">10:32</span><span style="cursor:pointer;font-size:20px;">📞</span></div>
+                    <div class="cinfo"><div class="cname">Алексей</div><div class="clast" style="color:var(--green);">Видеозвонок · 5 мин</div></div>
+                    <div class="cmeta"><span class="ctime">10:32</span></div>
+                </div>
+                <div class="citem" onclick="showToast('📞 Звоним Марии...')">
+                    <div class="ava green">М</div>
+                    <div class="cinfo"><div class="cname">Мария</div><div class="clast" style="color:var(--red);">Пропущенный</div></div>
+                    <div class="cmeta"><span class="ctime">вчера</span></div>
                 </div>
             </div>
         </div>
 
         <!-- CONTACTS PAGE -->
         <div class="page" id="pContacts">
-            <div class="header"><span class="header-title">Контакты</span><button class="hbtn" onclick="showToast('Добавить контакт')">+</button></div>
-            <div class="searchbar" onclick="openGlobalSearch()">🔍 Поиск по контактам</div>
+            <div class="header"><span class="header-title">Контакты</span><button class="hbtn" onclick="showToast('Добавить')">+</button></div>
             <div class="scroll">
                 <div class="section-label">Мои контакты</div>
-                <div class="citem" onclick="openChatByUsername('alex_tg')"><div class="ava blue">А<div class="online"></div></div><div class="cinfo"><div class="cname">Алексей <span class="verified">✓</span></div><div class="clast">@alex_tg · онлайн</div></div></div>
-                <div class="citem" onclick="openChatByUsername('maria_star')"><div class="ava green">М</div><div class="cinfo"><div class="cname">Мария</div><div class="clast">@maria_star · была недавно</div></div></div>
-                <div class="citem" onclick="openChatByUsername('elena_v')"><div class="ava red">Е</div><div class="cinfo"><div class="cname">Елена</div><div class="clast">@elena_v · была вчера</div></div></div>
+                <div class="citem" onclick="openChatByUsername('alex_tg')"><div class="ava blue">А<div class="online"></div></div><div class="cinfo"><div class="cname">Алексей</div><div class="clast">@alex_tg · онлайн</div></div></div>
+                <div class="citem" onclick="openChatByUsername('maria_star')"><div class="ava green">М</div><div class="cinfo"><div class="cname">Мария</div><div class="clast">@maria_star</div></div></div>
+                <div class="citem" onclick="openChatByUsername('elena_v')"><div class="ava red">Е</div><div class="cinfo"><div class="cname">Елена</div><div class="clast">@elena_v</div></div></div>
             </div>
         </div>
 
@@ -477,19 +504,19 @@
             <div class="scroll">
                 <div class="sblock" style="margin-bottom:0;">
                     <div class="sitem" onclick="openProfilePage()">
-                        <div class="ava blue" style="width:60px;height:60px;font-size:26px;font-weight:700;" id="setAva">М</div>
+                        <div class="ava blue" style="width:48px;height:48px;font-size:20px;border-radius:50%;" id="setAva">М</div>
                         <div style="flex:1;">
-                            <div style="font-size:18px;font-weight:700;" id="setName">Пользователь</div>
-                            <div style="font-size:14px;color:var(--text2);" id="setPhone">+7 (999) 123-45-67</div>
-                            <div style="font-size:13px;color:var(--blue);" id="setUsername">@username</div>
+                            <div style="font-weight:600;font-size:16px;" id="setName">Пользователь</div>
+                            <div style="font-size:13px;color:var(--text2);" id="setPhone">+7 963 530-79-55</div>
+                            <div style="font-size:12px;color:var(--blue);" id="setUsername">@username</div>
                         </div>
                         <span class="sarrow">›</span>
                     </div>
                 </div>
-                <div style="margin:8px 12px;background:linear-gradient(135deg,#007aff,#5856d6);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showToast('Telegram Premium')">
-                    <span style="font-size:32px;">⭐</span>
-                    <div><div style="font-weight:700;color:#fff;">Telegram Premium</div><div style="font-size:12px;color:rgba(255,255,255,.8);">Безлимитные файлы, реакции</div></div>
-                    <span style="color:#fff;font-size:20px;margin-left:auto;">›</span>
+                <div style="margin:8px 12px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="showToast('Telegram Premium — безлимитные файлы, реакции, стикеры')">
+                    <span style="font-size:28px;">⭐</span>
+                    <div><div style="font-weight:700;color:#fff;">Telegram Premium</div><div style="font-size:11px;color:rgba(255,255,255,.75);">Безлимитные файлы, реакции</div></div>
+                    <span style="color:#fff;font-size:18px;margin-left:auto;">›</span>
                 </div>
                 <div class="sblock">
                     <div class="sitem" onclick="showNotifications()"><span class="sicon">🔔</span> Уведомления и звуки<span class="sarrow">›</span></div>
@@ -500,10 +527,7 @@
                 <div class="sblock">
                     <div class="sitem" onclick="openProfilePage()"><span class="sicon">⭐</span> Избранное<span class="sarrow">›</span></div>
                     <div class="sitem" onclick="openGiftsStore()"><span class="sicon">🎁</span> Подарки<span class="tag-new">NEW</span></div>
-                    <div class="sitem" onclick="showStars()"><span class="sicon">🌟</span> Звёзды Telegram<span class="sval" id="starsMenuVal">50 ★</span></div>
-                </div>
-                <div style="text-align:center;color:var(--text2);font-size:13px;padding:20px 16px 30px;">
-                    Telegram Clone v4.0<br><span style="font-size:11px;">С регистрацией и поиском</span>
+                    <div class="sitem" onclick="showStars()"><span class="sicon">🌟</span> Звёзды Telegram<span class="sval" id="starsMenuVal">1000 ★</span></div>
                 </div>
             </div>
         </div>
@@ -512,31 +536,56 @@
         <div class="page" id="pProfile">
             <div class="header">
                 <button class="back-btn" onclick="goBack('pSettings')">‹</button>
-                <span class="header-title">Профиль</span>
-                <button class="hbtn" onclick="showEditProfile()">Изм.</button>
+                <span class="header-title">Мой профиль</span>
+                <button class="hbtn" onclick="showToast('Поделиться')">📤</button>
             </div>
-            <div class="scroll">
-                <div class="profile-header">
-                    <div class="profile-ava" id="profAva" onclick="showToast('Изменить фото')">М<div class="camera">📷</div></div>
-                    <div class="pname" id="profName">Пользователь</div>
-                    <div class="pphone" id="profPhone">+7 (999) 123-45-67</div>
-                    <div class="puser" id="profUsername">@username</div>
-                    <div style="color:var(--text2);font-size:13px;margin-top:4px;" id="profBio">Статус не установлен</div>
+            <div class="profile-container">
+                <div class="profile-card">
+                    <div class="profile-card-top">
+                        <div class="profile-ava-lg" id="profAvaLg">М</div>
+                        <div class="profile-info-lg">
+                            <div class="profile-name-lg" id="profNameLg">Пользователь <span class="profile-badge">✨</span></div>
+                            <div class="profile-username-lg" id="profUsernameLg">@username</div>
+                            <div class="profile-status-row">
+                                <div class="profile-status-dot"></div>
+                                <span class="profile-status-text">в сети</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <div class="profile-action-item" onclick="showToast('Эмодзи-статус установлен! 🏠')">
+                            <div class="profile-action-icon blue">🏠</div>
+                            <span>Установить эмодзи-статус</span>
+                            <span class="profile-action-arrow">›</span>
+                        </div>
+                        <div class="profile-action-item" onclick="changeProfileColor()">
+                            <div class="profile-action-icon purple">🎨</div>
+                            <span>Изменить цвет профиля</span>
+                            <span class="profile-action-arrow">›</span>
+                        </div>
+                        <div class="profile-action-item" onclick="showToast('Выберите новое фото 📷')">
+                            <div class="profile-action-icon pink">📷</div>
+                            <span>Изменить фотографию</span>
+                            <span class="profile-action-arrow">›</span>
+                        </div>
+                    </div>
+                    <div class="profile-id-row">
+                        ID: <span id="profId">7323296973</span>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="profile-stat" onclick="showToast('Подписчики: 15,2K')">
+                            <div class="profile-stat-num">15,2K</div>
+                            <div class="profile-stat-label">подписчиков</div>
+                        </div>
+                        <div class="profile-stat" onclick="showToast('Подписки: 6K')">
+                            <div class="profile-stat-num">6K</div>
+                            <div class="profile-stat-label">подписок</div>
+                        </div>
+                    </div>
                 </div>
-                <div style="display:flex;gap:8px;padding:12px 16px;">
-                    <button class="btn btn-primary" style="flex:1;" onclick="showToast('Написать себе')">✉️ Написать</button>
-                    <button class="btn btn-ghost" style="flex:1;" onclick="showToast('Поделиться профилем')">📤 Поделиться</button>
-                </div>
-                <div class="profile-tabs">
-                    <div class="profile-tab on" id="ptab-gifts" onclick="switchPTab('gifts')">🎁 Подарки</div>
-                    <div class="profile-tab" id="ptab-stories" onclick="switchPTab('stories')">📖 Истории</div>
-                </div>
-                <div id="ptab-content-gifts">
-                    <div class="gift-owned-grid" id="ownedGiftsGrid"></div>
-                    <div id="noGifts" style="text-align:center;color:var(--text2);padding:32px;font-size:14px;">У вас пока нет подарков</div>
-                </div>
-                <div id="ptab-content-stories" style="display:none;">
-                    <div style="text-align:center;padding:32px;color:var(--text2);">+ Добавить историю</div>
+                <div class="profile-bottom-actions">
+                    <button class="profile-bottom-btn blue" onclick="showToast('Аккаунт добавлен ✓')">Добавить аккаунт</button>
+                    <button class="profile-bottom-btn" onclick="openProfilePage()">Мой профиль</button>
                 </div>
             </div>
         </div>
@@ -550,253 +599,129 @@
                     <div class="chat-name-h" id="chatNameH">Алексей</div>
                     <div class="chat-status-h" id="chatStatusH">онлайн</div>
                 </div>
-                <button class="cico" onclick="showToast('Поиск')">🔍</button>
+                <button class="cico" onclick="showToast('Поиск в чате')">🔍</button>
                 <button class="cico" onclick="sendGiftInChat()">🎁</button>
                 <button class="cico" onclick="showToast('Звонок')">📞</button>
             </div>
             <div class="messages" id="chatMsgs"></div>
             <div class="cinput-bar">
-                <button class="cico" onclick="showToast('Прикрепить')">📎</button>
+                <button class="cico" onclick="showToast('Прикрепить файл')">📎</button>
                 <input class="cinput" id="chatInput" placeholder="Сообщение...">
-                <button class="cico" onclick="showToast('Голосовое')">🎤</button>
+                <button class="cico" onclick="showToast('Голосовое сообщение')">🎤</button>
                 <button class="csend" onclick="sendMsg()">↑</button>
             </div>
         </div>
 
         <!-- TAB BAR -->
         <div class="tabbar" id="mainTabbar">
-            <button class="tab on" onclick="switchTab('pChats',this)"><span class="tab-icon">💬</span>Чаты<span class="tab-badge">10</span></button>
+            <button class="tab on" onclick="switchTab('pChats',this)"><span class="tab-icon">💬</span>Чаты<span class="tab-badge">5</span></button>
             <button class="tab" onclick="switchTab('pCalls',this)"><span class="tab-icon">📞</span>Звонки</button>
             <button class="tab" onclick="switchTab('pContacts',this)"><span class="tab-icon">👥</span>Контакты</button>
             <button class="tab" onclick="switchTab('pSettings',this)"><span class="tab-icon">⚙️</span>Настройки</button>
         </div>
     </div>
 
-    <!-- ── MODALS ── -->
+    <!-- MODALS -->
+    <div class="overlay" id="ovGlobalSearch"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔍 Поиск</div><div class="mpad"><div style="display:flex;align-items:center;gap:8px;background:var(--input-bg);border-radius:10px;padding:10px 14px;border:1px solid var(--border);"><span>🔍</span><input type="text" id="globalSearchInput" placeholder="@username или имя..." oninput="performSearch()" style="flex:1;background:transparent;border:none;color:var(--text);font-size:15px;outline:none;" autocomplete="off"></div><div id="searchResultsContainer" class="search-results"></div></div><div class="mpad" style="margin-top:10px;"><button class="btn btn-ghost" onclick="closeOv('ovGlobalSearch')">Закрыть</button></div></div></div>
 
-    <!-- Global Search -->
-    <div class="overlay" id="ovGlobalSearch">
-        <div class="modal" style="padding-bottom:16px;">
-            <div class="mhandle"></div>
-            <div class="mtitle">🔍 Поиск пользователей</div>
-            <div style="position:relative;padding:0 16px;">
-                <div style="display:flex;align-items:center;gap:8px;background:var(--input-bg);border-radius:10px;padding:10px 14px;border:1px solid var(--border);">
-                    <span>🔍</span>
-                    <input type="text" class="search-input" id="globalSearchInput" placeholder="Введите @username или имя..." oninput="performSearch()" autocomplete="off" autocorrect="off">
-                </div>
-                <div id="searchResultsContainer" style="margin-top:8px;"></div>
-            </div>
-            <div class="mpad" style="margin-top:12px;"><button class="btn btn-ghost" onclick="closeOv('ovGlobalSearch')">Закрыть</button></div>
-        </div>
-    </div>
+    <div class="overlay" id="ovPrivacy"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔒 Конфиденциальность</div><div class="sblock" style="margin:0 14px 10px;border-radius:12px;overflow:hidden;"><div class="sitem" onclick="showToast('Кто видит номер: Мои контакты')"><span>Номер телефона</span><span class="sval">Мои контакты</span></div><div class="sitem" onclick="showToast('Активность: Все')"><span>Последняя активность</span><span class="sval">Все</span></div><div class="sitem" onclick="showPassModal()"><span>🔑 Пароль</span><span class="sarrow">›</span></div><div class="sitem" onclick="showBlockedModal()"><span>🚫 Чёрный список</span><span class="sarrow">›</span></div></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovPrivacy')">Закрыть</button></div></div></div>
 
-    <!-- Privacy -->
-    <div class="overlay" id="ovPrivacy">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">🔒 Конфиденциальность</div>
-            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-                <div class="sitem"><span>Номер телефона</span><span class="sval">Мои контакты</span></div>
-                <div class="sitem"><span>Последняя активность</span><span class="sval">Все</span></div>
-                <div class="sitem" onclick="showPassModal()"><span>🔑 Пароль</span><span class="sarrow">›</span></div>
-                <div class="sitem" onclick="showBlockedModal()"><span>🚫 Чёрный список</span><span class="sarrow">›</span></div>
-            </div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovPrivacy')">Закрыть</button></div></div>
-    </div>
+    <div class="overlay" id="ovPass"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔑 Пароль</div><div class="mpad"><input type="password" class="minput" placeholder="Новый пароль" id="newPassIn" style="margin-bottom:8px;"><input type="password" class="minput" placeholder="Повторите пароль" id="confPassIn"><button class="btn btn-primary" style="margin-top:10px;" onclick="savePass()">Сохранить</button><button class="btn btn-ghost" onclick="closeOv('ovPass')">Отмена</button></div></div></div>
 
-    <!-- Password -->
-    <div class="overlay" id="ovPass">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">🔑 Пароль входа</div>
-            <div class="mpad">
-                <input type="password" class="minput" placeholder="Новый пароль" id="newPassIn" style="margin-bottom:8px;">
-                <input type="password" class="minput" placeholder="Повторите пароль" id="confPassIn">
-                <button class="btn btn-primary" style="margin-top:12px;" onclick="savePass()">Сохранить</button>
-                <button class="btn btn-ghost" onclick="closeOv('ovPass')">Отмена</button>
-            </div></div>
-    </div>
+    <div class="overlay" id="ovBlocked"><div class="modal"><div class="mhandle"></div><div class="mtitle">🚫 Чёрный список</div><div id="blockedListEl" class="mpad"></div><div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="addBlocked()">+ Добавить</button><button class="btn btn-ghost" onclick="closeOv('ovBlocked')">Закрыть</button></div></div></div>
 
-    <!-- Blocked -->
-    <div class="overlay" id="ovBlocked">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">🚫 Чёрный список</div>
-            <div id="blockedListEl" style="padding:0 16px;"></div>
-            <div class="mpad" style="margin-top:10px;">
-                <button class="btn btn-ghost" onclick="addBlocked()">+ Добавить</button>
-                <button class="btn btn-ghost" onclick="closeOv('ovBlocked')">Закрыть</button>
-            </div></div>
-    </div>
+    <div class="overlay" id="ovData"><div class="modal"><div class="mhandle"></div><div class="mtitle">💾 Данные и память</div><div class="sblock" style="margin:0 14px 10px;border-radius:12px;overflow:hidden;"><div class="sitem"><span>Использовано</span><span class="sval">24.6 МБ</span></div><div class="sitem"><span>Кэш</span><span class="sval">8.2 МБ</span></div></div><div class="mpad"><button class="btn btn-primary" onclick="clearCache()">Очистить кэш</button><button class="btn btn-ghost" onclick="closeOv('ovData')">Закрыть</button></div></div></div>
 
-    <!-- Data -->
-    <div class="overlay" id="ovData">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">💾 Данные и память</div>
-            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-                <div class="sitem"><span>Использовано</span><span class="sval">24.6 МБ</span></div>
-                <div class="sitem"><span>Кэш</span><span class="sval">8.2 МБ</span></div>
-            </div>
-            <div class="mpad"><button class="btn btn-primary" onclick="clearCache()">Очистить кэш</button><button class="btn btn-ghost" onclick="closeOv('ovData')">Закрыть</button></div></div>
-    </div>
+    <div class="overlay" id="ovAppearance"><div class="modal"><div class="mhandle"></div><div class="mtitle">🎨 Оформление</div><div class="mpad"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;"><div onclick="setTheme('dark')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:3px solid var(--blue);"><div style="height:36px;background:#000;"></div><div style="background:var(--surface2);padding:3px;text-align:center;font-size:11px;font-weight:600;">🌙 Тёмная</div></div><div onclick="setTheme('light')" style="cursor:pointer;border-radius:10px;overflow:hidden;border:3px solid transparent;"><div style="height:36px;background:#fff;"></div><div style="background:#f0f0f0;padding:3px;text-align:center;font-size:11px;font-weight:600;color:#000;">☀️ Светлая</div></div></div><button class="btn btn-ghost" onclick="closeOv('ovAppearance')">Закрыть</button></div></div></div>
 
-    <!-- Appearance -->
-    <div class="overlay" id="ovAppearance">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">🎨 Оформление</div>
-            <div class="mpad">
-                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;">
-                    <div onclick="setTheme('dark')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid var(--blue);"><div style="height:40px;background:#000;"></div><div style="background:var(--surface);padding:4px;text-align:center;font-size:12px;font-weight:600;">🌙 Тёмная</div></div>
-                    <div onclick="setTheme('light')" style="cursor:pointer;border-radius:12px;overflow:hidden;border:3px solid transparent;"><div style="height:40px;background:#fff;"></div><div style="background:#f0f0f0;padding:4px;text-align:center;font-size:12px;font-weight:600;color:#000;">☀️ Светлая</div></div>
-                </div>
-                <button class="btn btn-ghost" onclick="closeOv('ovAppearance')">Закрыть</button>
-            </div></div>
-    </div>
+    <div class="overlay" id="ovNotif"><div class="modal"><div class="mhandle"></div><div class="mtitle">🔔 Уведомления</div><div class="sblock" style="margin:0 14px 10px;border-radius:12px;overflow:hidden;"><div class="sitem"><span>Уведомления</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div><div class="sitem"><span>Звук</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div><div class="sitem"><span>Вибрация</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovNotif')">Закрыть</button></div></div></div>
 
-    <!-- Notifications -->
-    <div class="overlay" id="ovNotif">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">🔔 Уведомления и звуки</div>
-            <div class="sblock" style="margin:0 16px 12px;border-radius:12px;overflow:hidden;">
-                <div class="sitem"><span>Уведомления</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
-                <div class="sitem"><span>Звук</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
-                <div class="sitem"><span>Вибрация</span><div class="toggle on" onclick="toggleToggle(this,event)"></div></div>
-            </div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovNotif')">Закрыть</button></div></div>
-    </div>
+    <div class="overlay" id="ovGifts"><div class="modal"><div class="mhandle"></div><div class="mtitle">🎁 Магазин подарков</div><div style="text-align:center;color:var(--text2);font-size:13px;margin:-6px 0 8px;">Баланс: <strong id="giftsBal">1000 ★</strong></div><div class="mpad"><div style="display:flex;gap:5px;margin-bottom:8px;"><button class="btn btn-primary" style="flex:1;font-size:12px;padding:8px;" onclick="filterGifts('all')">Все</button><button class="btn btn-ghost" style="flex:1;font-size:12px;padding:8px;" onclick="filterGifts('nft')">NFT</button><button class="btn btn-ghost" style="flex:1;font-size:12px;padding:8px;" onclick="filterGifts('popular')">TOP</button></div><div class="gift-grid" id="giftsGrid"></div></div><div class="mpad"><button class="btn btn-primary" onclick="showStars()">⭐ Пополнить</button><button class="btn btn-ghost" onclick="closeOv('ovGifts')">Закрыть</button></div></div></div>
 
-    <!-- Gifts Store -->
-    <div class="overlay" id="ovGifts">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">🎁 Магазин подарков</div>
-            <div style="text-align:center;color:var(--text2);font-size:14px;margin:-8px 0 8px;">Баланс: <strong id="giftsBal">50 ★</strong></div>
-            <div class="mpad">
-                <div style="display:flex;gap:6px;margin-bottom:10px;">
-                    <button class="btn btn-primary" style="flex:1;font-size:13px;" onclick="filterGifts('all')">Все</button>
-                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('nft')">NFT ✨</button>
-                    <button class="btn btn-ghost" style="flex:1;font-size:13px;" onclick="filterGifts('popular')">TOP</button>
-                </div>
-                <div class="gift-grid" id="giftsGrid"></div>
-            </div>
-            <div class="mpad">
-                <button class="btn btn-primary" onclick="showStars()">⭐ Пополнить звёзды</button>
-                <button class="btn btn-ghost" onclick="closeOv('ovGifts')">Закрыть</button>
-            </div></div>
-    </div>
+    <div class="overlay" id="ovStars"><div class="modal"><div class="mhandle"></div><div class="stars-big"><div style="font-size:48px;">⭐</div><div class="snum" id="starsNum">1000</div><div style="color:var(--text2);">Звёзд Telegram</div></div><div style="text-align:center;color:var(--text2);font-size:12px;margin-bottom:10px;">1⭐ ≈ 1₽</div><div class="mpad" id="starPkgs"></div><div style="color:var(--text2);font-size:12px;padding:10px 14px 4px;">История:</div><div id="starsHist" style="max-height:120px;overflow-y:auto;padding:0 14px;"></div><div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="closeOv('ovStars')">Закрыть</button></div></div></div>
 
-    <!-- Stars -->
-    <div class="overlay" id="ovStars">
-        <div class="modal"><div class="mhandle"></div>
-            <div class="stars-big"><div style="font-size:54px;">⭐</div><div class="snum" id="starsNum">50</div><div style="color:var(--text2);">Звёзд Telegram</div></div>
-            <div style="text-align:center;color:var(--text2);font-size:13px;margin-bottom:12px;">1 звезда ≈ 1 ₽</div>
-            <div class="mpad" id="starPkgs"></div>
-            <div style="color:var(--text2);font-size:13px;padding:12px 16px 4px;">История:</div>
-            <div id="starsHist" style="max-height:130px;overflow-y:auto;padding:0 16px;"></div>
-            <div class="mpad" style="margin-top:8px;"><button class="btn btn-ghost" onclick="closeOv('ovStars')">Закрыть</button></div></div>
-    </div>
+    <div class="overlay" id="ovSendGift"><div class="modal"><div class="mhandle"></div><div class="mtitle" id="sendGiftTitle">🎁 Отправить подарок</div><div class="mpad"><div class="gift-grid" id="sendGiftGrid"></div></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovSendGift')">Отмена</button></div></div></div>
 
-    <!-- Send Gift in Chat -->
-    <div class="overlay" id="ovSendGift">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle" id="sendGiftTitle">🎁 Отправить подарок</div>
-            <div class="mpad"><div class="gift-grid" id="sendGiftGrid"></div></div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovSendGift')">Отмена</button></div></div>
-    </div>
+    <div class="overlay" id="ovEditProfile"><div class="modal"><div class="mhandle"></div><div class="mtitle">Редактировать профиль</div><div class="mpad"><input class="minput" id="editName" placeholder="Имя" style="margin-bottom:8px;"><input class="minput" id="editLastName" placeholder="Фамилия" style="margin-bottom:8px;"><div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;"><span style="color:var(--text2);">@</span><input class="minput" id="editUsername" placeholder="username" style="flex:1;" autocomplete="off"></div><div style="color:var(--red);font-size:11px;margin-bottom:6px;display:none;" id="editUsernameError"></div><input class="minput" id="editBio" placeholder="О себе" style="margin-bottom:8px;"><button class="btn btn-primary" style="margin-top:8px;" onclick="saveProfile()">Сохранить</button><button class="btn btn-ghost" onclick="closeOv('ovEditProfile')">Отмена</button></div></div></div>
 
-    <!-- Edit Profile -->
-    <div class="overlay" id="ovEditProfile">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle">Редактировать профиль</div>
-            <div class="mpad">
-                <input class="minput" id="editName" placeholder="Имя" style="margin-bottom:8px;">
-                <input class="minput" id="editLastName" placeholder="Фамилия" style="margin-bottom:8px;">
-                <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
-                    <span style="color:var(--text2);">@</span>
-                    <input class="minput" id="editUsername" placeholder="username" style="flex:1;" autocomplete="off" autocorrect="off" autocapitalize="none">
-                </div>
-                <div style="color:var(--red);font-size:12px;margin-bottom:8px;display:none;" id="editUsernameError"></div>
-                <input class="minput" id="editBio" placeholder="О себе" style="margin-bottom:8px;">
-                <button class="btn btn-primary" style="margin-top:8px;" onclick="saveProfile()">Сохранить</button>
-                <button class="btn btn-ghost" onclick="closeOv('ovEditProfile')">Отмена</button>
-            </div></div>
-    </div>
-
-    <!-- Gift Detail -->
-    <div class="overlay" id="ovGiftDetail">
-        <div class="modal"><div class="mhandle"></div><div class="mtitle" id="giftDetailTitle">🎁 Подарок</div>
-            <div style="text-align:center;padding:12px;" id="giftDetailInfo"></div>
-            <div class="mpad" id="giftDetailActions"></div>
-            <div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovGiftDetail')">Закрыть</button></div></div>
-    </div>
+    <div class="overlay" id="ovGiftDetail"><div class="modal"><div class="mhandle"></div><div class="mtitle" id="giftDetailTitle">🎁</div><div style="text-align:center;padding:10px;" id="giftDetailInfo"></div><div class="mpad" id="giftDetailActions"></div><div class="mpad"><button class="btn btn-ghost" onclick="closeOv('ovGiftDetail')">Закрыть</button></div></div></div>
 
     <script>
-        // ═══════════════════════════════════════
-        // STATE
-        // ═══════════════════════════════════════
-        const DEMO_SMS = '12345';
+        // ══════════════════════════════ STATE ══════════════════════════════
+        let currentSMSCode = '1234';
         let S = {
-            phone: '',
-            name: '',
+            phone: '+7 963 530-79-55',
+            name: 'Макар',
             lastName: '',
-            username: '',
+            username: 'o_gem',
             bio: '',
-            stars: 50,
+            stars: 1000,
             password: '',
             blocked: ['spam_user'],
             starsHistory: [],
             savedMsgs: [],
-            ownedGifts: [],
-            stories: []
+            ownedGifts: [
+                { e: '💎', n: 'Бриллиант', p: 500, nft: true },
+                { e: '❤️', n: 'Сердце', p: 30, nft: false }
+            ],
+            profileColor: 'blue'
         };
 
-        // Registered users database (simulated)
         const USERS_DB = new Map();
-        // Pre-register demo users
-        USERS_DB.set('alex_tg', { name: 'Алексей', username: 'alex_tg', phone: '+79001234567', avatar: 'А', color: 'blue',
-            online: true });
-        USERS_DB.set('maria_star', { name: 'Мария', username: 'maria_star', phone: '+79002345678', avatar: 'М', color: 'green',
-            online: false });
-        USERS_DB.set('elena_v', { name: 'Елена', username: 'elena_v', phone: '+79003456789', avatar: 'Е', color: 'red',
-            online: false });
-        USERS_DB.set('dmitry_k', { name: 'Дмитрий', username: 'dmitry_k', phone: '+79004567890', avatar: 'Д', color: 'teal',
-            online: true });
-        USERS_DB.set('team_group', { name: 'Команда', username: 'team_group', phone: '', avatar: 'К', color: 'purple',
-            online: false, isGroup: true });
+        USERS_DB.set('alex_tg', { name: 'Алексей', username: 'alex_tg', phone: '+79001234567', avatar: 'А', color: 'blue', online: true });
+        USERS_DB.set('maria_star', { name: 'Мария', username: 'maria_star', phone: '+79002345678', avatar: 'М', color: 'green', online: false });
+        USERS_DB.set('elena_v', { name: 'Елена', username: 'elena_v', phone: '+79003456789', avatar: 'Е', color: 'red', online: false });
+        USERS_DB.set('o_gem', { name: 'Макар', username: 'o_gem', phone: '+79635307955', avatar: 'М', color: 'blue', online: true });
 
         const CHATS = [
-            { name: 'Алексей', a: 'А', c: 'blue', last: 'Привет! Как дела?', time: '10:32', badge: 3, online: true,
-                username: 'alex_tg' },
-            { name: 'Мария', a: 'М', c: 'green', last: 'Отправила подарок 🎁', time: '9:15', badge: 0, online: false,
-                username: 'maria_star' },
-            { name: 'Елена', a: 'Е', c: 'red', last: 'До встречи! 👋', time: 'вчера', badge: 0, online: false,
-            username: 'elena_v' },
-            { name: 'Дмитрий', a: 'Д', c: 'teal', last: 'Ок, договорились', time: 'вс', badge: 0, online: true,
-                username: 'dmitry_k' },
-            { name: 'Команда', a: 'К', c: 'purple', last: 'Иван: Отличная работа! 🔥', time: 'пн', badge: 7, online: false,
-                username: 'team_group', isGroup: true },
+            { name: 'Алексей', a: 'А', c: 'blue', last: 'Привет! Как дела?', time: '10:32', badge: 3, online: true, username: 'alex_tg' },
+            { name: 'Мария', a: 'М', c: 'green', last: 'Отправила подарок 🎁', time: '9:15', badge: 0, online: false, username: 'maria_star' },
+            { name: 'Елена', a: 'Е', c: 'red', last: 'До встречи! 👋', time: 'вчера', badge: 0, online: false, username: 'elena_v' },
+            { name: 'Команда', a: 'К', c: 'purple', last: 'Иван: Отличная работа!', time: 'пн', badge: 5, online: false, username: 'team_group', isGroup: true },
+            { name: 'Telegram', a: '✈', c: 'blue', last: 'Вход с нового устройства', time: '25.04', badge: 0, online: false, isChannel: true },
         ];
 
         const GIFTS = [
-            { e: '🧸', n: 'Мишка', p: 50, s: '12.5K' }, { e: '❤️', n: 'Сердце', p: 30, s: '45.2K', top: true }, { e: '🌹',
-                n: 'Роза', p: 25, s: '38.1K', top: true }, { e: '🎁', n: 'Подарок', p: 75, s: '8.3K' }, { e: '💎', n: 'Бриллиант',
-                p: 500, s: '1.2K', nft: true }, { e: '🍰', n: 'Тортик', p: 40, s: '15.7K' }, { e: '💍', n: 'Кольцо', p: 300,
-                s: '3.4K', nft: true }, { e: '🌸', n: 'Цветы', p: 20, s: '52.3K', top: true }, { e: '🏆', n: 'Кубок', p: 200,
-                s: '4.5K', nft: true }, { e: '👑', n: 'Корона', p: 1000, s: '892', nft: true },
+            { e: '🧸', n: 'Мишка', p: 50, s: '12.5K' }, { e: '❤️', n: 'Сердце', p: 30, s: '45.2K', top: true },
+            { e: '🌹', n: 'Роза', p: 25, s: '38.1K', top: true }, { e: '🎁', n: 'Подарок', p: 75, s: '8.3K' },
+            { e: '💎', n: 'Бриллиант', p: 500, s: '1.2K', nft: true }, { e: '💍', n: 'Кольцо', p: 300, s: '3.4K', nft: true },
+            { e: '🌸', n: 'Цветы', p: 20, s: '52.3K', top: true }, { e: '🏆', n: 'Кубок', p: 200, s: '4.5K', nft: true },
         ];
 
-        const STAR_PKGS = [{ s: 50, p: 49 }, { s: 100, p: 99 }, { s: 250, p: 239 }, { s: 500, p: 459 }, { s: 1000, p: 899 },
-            { s: 2500, p: 2199 }
-        ];
+        const STAR_PKGS = [{ s: 50, p: 49 }, { s: 100, p: 99 }, { s: 250, p: 239 }, { s: 500, p: 459 }, { s: 1000, p: 899 }, { s: 2500, p: 2199 }];
 
         let curChat = null;
         let prevPage = 'pChats';
         let chatHistory = {};
         let giftFilter = 'all';
-        let registrationStep = 1;
+        let currentSMSCodeSent = '';
 
-        // ═══════════════════════════════════════
-        // REGISTRATION
-        // ═══════════════════════════════════════
+        // ═══════════════ REGISTRATION ═══════════════
+        function generateSMSCode() {
+            return Math.floor(1000 + Math.random() * 9000).toString();
+        }
+
         function sendSMS() {
-            const phone = document.getElementById('regPhone').value.trim();
-            if (phone.length < 6) { showToast('Введите корректный номер'); return; }
+            const phone = document.getElementById('regPhone').value.replace(/\s/g, '').trim();
+            if (phone.length < 10) { showToast('Введите корректный номер'); return; }
             S.phone = phone;
+            // Для админского номера код всегда 1234
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            currentSMSCodeSent = cleanPhone === '79635307955' ? '1234' : generateSMSCode();
+
             document.getElementById('smsPhoneDisplay').textContent = phone;
+            document.getElementById('codeHint').innerHTML = '📱 SMS отправлено! Код: <strong style="color:var(--blue);">' + currentSMSCodeSent + '</strong>';
+            document.getElementById('smsCode').value = '';
             document.getElementById('regStep1').classList.add('hidden');
             document.getElementById('regStep2').classList.remove('hidden');
-            showToast(`SMS отправлено на ${phone} 📱`);
+            showToast('SMS отправлено 📱');
         }
 
         function resendSMS() {
-            showToast('SMS отправлено повторно 📱');
+            const cleanPhone = S.phone.replace(/[^0-9]/g, '');
+            currentSMSCodeSent = cleanPhone === '79635307955' ? '1234' : generateSMSCode();
+            document.getElementById('codeHint').innerHTML = '📱 Новый код: <strong style="color:var(--blue);">' + currentSMSCodeSent + '</strong>';
+            showToast('Новый код отправлен 🔄');
         }
 
         function goBackToPhone() {
@@ -806,197 +731,108 @@
 
         function verifySMS() {
             const code = document.getElementById('smsCode').value.trim();
-            if (code !== DEMO_SMS) {
-                showToast('Неверный код. Попробуйте 12345');
+            if (code !== currentSMSCodeSent) {
+                showToast('Неверный код!');
                 return;
             }
             document.getElementById('regStep2').classList.add('hidden');
             document.getElementById('regStep3').classList.remove('hidden');
-            // Pre-fill suggested username
-            const suggested = 'user_' + Math.random().toString(36).substring(2, 8);
-            document.getElementById('regUsername').value = suggested;
-            S.username = suggested;
+            document.getElementById('regUsername').value = 'o_gem';
+            S.username = 'o_gem';
         }
 
         function finishRegistration() {
             const username = document.getElementById('regUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
             if (!username || username.length < 3) {
-                document.getElementById('usernameError').textContent = 'Минимум 3 символа (буквы, цифры, _)';
-                document.getElementById('usernameError').style.display = '';
-                return;
+                document.getElementById('usernameError').textContent = 'Минимум 3 символа';
+                document.getElementById('usernameError').style.display = ''; return;
             }
-            if (USERS_DB.has(username)) {
-                document.getElementById('usernameError').textContent = 'Этот username уже занят!';
-                document.getElementById('usernameError').style.display = '';
-                return;
+            if (USERS_DB.has(username) && username !== 'o_gem') {
+                document.getElementById('usernameError').textContent = 'Занят!';
+                document.getElementById('usernameError').style.display = ''; return;
             }
             S.username = username;
-            S.name = 'Пользователь';
             completeRegistration();
         }
 
         function skipUsername() {
-            S.username = 'user_' + Math.random().toString(36).substring(2, 8);
-            S.name = 'Пользователь';
+            S.username = 'o_gem';
             completeRegistration();
         }
 
         function completeRegistration() {
-            // Register user in DB
-            USERS_DB.set(S.username, {
-                name: S.name || 'Пользователь',
-                username: S.username,
-                phone: S.phone,
-                avatar: (S.name || 'П')[0].toUpperCase(),
-                color: 'blue',
-                online: true
-            });
-
+            USERS_DB.set(S.username, { name: S.name, username: S.username, phone: S.phone, avatar: S.name[0].toUpperCase(), color: 'blue', online: true });
             document.getElementById('regStep3').classList.add('hidden');
             document.getElementById('mainApp').style.display = 'flex';
             init();
             updateAllUI();
-            updateProfilePage();
-            showToast(`Добро пожаловать, @${S.username}! 🎉`);
+            showToast('Добро пожаловать, @' + S.username + '! 🎉');
         }
 
-        // ═══════════════════════════════════════
-        // INIT
-        // ═══════════════════════════════════════
+        // ═══════════════ INIT ═══════════════
         function init() {
             renderDynamicChats();
             renderGiftsGrid('giftsGrid', buyGift);
             renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
             renderStarPkgs();
             updateAllUI();
-            document.getElementById('chatInput').addEventListener('keydown', e => {
-                if (e.key === 'Enter') { e.preventDefault();
-                    sendMsg(); }
-            });
-            // Live username validation
-            document.getElementById('regUsername').addEventListener('input', function() {
-                const val = this.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
-                this.value = val;
-                const errEl = document.getElementById('usernameError');
-                if (val.length > 0 && val.length < 3) {
-                    errEl.textContent = 'Минимум 3 символа';
-                    errEl.style.display = '';
-                } else if (USERS_DB.has(val)) {
-                    errEl.textContent = 'Этот username уже занят!';
-                    errEl.style.display = '';
-                } else {
-                    errEl.style.display = 'none';
-                }
+            document.getElementById('chatInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault();
+                    sendMsg(); } });
+            document.querySelectorAll('.folder-tab').forEach(t => {
+                t.addEventListener('click', () => { document.querySelectorAll('.folder-tab').forEach(x => x.classList
+                        .remove('on'));
+                    t.classList.add('on'); });
             });
         }
 
-        // ═══════════════════════════════════════
-        // GLOBAL SEARCH
-        // ═══════════════════════════════════════
-        function openGlobalSearch() {
-            document.getElementById('globalSearchInput').value = '';
+        // ═══════════════ SEARCH ═══════════════
+        function openGlobalSearch() { document.getElementById('globalSearchInput').value = '';
             document.getElementById('searchResultsContainer').innerHTML = '';
             openOv('ovGlobalSearch');
-            setTimeout(() => document.getElementById('globalSearchInput').focus(), 300);
-        }
+            setTimeout(() => document.getElementById('globalSearchInput').focus(), 300); }
 
         function performSearch() {
-            const query = document.getElementById('globalSearchInput').value.trim().toLowerCase();
-            const container = document.getElementById('searchResultsContainer');
-
-            if (!query) {
-                container.innerHTML = '<div class="no-results">Введите @username или имя</div>';
-                return;
-            }
-
-            const results = [];
-            USERS_DB.forEach((user, username) => {
-                if (username === S.username) return; // skip self
-                if (username.includes(query) || user.name.toLowerCase().includes(query)) {
-                    results.push({ ...user, username });
-                }
-            });
-
-            if (results.length === 0) {
-                container.innerHTML = '<div class="no-results">Никого не найдено 😔</div>';
-                return;
-            }
-
-            container.innerHTML = results.map(u => `
-            <div class="search-result-item" onclick="openChatByUsername('${u.username}')">
-              <div class="ava ${u.color||'blue'}">${u.avatar||u.name[0]}</div>
-              <div style="flex:1;">
-                <div style="font-weight:600;">${u.name}</div>
-                <div style="color:var(--text2);font-size:13px;">@${u.username}${u.online?' · <span style="color:var(--green);">онлайн</span>':''}</div>
-              </div>
-              <span style="color:var(--blue);font-size:20px;">→</span>
-            </div>
-          `).join('');
+            const q = document.getElementById('globalSearchInput').value.trim().toLowerCase();
+            const c = document.getElementById('searchResultsContainer');
+            if (!q) { c.innerHTML = '<div class="no-results">Введите @username</div>'; return; }
+            const r = [];
+            USERS_DB.forEach((u, un) => { if (un === S.username) return; if (un.includes(q) || u.name.toLowerCase().includes(
+                    q)) r.push({ ...u, username: un }); });
+            if (!r.length) { c.innerHTML = '<div class="no-results">Никого не найдено</div>'; return; }
+            c.innerHTML = r.map(u => `<div class="search-result-item" onclick="openChatByUsername('${u.username}')"><div class="ava ${u.color||'blue'}" style="width:38px;height:38px;font-size:14px;border-radius:50%;">${u.avatar}</div><div style="flex:1;"><div style="font-weight:600;">${u.name}</div><div style="color:var(--text2);font-size:12px;">@${u.username}</div></div><span style="color:var(--blue);">→</span></div>`).join('');
         }
 
         function openChatByUsername(username) {
-            const user = USERS_DB.get(username);
-            if (!user) { showToast('Пользователь не найден'); return; }
-
+            const u = USERS_DB.get(username);
+            if (!u) { showToast('Не найден'); return; }
             closeOv('ovGlobalSearch');
-
-            // Create chat object
-            curChat = {
-                name: user.name,
-                a: user.avatar || user.name[0],
-                c: user.color || 'blue',
-                online: user.online || false,
-                username: username,
-                isExternal: true
-            };
-
-            if (!chatHistory[curChat.name]) {
-                chatHistory[curChat.name] = [
-                    { text: `Вы начали чат с @${username}`, out: true, time: nowTime() },
-                    { text: 'Привет! 👋', out: false, time: nowTime() }
-                ];
-            }
-
+            curChat = { name: u.name, a: u.avatar, c: u.color, online: u.online, username, isExternal: true };
+            if (!chatHistory[curChat.name]) chatHistory[curChat.name] = [
+                { text: 'Чат с @' + username, out: true, time: nowTime() }, { text: 'Привет! 👋', out: false, time: nowTime() }
+            ];
             document.getElementById('chatNameH').textContent = curChat.name;
             document.getElementById('chatAvaH').textContent = curChat.a;
             document.getElementById('chatAvaH').className = 'chat-ava-sm ' + (curChat.c || 'blue');
             document.getElementById('chatStatusH').textContent = curChat.online ? 'онлайн' : 'был(а) недавно';
-            document.getElementById('chatStatusH').style.color = curChat.online ? 'var(--green)' : 'var(--text2)';
             renderChatMsgs();
             showPageNoTab('pChat');
-            showToast(`Чат с @${username} открыт`);
         }
 
-        // ═══════════════════════════════════════
-        // CHATS
-        // ═══════════════════════════════════════
+        // ═══════════════ CHATS ═══════════════
         function renderDynamicChats() {
             document.getElementById('dynamicChats').innerHTML = CHATS.map((c, i) => `
-            <div class="citem" onclick="openChat(${i})">
+            <div class="citem${c.badge?' unread':''}" onclick="openChat(${i})">
               <div class="ava ${c.c}">${c.a}${c.online?'<div class="online"></div>':''}</div>
-              <div class="cinfo">
-                <div class="cname">${c.name}${c.isGroup?'<span style="color:var(--text2);font-size:11px;"> 👥</span>':''}</div>
-                <div class="clast">${c.last}</div>
-              </div>
-              <div class="cmeta">
-                <span class="ctime">${c.time}</span>
-                ${c.badge?`<span class="cbadge">${c.badge}</span>`:''}
-              </div>
-            </div>
-          `).join('');
+              <div class="cinfo"><div class="cname">${c.name}${c.isChannel?'<span style="font-size:10px;color:var(--text2);"> 📢</span>':''}</div><div class="clast">${c.last}</div></div>
+              <div class="cmeta"><span class="ctime">${c.time}</span>${c.badge?`<span class="cbadge">${c.badge}</span>`:''}</div>
+            </div>`).join('');
         }
 
         function openChat(idx) {
-            if (idx === 'saved') {
-                curChat = { name: 'Избранное', a: '⭐', c: 'orange', saved: true };
-            } else {
-                curChat = { ...CHATS[idx], idx };
-            }
-            if (!chatHistory[curChat.name]) {
-                chatHistory[curChat.name] = curChat.saved ? S.savedMsgs.map(m => ({ ...m, out: true })) : [
-                    { text: `Привет! Это чат с ${curChat.name}`, out: false, time: nowTime() }
-                ];
-            }
+            if (idx === 'saved') { curChat = { name: 'Избранное', a: '⭐', c: 'orange', saved: true }; } else { curChat = { ...CHATS[idx], idx }; }
+            if (!chatHistory[curChat.name]) chatHistory[curChat.name] = curChat.saved ? S.savedMsgs.map(m => ({ ...m, out: true })) : [
+                { text: 'Привет! 👋', out: false, time: nowTime() }
+            ];
             document.getElementById('chatNameH').textContent = curChat.name;
             document.getElementById('chatAvaH').textContent = curChat.a;
             document.getElementById('chatAvaH').className = 'chat-ava-sm ' + (curChat.c || 'blue');
@@ -1009,180 +845,65 @@
         function closeChat() { showPageNoTab(prevPage || 'pChats'); }
 
         function renderChatMsgs() {
-            const el = document.getElementById('chatMsgs');
             const msgs = chatHistory[curChat.name] || [];
-            el.innerHTML = `<div class="day-divider"><span>Сегодня</span></div>` + msgs.map(m => {
-                if (m.gift) return `<div class="mrow ${m.out?'out':'in'}">${
-              m.out?'':'<div class="ava '+(curChat.c||'blue')+'" style="width:28px;height:28px;font-size:12px;">'+curChat.a+'</div>'
-            }<div><div class="mbubble">🎁 Подарок: ${m.gift.e} ${m.gift.n}${m.gift.nft?' <span class="nft-badge">NFT</span>':''}</div><div class="mtime">${m.time}</div></div></div>`;
-                return `<div class="mrow ${m.out?'out':'in'}">${
-              !m.out?`<div class="ava ${curChat.c||'blue'}" style="width:28px;height:28px;font-size:12px;">${curChat.a}</div>`:''
-            }<div><div class="mbubble">${m.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="mtime">${m.time}</div></div></div>`;
+            document.getElementById('chatMsgs').innerHTML = '<div class="day-divider"><span>Сегодня</span></div>' + msgs.map(m => {
+                if (m.gift) return `<div class="mrow ${m.out?'out':'in'}"><div><div class="mbubble">🎁 ${m.gift.e} ${m.gift.n}</div><div class="mtime">${m.time}</div></div></div>`;
+                return `<div class="mrow ${m.out?'out':'in'}"><div><div class="mbubble">${m.text.replace(/</g,'&lt;')}</div><div class="mtime">${m.time}</div></div></div>`;
             }).join('');
-            el.scrollTop = el.scrollHeight;
+            document.getElementById('chatMsgs').scrollTop = document.getElementById('chatMsgs').scrollHeight;
         }
 
         function sendMsg() {
-            const inp = document.getElementById('chatInput');
-            const txt = inp.value.trim();
+            const txt = document.getElementById('chatInput').value.trim();
             if (!txt || !curChat) return;
             const t = nowTime();
             if (!chatHistory[curChat.name]) chatHistory[curChat.name] = [];
             chatHistory[curChat.name].push({ text: txt, out: true, time: t });
             if (curChat.saved) { S.savedMsgs.push({ text: txt, time: t });
                 updateSavedUI(); }
-            inp.value = '';
+            document.getElementById('chatInput').value = '';
             renderChatMsgs();
-            if (!curChat.saved) {
-                setTimeout(() => {
-                    const replies = ['Понял! 👍', 'Отлично!', 'Хорошая идея 😊', 'Договорились!', 'Спасибо! 🙏', 'Ого! 🔥'];
-                    chatHistory[curChat.name].push({ text: replies[Math.floor(Math.random() * replies.length)], out: false,
-                        time: nowTime() });
-                    renderChatMsgs();
-                }, 600 + Math.random() * 1000);
-            }
+            if (!curChat.saved) setTimeout(() => {
+                const r = ['Понял! 👍', 'Отлично!', '😊', 'Договорились!', 'Спасибо!'];
+                chatHistory[curChat.name].push({ text: r[Math.floor(Math.random() * r.length)], out: false, time: nowTime() });
+                renderChatMsgs();
+            }, 500 + Math.random() * 800);
         }
 
-        // ═══════════════════════════════════════
-        // PROFILE
-        // ═══════════════════════════════════════
+        // ═══════════════ PROFILE ═══════════════
         function openProfilePage() { showPageNoTab('pProfile');
-            updateProfilePage(); }
+            updateProfileUI(); }
 
-        function updateProfilePage() {
-            document.getElementById('profName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
-            document.getElementById('profUsername').textContent = '@' + S.username;
-            document.getElementById('profBio').textContent = S.bio || 'Статус не установлен';
-            document.getElementById('profPhone').textContent = S.phone;
-            document.getElementById('profAva').childNodes[0].textContent = (S.name || 'П')[0].toUpperCase();
-            renderOwnedGifts();
+        function updateProfileUI() {
+            document.getElementById('profAvaLg').textContent = S.name[0].toUpperCase();
+            document.getElementById('profNameLg').innerHTML = S.name + ' <span class="profile-badge">✨</span>';
+            document.getElementById('profUsernameLg').textContent = '@' + S.username;
+            document.getElementById('profId').textContent = Math.floor(Math.random() * 9000000000 + 1000000000);
         }
 
-        function switchPTab(tab) {
-            ['gifts', 'stories'].forEach(t => {
-                document.getElementById('ptab-' + t).classList.toggle('on', t === tab);
-                document.getElementById('ptab-content-' + t).style.display = t === tab ? '' : 'none';
-            });
+        function changeProfileColor() {
+            const colors = ['blue', 'purple', 'pink', 'green', 'orange'];
+            const cur = colors.indexOf(S.profileColor);
+            S.profileColor = colors[(cur + 1) % colors.length];
+            document.getElementById('profAvaLg').style.background = 'var(--' + S.profileColor + ')';
+            showToast('Цвет профиля изменён 🎨');
         }
 
-        function renderOwnedGifts() {
-            const el = document.getElementById('ownedGiftsGrid');
-            const nd = document.getElementById('noGifts');
-            if (S.ownedGifts.length === 0) { el.innerHTML = '';
-                nd.style.display = ''; return; }
-            nd.style.display = 'none';
-            el.innerHTML = S.ownedGifts.map((g, i) => `
-            <div class="gift-owned-card${g.nft?' nft-owned':''}" onclick="showGiftDetail(${i})">
-              <span class="gift-big-emoji">${g.e}</span>
-              <div style="font-size:13px;font-weight:600;">${g.n}</div>
-              ${g.nft?'<span class="nft-badge">NFT</span>':''}
-              <div style="font-size:11px;color:var(--text2);">⭐ ${g.p}</div>
-            </div>
-          `).join('');
-        }
-
-        function showGiftDetail(i) {
-            const g = S.ownedGifts[i];
-            document.getElementById('giftDetailTitle').textContent = `${g.e} ${g.n}`;
-            document.getElementById('giftDetailInfo').innerHTML = `
-            <div style="font-size:60px;">${g.e}</div>
-            <div style="font-size:20px;font-weight:700;">${g.n}</div>
-            <div style="color:var(--orange);font-size:16px;">⭐ ${g.p}</div>
-            ${g.nft?'<div style="margin-top:6px;"><span style="background:linear-gradient(135deg,#ff9500,#ff3b30);color:#fff;padding:4px 10px;border-radius:8px;font-weight:700;font-size:12px;">✨ Уникальный NFT</span></div>':''}
-          `;
-            const actions = document.getElementById('giftDetailActions');
-            if (g.nft) {
-                actions.innerHTML = `
-              <button class="btn btn-primary" onclick="sellNFT(${i})">💰 Продать NFT (${Math.floor(g.p*1.5)} ⭐)</button>
-              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>
-            `;
-            } else {
-                actions.innerHTML = `
-              <button class="btn btn-green" onclick="upgradeToNFT(${i})">✨ В NFT (${Math.floor(g.p*2)} ⭐)</button>
-              <button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>
-              <button class="btn btn-ghost" onclick="exchangeGift(${i})">🔄 Обменять</button>
-            `;
-            }
-            openOv('ovGiftDetail');
-        }
-
-        function upgradeToNFT(i) {
-            const cost = Math.floor(S.ownedGifts[i].p * 2);
-            if (S.stars < cost) { showToast('Недостаточно звёзд!'); return; }
-            if (!confirm(`Превратить в NFT за ${cost} ⭐?`)) return;
-            S.stars -= cost;
-            S.ownedGifts[i].nft = true;
-            S.starsHistory.push({ t: 'nft_upgrade', g: S.ownedGifts[i], cost, ts: nowTime() });
-            updateAllUI();
-            renderOwnedGifts();
-            closeOv('ovGiftDetail');
-            showToast('Теперь это NFT! ✨');
-        }
-
-        function sellNFT(i) {
-            const g = S.ownedGifts[i];
-            const price = Math.floor(g.p * 1.5);
-            S.stars += price;
-            S.starsHistory.push({ t: 'nft_sell', g, price, ts: nowTime() });
-            S.ownedGifts.splice(i, 1);
-            updateAllUI();
-            renderOwnedGifts();
-            closeOv('ovGiftDetail');
-            showToast(`NFT продан за ${price} ⭐!`);
-        }
-
-        function transferGift(i) {
-            const to = prompt('Кому передать? (введите @username)');
-            if (!to) return;
-            const g = S.ownedGifts.splice(i, 1)[0];
-            S.starsHistory.push({ t: 'transfer', g, to, ts: nowTime() });
-            updateAllUI();
-            renderOwnedGifts();
-            closeOv('ovGiftDetail');
-            showToast(`${g.n} передан → ${to}`);
-        }
-
-        function exchangeGift(i) {
-            const g = S.ownedGifts[i];
-            const similar = GIFTS.filter(x => Math.abs(x.p - g.p) <= 20 && x.n !== g.n);
-            if (!similar.length) { showToast('Нет подарков для обмена'); return; }
-            const target = similar[Math.floor(Math.random() * similar.length)];
-            S.ownedGifts[i] = { ...target, nft: false };
-            S.starsHistory.push({ t: 'exchange', from: g, to: target, ts: nowTime() });
-            updateAllUI();
-            renderOwnedGifts();
-            closeOv('ovGiftDetail');
-            showToast(`Обменяно на ${target.n}!`);
-        }
-
-        // ═══════════════════════════════════════
-        // GIFTS
-        // ═══════════════════════════════════════
+        // ═══════════════ GIFTS ═══════════════
         function renderGiftsGrid(elId, handler) {
-            const filtered = giftFilter === 'all' ? GIFTS : giftFilter === 'nft' ? GIFTS.filter(g => g.nft) : GIFTS.filter(g =>
-                g.top);
+            const filtered = giftFilter === 'all' ? GIFTS : giftFilter === 'nft' ? GIFTS.filter(g => g.nft) : GIFTS.filter(g => g.top);
             document.getElementById(elId).innerHTML = filtered.map((g, i) => {
-                const origIdx = GIFTS.indexOf(g);
-                return `
-            <div class="gcard${g.nft?' nft':''}${g.top?' gift-popular':''}" onclick="${handler.name}(${origIdx})">
-              ${g.top?'<span class="gtop">TOP</span>':''}
-              ${g.nft?'<span class="gnft">NFT</span>':''}
-              <span class="gemoji">${g.e}</span>
-              <div class="gname">${g.n}</div>
-              <div class="gprice">⭐ ${g.p}</div>
-              <div class="gsent">${g.s}</div>
-            </div>`;
+                const oi = GIFTS.indexOf(g);
+                return `<div class="gcard${g.nft?' nft':''}" onclick="${handler.name}(${oi})">${g.top?'<span class="gtop">TOP</span>':''}${g.nft?'<span class="gnft">NFT</span>':''}<span class="gemoji">${g.e}</span><div class="gname">${g.n}</div><div class="gprice">⭐ ${g.p}</div><div class="gsent">${g.s}</div></div>`;
             }).join('');
         }
 
         function filterGifts(type) { giftFilter = type;
             renderGiftsGrid('giftsGrid', buyGift); }
-        function openGiftsStore() { updateGiftsUI();
-            giftFilter = 'all';
+
+        function openGiftsStore() { giftFilter = 'all';
             renderGiftsGrid('giftsGrid', buyGift);
             openOv('ovGifts'); }
-
-        function updateGiftsUI() { document.getElementById('giftsBal').textContent = S.stars + ' ★'; }
 
         function buyGift(i) {
             const g = GIFTS[i];
@@ -1191,14 +912,13 @@
             S.ownedGifts.push({ ...g, nft: !!g.nft });
             S.starsHistory.push({ t: 'buy', g, ts: nowTime() });
             updateAllUI();
-            renderOwnedGifts();
             closeOv('ovGifts');
-            showToast(`Куплено ${g.e} ${g.n}!`);
+            showToast('Куплено: ' + g.e + ' ' + g.n + '!');
         }
 
         function sendGiftInChat() {
-            if (curChat?.saved) { showToast('Нельзя отправить себе'); return; }
-            document.getElementById('sendGiftTitle').textContent = `🎁 Подарок для ${curChat?.name}`;
+            if (curChat?.saved) { showToast('Нельзя себе'); return; }
+            document.getElementById('sendGiftTitle').textContent = '🎁 Подарок для ' + (curChat?.name || '');
             giftFilter = 'all';
             renderGiftsGrid('sendGiftGrid', sendGiftFromChat);
             openOv('ovSendGift');
@@ -1209,57 +929,67 @@
             if (S.stars < g.p) { showToast('Недостаточно звёзд!'); return; }
             S.stars -= g.p;
             S.starsHistory.push({ t: 'send', g, to: curChat?.name, ts: nowTime() });
-            if (curChat && chatHistory[curChat.name]) {
-                chatHistory[curChat.name].push({ gift: g, out: true, time: nowTime() });
-                renderChatMsgs();
-            }
+            if (curChat && chatHistory[curChat.name]) { chatHistory[curChat.name].push({ gift: g, out: true, time: nowTime() });
+                renderChatMsgs(); }
             updateAllUI();
             closeOv('ovSendGift');
-            showToast(`Подарок отправлен! ${g.e}`);
+            showToast('Подарок отправлен! 🎁');
         }
 
-        // ═══════════════════════════════════════
-        // STARS
-        // ═══════════════════════════════════════
+        function showGiftDetail(i) {
+            const g = S.ownedGifts[i];
+            document.getElementById('giftDetailTitle').textContent = g.e + ' ' + g.n;
+            document.getElementById('giftDetailInfo').innerHTML = `<div style="font-size:54px;">${g.e}</div><div style="font-weight:700;">${g.n}</div><div style="color:var(--orange);">⭐ ${g.p}</div>${g.nft?'<div style="margin-top:4px;"><span style="background:var(--orange);color:#000;padding:3px 8px;border-radius:6px;font-weight:700;font-size:11px;">✨ NFT</span></div>':''}`;
+            document.getElementById('giftDetailActions').innerHTML = g.nft ?
+                `<button class="btn btn-primary" onclick="sellNFT(${i})">💰 Продать (${Math.floor(g.p*1.5)}⭐)</button><button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>` :
+                `<button class="btn btn-green" onclick="upgradeToNFT(${i})">✨ В NFT (${Math.floor(g.p*2)}⭐)</button><button class="btn btn-ghost" onclick="transferGift(${i})">📤 Передать</button>`;
+            openOv('ovGiftDetail');
+        }
+
+        function upgradeToNFT(i) { const c = Math.floor(S.ownedGifts[i].p * 2); if (S.stars < c) { showToast(
+                'Недостаточно звёзд!'); return; } if (!confirm('Превратить в NFT за ' + c + '⭐?')) return;
+            S.stars -= c;
+            S.ownedGifts[i].nft = true;
+            S.starsHistory.push({ t: 'nft', g: S.ownedGifts[i], cost: c, ts: nowTime() });
+            updateAllUI();
+            closeOv('ovGiftDetail');
+            showToast('NFT! ✨'); }
+
+        function sellNFT(i) { const g = S.ownedGifts[i];
+            const p = Math.floor(g.p * 1.5);
+            S.stars += p;
+            S.ownedGifts.splice(i, 1);
+            S.starsHistory.push({ t: 'sell', g, price: p, ts: nowTime() });
+            updateAllUI();
+            closeOv('ovGiftDetail');
+            showToast('Продано за ' + p + '⭐'); }
+
+        function transferGift(i) { const t = prompt('Кому передать? (@username)'); if (!t) return;
+            S.ownedGifts.splice(i, 1);
+            S.starsHistory.push({ t: 'transfer', ts: nowTime() });
+            updateAllUI();
+            closeOv('ovGiftDetail');
+            showToast('Передано → ' + t); }
+
+        // ═══════════════ STARS ═══════════════
         function showStars() { updateStarsUI();
             openOv('ovStars'); }
 
         function updateStarsUI() {
             document.getElementById('starsNum').textContent = S.stars;
-            const el = document.getElementById('starsHist');
-            if (!S.starsHistory.length) { el.innerHTML =
-                '<div style="color:var(--text2);font-size:13px;padding:4px 0;">Нет операций</div>'; return; }
-            el.innerHTML = S.starsHistory.slice(-8).reverse().map(h => {
-                const icon = h.t === 'topup' ? '⬆️' : '⬇️';
-                let desc = h.t === 'topup' ? `Пополнение +${h.amt}★ (${h.price}₽)` :
-                    h.t === 'buy' ? `Покупка ${h.g.e} ${h.g.n} −${h.g.p}★` :
-                    h.t === 'send' ? `Подарок → ${h.to} −${h.g.p}★` :
-                    h.t === 'nft_upgrade' ? `NFT ${h.g.n} −${h.cost}★` :
-                    h.t === 'nft_sell' ? `Продажа NFT +${h.price}★` : `${h.t}`;
-                return `<div style="font-size:12px;padding:5px 0;border-bottom:1px solid var(--divider);">${icon} ${desc}</div>`;
-            }).join('');
+            document.getElementById('starsHist').innerHTML = S.starsHistory.length ? S.starsHistory.slice(-6).reverse().map(h => `<div style="font-size:11px;padding:4px 0;border-bottom:1px solid var(--divider);">${h.t==='topup'?'⬆️ Пополнение +'+h.amt+'⭐':h.t==='buy'?'⬇️ Покупка '+h.g.e+' −'+h.g.p+'⭐':h.t==='send'?'⬇️ Подарок −'+h.g.p+'⭐':'⭐ Операция'}</div>`).join('') : '<div style="color:var(--text2);font-size:12px;">Нет операций</div>';
         }
 
-        function renderStarPkgs() {
-            document.getElementById('starPkgs').innerHTML = STAR_PKGS.map(p => `
-            <div class="spkg" onclick="buyStars(${p.s},${p.p})">
-              <span style="font-weight:700;font-size:17px;">⭐ ${p.s.toLocaleString()}</span>
-              <span style="color:var(--text2);">${p.p} ₽</span>
-            </div>`).join('');
-        }
+        function renderStarPkgs() { document.getElementById('starPkgs').innerHTML = STAR_PKGS.map(p => `<div class="spkg" onclick="buyStars(${p.s},${p.p})"><span style="font-weight:700;">⭐ ${p.s.toLocaleString()}</span><span style="color:var(--text2);">${p.p} ₽</span></div>`).join(''); }
 
-        function buyStars(amt, price) {
-            if (!confirm(`Купить ${amt} звёзд за ${price} ₽?`)) return;
-            S.stars += amt;
-            S.starsHistory.push({ t: 'topup', amt, price, ts: nowTime() });
+        function buyStars(a, p) { if (!confirm('Купить ' + a + '⭐ за ' + p + '₽?')) return;
+            S.stars += a;
+            S.starsHistory.push({ t: 'topup', amt: a, price: p, ts: nowTime() });
             updateAllUI();
             updateStarsUI();
-            showToast(`+${amt} ⭐`);
-        }
+            showToast('+' + a + '⭐'); }
 
-        // ═══════════════════════════════════════
-        // EDIT PROFILE
-        // ═══════════════════════════════════════
+        // ═══════════════ EDIT PROFILE ═══════════════
         function showEditProfile() {
             document.getElementById('editName').value = S.name;
             document.getElementById('editLastName').value = S.lastName;
@@ -1269,48 +999,24 @@
             openOv('ovEditProfile');
         }
 
-        document.getElementById('editUsername')?.addEventListener('input', function() {
-            const val = this.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
-            this.value = val;
-            const errEl = document.getElementById('editUsernameError');
-            if (val && val !== S.username && USERS_DB.has(val)) {
-                errEl.textContent = 'Этот username занят!';
-                errEl.style.display = '';
-            } else { errEl.style.display = 'none'; }
-        });
-
         function saveProfile() {
             const n = document.getElementById('editName').value.trim();
             if (!n) { showToast('Введите имя'); return; }
-            const newUsername = document.getElementById('editUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,
-            '');
-            if (newUsername && newUsername !== S.username && USERS_DB.has(newUsername)) {
-                showToast('Этот username занят!');
-                return;
-            }
-            // Update DB
+            const nu = document.getElementById('editUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+            if (nu && nu !== S.username && USERS_DB.has(nu)) { showToast('Username занят!'); return; }
             if (S.username) USERS_DB.delete(S.username);
             S.name = n;
             S.lastName = document.getElementById('editLastName').value.trim();
-            S.username = newUsername || S.username;
+            S.username = nu || S.username;
             S.bio = document.getElementById('editBio').value.trim();
-            USERS_DB.set(S.username, {
-                name: S.name,
-                username: S.username,
-                phone: S.phone,
-                avatar: S.name[0].toUpperCase(),
-                color: 'blue',
-                online: true
-            });
+            USERS_DB.set(S.username, { name: S.name, username: S.username, phone: S.phone, avatar: S.name[0].toUpperCase(), color: 'blue', online: true });
             updateAllUI();
-            updateProfilePage();
+            updateProfileUI();
             closeOv('ovEditProfile');
-            showToast('Профиль сохранён ✓');
+            showToast('Сохранено ✓');
         }
 
-        // ═══════════════════════════════════════
-        // MODALS
-        // ═══════════════════════════════════════
+        // ═══════════════ MODALS ═══════════════
         function showPrivacy() { openOv('ovPrivacy'); }
 
         function showData() { openOv('ovData'); }
@@ -1338,106 +1044,76 @@
 
         function renderBlockedList() {
             const el = document.getElementById('blockedListEl');
-            if (!S.blocked.length) { el.innerHTML =
-                '<div style="color:var(--text2);text-align:center;padding:12px;">Список пуст</div>'; return; }
-            el.innerHTML = S.blocked.map(u =>
-                `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--surface2);border-radius:10px;margin:4px 0;"><span>🚫 ${u}</span><span style="color:var(--red);cursor:pointer;font-size:18px;" onclick="removeBlocked('${u}')">✕</span></div>`
-                ).join('');
+            el.innerHTML = S.blocked.length ? S.blocked.map(u => `<div style="display:flex;justify-content:space-between;padding:8px;background:var(--surface2);border-radius:8px;margin:4px 0;"><span>🚫 ${u}</span><span style="color:var(--red);cursor:pointer;" onclick="removeBlocked('${u}')">✕</span></div>`).join('') : '<div style="color:var(--text2);text-align:center;padding:12px;">Список пуст</div>';
         }
 
         function addBlocked() { const n = prompt('Имя пользователя:'); if (n && !S.blocked.includes(n)) { S.blocked.push(n);
                 renderBlockedList();
-                showToast(`${n} заблокирован`); } }
+                showToast(n + ' заблокирован'); } }
 
         function removeBlocked(u) { S.blocked = S.blocked.filter(b => b !== u);
             renderBlockedList();
-            showToast(`${u} разблокирован`); }
+            showToast(u + ' разблокирован'); }
 
         function clearCache() { closeOv('ovData');
             showToast('Кэш очищен 🧹'); }
 
-        function setTheme(theme) {
-            if (theme === 'light') {
-                ['--bg', '#f5f5f5', '--surface', '#ffffff', '--surface2', '#f0f0f0', '--text', '#000000', '--text2',
-                    '#999999', '--bubble-in', '#e9e9eb', '--input-bg', '#e9e9eb'
-                ].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
-                document.getElementById('themeLabel').textContent = 'Светлая';
-            } else {
-                ['--bg', '#000000', '--surface', '#1c1c1e', '--surface2', '#2c2c2e', '--text', '#ffffff', '--text2',
-                    '#8e8e93', '--bubble-in', '#1c1c1e', '--input-bg', '#2c2c2e'
-                ].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
-                document.getElementById('themeLabel').textContent = 'Тёмная';
-            }
+        function setTheme(t) {
+            if (t === 'light') { ['--bg', '#f5f5f5', '--surface', '#ffffff', '--surface2', '#f0f0f0', '--text', '#000000', '--text2', '#666', '--bubble-in', '#e9e9eb', '--input-bg', '#e9e9eb'].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
+                document.getElementById('themeLabel').textContent = 'Светлая'; } else { ['--bg', '#000000', '--surface', '#111111', '--surface2', '#1a1a1a', '--text', '#ffffff', '--text2', '#6b6b7b', '--bubble-in', '#1c1c24', '--input-bg', '#1a1a24'].forEach((v, i, a) => { if (i % 2 === 0) document.body.style.setProperty(v, a[i + 1]); });
+                document.getElementById('themeLabel').textContent = 'Тёмная'; }
             closeOv('ovAppearance');
-            showToast('Тема изменена 🎨');
+            showToast('Тема: ' + (t === 'light' ? 'Светлая' : 'Тёмная'));
         }
 
         function toggleToggle(el, e) { e.stopPropagation();
             el.classList.toggle('on'); }
 
-        // ═══════════════════════════════════════
-        // NAVIGATION
-        // ═══════════════════════════════════════
-        function switchTab(pageId, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-            document.getElementById(pageId).classList.add('on');
+        // ═══════════════ NAVIGATION ═══════════════
+        function switchTab(pid, btn) { document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+            document.getElementById(pid).classList.add('on');
             document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
             btn.classList.add('on');
-            prevPage = pageId;
-            document.getElementById('mainTabbar').style.display = '';
-        }
+            prevPage = pid;
+            document.getElementById('mainTabbar').style.display = ''; }
 
-        function showPageNoTab(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-            document.getElementById(pageId).classList.add('on');
-            document.getElementById('mainTabbar').style.display = ['pChat', 'pProfile'].includes(pageId) ? 'none' : '';
-        }
+        function showPageNoTab(pid) { document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+            document.getElementById(pid).classList.add('on');
+            document.getElementById('mainTabbar').style.display = ['pChat', 'pProfile'].includes(pid) ? 'none' : ''; }
 
-        function goBack(to) {
-            showPageNoTab(to || prevPage);
-            if (!['pChat', 'pProfile'].includes(to)) document.getElementById('mainTabbar').style.display = '';
-        }
+        function goBack(to) { showPageNoTab(to || prevPage); if (!['pChat', 'pProfile'].includes(to)) document.getElementById(
+                'mainTabbar').style.display = ''; }
 
         function openOv(id) { document.getElementById(id).classList.add('on'); }
 
         function closeOv(id) { document.getElementById(id).classList.remove('on'); }
 
-        document.querySelectorAll('.overlay').forEach(ov => {
-            ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('on'); });
-        });
+        document.querySelectorAll('.overlay').forEach(ov => { ov.addEventListener('click', e => { if (e.target === ov) ov
+                    .classList.remove('on'); }); });
 
-        // ═══════════════════════════════════════
-        // UI
-        // ═══════════════════════════════════════
+        // ═══════════════ UI ═══════════════
         function updateAllUI() {
             document.getElementById('starsMenuVal').textContent = S.stars + ' ★';
+            document.getElementById('giftsBal').textContent = S.stars + ' ★';
+            document.getElementById('starsNum').textContent = S.stars;
             document.getElementById('setName').textContent = S.name + (S.lastName ? ' ' + S.lastName : '');
             document.getElementById('setPhone').textContent = S.phone;
             document.getElementById('setUsername').textContent = '@' + S.username;
-            document.getElementById('setAva').textContent = (S.name || 'П')[0].toUpperCase();
-            updateGiftsUI();
-            updateStarsUI();
+            document.getElementById('setAva').textContent = S.name[0].toUpperCase();
         }
 
-        function updateSavedUI() {
-            const last = S.savedMsgs[S.savedMsgs.length - 1];
-            document.getElementById('savedLast').textContent = last ? last.text : 'Сохраняйте важные сообщения';
-            document.getElementById('savedT').textContent = last ? last.time : '';
-        }
+        function updateSavedUI() { const l = S.savedMsgs[S.savedMsgs.length - 1];
+            document.getElementById('savedLast').textContent = l ? l.text : 'Сохраняйте важное';
+            document.getElementById('savedT').textContent = l ? l.time : ''; }
 
-        function showToast(txt) {
-            document.querySelectorAll('.toast').forEach(t => t.remove());
+        function showToast(t) { document.querySelectorAll('.toast').forEach(x => x.remove());
             const d = document.createElement('div');
             d.className = 'toast';
-            d.textContent = txt;
+            d.textContent = t;
             document.body.appendChild(d);
-            setTimeout(() => d.remove(), 2100);
-        }
+            setTimeout(() => d.remove(), 2000); }
 
-        function nowTime() {
-            const now = new Date();
-            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        }
+        function nowTime() { const n = new Date(); return n.getHours().toString().padStart(2, '0') + ':' + n.getMinutes().toString().padStart(2, '0'); }
     </script>
 </body>
 </html>
