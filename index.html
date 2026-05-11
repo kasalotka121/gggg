@@ -5,12 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Telegram iOS</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
     background: #000; color: white;
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
@@ -19,21 +16,20 @@
   ::-webkit-scrollbar { width: 0; background: transparent; }
 
   .glass-panel {
-    background: rgba(28,28,30,0.65);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+    background: rgba(28,28,30,0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.12);
   }
-  .glass-card { background: rgba(44,44,46,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); }
-  .ios-btn { background: #0A84FF; color: white; font-weight: 600; border-radius: 12px; padding: 14px; text-align: center; transition: opacity 0.2s; cursor: pointer; }
-  .ios-btn:active { opacity: 0.7; }
+  .glass-card { background: rgba(44,44,46,0.5); border: 1px solid rgba(255,255,255,0.08); }
+  .ios-btn { background: #0A84FF; color: white; font-weight: 600; border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: opacity .15s; }
+  .ios-btn:active { opacity: .7; }
   .ios-btn-secondary { background: rgba(255,255,255,0.1); color: #0A84FF; border: 1px solid rgba(255,255,255,0.1); }
 
-  .msg-row-in  { display:flex; justify-content:flex-start; width:100%; }
-  .msg-row-out { display:flex; justify-content:flex-end; width:100%; }
-  .msg-in  { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px 18px 18px 4px; max-width:78%; padding:8px 12px; }
-  .msg-out { background: #0A84FF; border-radius: 18px 18px 4px 18px; max-width:78%; padding:8px 12px; box-shadow: 0 4px 15px rgba(10,132,255,0.3); }
+  .msg-row-in  { display:flex; justify-content:flex-start; width:100%; margin-bottom:3px; }
+  .msg-row-out { display:flex; justify-content:flex-end;   width:100%; margin-bottom:3px; }
+  .msg-in  { background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.05); border-radius:18px 18px 18px 4px; max-width:78%; padding:9px 13px; }
+  .msg-out { background: #0A84FF; border-radius:18px 18px 4px 18px; max-width:78%; padding:9px 13px; box-shadow:0 4px 15px rgba(10,132,255,0.35); }
 
   .hidden-screen { display: none !important; }
   .tab-active   { color: #0A84FF; }
@@ -43,42 +39,31 @@
   @keyframes fadeIn  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
   @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
 
-  .ios-search-container { background: rgba(118,118,128,0.24); border-radius:10px; padding:8px 10px; display:flex; align-items:center; border:1px solid rgba(255,255,255,0.05); }
+  .ios-search-container { background:rgba(118,118,128,0.24); border-radius:10px; padding:8px 10px; display:flex; align-items:center; }
   .ios-search-input { background:transparent; border:none; color:white; margin-left:8px; width:100%; outline:none; font-size:17px; }
-  .toggle-switch { width:51px; height:31px; background:#39393D; border-radius:16px; position:relative; transition:background 0.3s; cursor:pointer; }
-  .toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:27px; height:27px; background:white; border-radius:50%; transition:transform 0.3s; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
+  .toggle-switch { width:51px; height:31px; background:#39393D; border-radius:16px; position:relative; transition:background .3s; cursor:pointer; }
+  .toggle-switch::after { content:''; position:absolute; top:2px; left:2px; width:27px; height:27px; background:white; border-radius:50%; transition:transform .3s; box-shadow:0 2px 4px rgba(0,0,0,.2); }
   .toggle-active { background:#34C759; }
   .toggle-active::after { transform:translateX(20px); }
 
-  /* Media preview in chat */
   .msg-photo { max-width:200px; max-height:200px; border-radius:12px; object-fit:cover; cursor:pointer; display:block; }
-  .msg-video { max-width:220px; border-radius:12px; cursor:pointer; display:block; }
-  .msg-file-card { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px 12px; max-width:220px; cursor:pointer; }
+  .msg-file-card { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px 12px; max-width:220px; cursor:pointer; }
 
-  /* Typing indicator */
   .typing-dot { width:6px; height:6px; border-radius:50%; background:#0A84FF; animation:typingBounce 1.2s infinite; display:inline-block; }
   .typing-dot:nth-child(2) { animation-delay:.2s; }
   .typing-dot:nth-child(3) { animation-delay:.4s; }
   @keyframes typingBounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
 
-  /* Gift in chat */
-  .gift-card-chat { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:15px; width:180px; text-align:center; }
+  .gift-card-chat { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:16px; width:180px; text-align:center; }
 
-  /* Call log */
   .call-log-item { display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.06); cursor:pointer; }
-  .call-log-item:hover { background:rgba(255,255,255,0.04); }
+  .call-log-item:active { background:rgba(255,255,255,0.04); }
 
-  /* Incoming call overlay */
-  #incoming-call-overlay { position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.92); display:none; flex-direction:column; align-items:center; justify-content:space-between; padding:60px 20px; backdrop-filter:blur(20px); }
+  .unread-badge { background:#FF3B30; color:white; font-size:11px; font-weight:700; min-width:20px; height:20px; border-radius:10px; display:flex; align-items:center; justify-content:center; padding:0 5px; }
 
-  /* WebRTC video elements */
-  #remote-video { width:100%; height:100%; object-fit:cover; border-radius:20px; }
-  #local-video  { width:90px; height:120px; object-fit:cover; border-radius:12px; border:2px solid rgba(255,255,255,0.3); }
+  #lightbox { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; }
+  #lightbox img { max-width:95vw; max-height:90vh; border-radius:12px; }
 
-  /* Drop zone */
-  .drop-zone-active { border:2px dashed #0A84FF !important; background:rgba(10,132,255,0.1) !important; }
-
-  /* Themes */
   .theme-dark-green  { --bg:#0a1a0f; }
   .theme-dark-blue   { --bg:#000814; }
   .theme-dark-cyan   { --bg:#051a1f; }
@@ -86,30 +71,22 @@
   .theme-light-blue  { --bg:#e3f0ff; }
   .theme-light-cyan  { --bg:#e0f7fa; }
   [class*="theme-"] { background-color: var(--bg) !important; }
-  [class*="theme-"] .bg-black,
-  [class*="theme-"] #screen-app,
-  [class*="theme-"] #mobile-chat-overlay,
-  [class*="theme-"] #mobile-chat-messages { background-color: var(--bg) !important; }
   [class*="theme-light-"] { color:#111 !important; }
   [class*="theme-light-"] .text-white { color:#111 !important; }
-  [class*="theme-light-"] .glass-panel { background:rgba(255,255,255,0.75) !important; border:1px solid rgba(0,0,0,0.1) !important; color:#111 !important; }
+  [class*="theme-light-"] .glass-panel { background:rgba(255,255,255,0.80) !important; color:#111 !important; }
   [class*="theme-light-"] .ios-search-input { color:#111 !important; }
-  [class*="theme-light-"] .msg-in { background:rgba(0,0,0,0.06) !important; color:#111 !important; }
+  [class*="theme-light-"] .msg-in { background:rgba(0,0,0,0.07) !important; color:#111 !important; }
   [class*="theme-light-"] .tab-inactive { color:#888 !important; }
 
-  /* Unread badge */
-  .unread-badge { background:#FF3B30; color:white; font-size:11px; font-weight:700; min-width:20px; height:20px; border-radius:10px; display:flex; align-items:center; justify-content:center; padding:0 5px; }
-
-  /* Media lightbox */
-  #lightbox { position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; }
-  #lightbox img, #lightbox video { max-width:95vw; max-height:90vh; border-radius:12px; }
+  /* Code box */
+  .code-display { background:rgba(10,132,255,0.15); border:1px solid rgba(10,132,255,0.3); border-radius:14px; padding:16px 24px; text-align:center; margin-bottom:16px; }
+  .code-display .code-num { font-size:36px; font-weight:700; color:#0A84FF; letter-spacing:6px; display:block; }
+  .code-display .code-hint { font-size:12px; color:#8E8E93; margin-top:4px; }
 </style>
 </head>
 <body class="h-screen w-screen flex flex-col bg-black theme-dark-blue" id="app-body">
 
-<!-- ═══════════════════════════ AUTH SCREENS ═══════════════════════════ -->
-
-<!-- LOGIN -->
+<!-- ═══════════ AUTH: PHONE ═══════════ -->
 <div id="screen-login" class="w-full h-full flex flex-col items-center justify-center absolute inset-0 z-50 bg-black px-6 fade-in">
   <div class="w-24 h-24 bg-[#0A84FF] rounded-full flex items-center justify-center mb-8 shadow-lg shadow-blue-500/20">
     <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
@@ -117,54 +94,52 @@
   <h1 class="text-3xl font-bold mb-2">Telegram</h1>
   <p class="text-gray-400 text-center mb-10">Введите номер телефона</p>
   <div class="w-full max-w-xs space-y-4">
-    <input type="tel" id="phone-input" class="w-full glass-panel rounded-xl p-3 text-center text-white bg-transparent border border-white/10 focus:border-[#0A84FF] outline-none text-lg" value="+7 " placeholder="+7 999 000-00-00">
-    <button id="btn-get-code" class="w-full ios-btn uppercase text-sm tracking-wide">Получить код</button>
+    <input type="tel" id="phone-input" class="w-full glass-panel rounded-xl p-3 text-center text-white bg-transparent outline-none text-lg" placeholder="+7 999 000-00-00" style="-webkit-user-select:auto;user-select:auto;">
+    <button id="btn-get-code" class="w-full ios-btn uppercase text-sm tracking-wide" onclick="submitPhone()">Получить код</button>
   </div>
 </div>
 
-<!-- CODE -->
+<!-- ═══════════ AUTH: CODE ═══════════ -->
 <div id="screen-code" class="hidden-screen w-full h-full flex flex-col absolute inset-0 z-50 bg-black">
   <div class="flex items-center p-4 pt-12">
-    <button onclick="goToScreen('screen-login')" class="text-[#0A84FF] flex items-center gap-1 text-lg">
+    <button onclick="goScreen('screen-login')" class="text-[#0A84FF] flex items-center gap-1 text-lg">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
   </div>
-  <div class="flex-1 flex flex-col items-center px-6 pt-8">
-    <h2 class="text-2xl font-bold mb-3">Код из SMS</h2>
-    <p class="text-gray-400 mb-8 text-center">Мы отправили код на <span id="display-phone" class="text-white font-medium"></span></p>
-    <input type="number" id="code-input" maxlength="5" class="w-40 text-center text-4xl tracking-[0.3em] bg-transparent border-b-2 border-[#0A84FF] focus:outline-none pb-2 font-bold mb-8">
-    <button id="btn-verify" class="w-full max-w-xs ios-btn uppercase text-sm disabled:opacity-50" disabled>Подтвердить</button>
-    <div id="timer-block" class="mt-8 text-gray-400 hidden text-center">
-      <button onclick="resendCode()" class="text-[#0A84FF] text-base">Отправить повторно</button>
-      <p class="mt-2">Через <span id="countdown">59</span> сек.</p>
+  <div class="flex-1 flex flex-col items-center px-6 pt-6">
+    <h2 class="text-2xl font-bold mb-2">Код из SMS</h2>
+    <p class="text-gray-400 mb-6 text-center">Мы отправили код на <span id="display-phone" class="text-white font-medium"></span></p>
+    <!-- Code shown here -->
+    <div class="code-display w-full max-w-xs">
+      <span class="code-num" id="shown-code">----</span>
+      <p class="code-hint">Ваш код подтверждения</p>
     </div>
+    <input type="number" id="code-input" maxlength="4" class="w-40 text-center text-4xl tracking-[0.3em] bg-transparent border-b-2 border-[#0A84FF] focus:outline-none pb-2 font-bold mb-8" style="-webkit-user-select:auto;user-select:auto;" placeholder="">
+    <button id="btn-verify" class="w-full max-w-xs ios-btn uppercase text-sm" onclick="submitCode()">Подтвердить</button>
+    <button class="mt-4 text-[#0A84FF] text-sm" onclick="goScreen('screen-login')">Изменить номер</button>
   </div>
 </div>
 
-<!-- REGISTER USERNAME -->
+<!-- ═══════════ AUTH: USERNAME ═══════════ -->
 <div id="screen-username" class="hidden-screen w-full h-full flex flex-col absolute inset-0 z-50 bg-black">
-  <div class="flex-1 flex flex-col items-center px-6 pt-20">
+  <div class="flex-1 flex flex-col items-center px-6 pt-16">
     <div class="w-20 h-20 rounded-full glass-panel flex items-center justify-center text-3xl mb-6">👤</div>
     <h2 class="text-2xl font-bold mb-2">Ваш профиль</h2>
-    <p class="text-gray-400 mb-8 text-center text-sm">Заполните данные. Username можно найти другим пользователям.</p>
+    <p class="text-gray-400 mb-8 text-center text-sm">Заполните данные профиля.</p>
     <div class="w-full max-w-xs space-y-3">
-      <div class="glass-panel rounded-xl px-4 py-3">
-        <input type="text" id="fname-input" class="w-full bg-transparent focus:outline-none text-white text-lg" placeholder="Имя *">
-      </div>
-      <div class="glass-panel rounded-xl px-4 py-3">
-        <input type="text" id="lname-input" class="w-full bg-transparent focus:outline-none text-white text-lg" placeholder="Фамилия">
-      </div>
+      <div class="glass-panel rounded-xl px-4 py-3"><input type="text" id="fname-input" class="w-full bg-transparent focus:outline-none text-white text-lg" placeholder="Имя *" style="-webkit-user-select:auto;user-select:auto;"></div>
+      <div class="glass-panel rounded-xl px-4 py-3"><input type="text" id="lname-input" class="w-full bg-transparent focus:outline-none text-white text-lg" placeholder="Фамилия" style="-webkit-user-select:auto;user-select:auto;"></div>
       <div class="glass-panel rounded-xl px-4 py-3 flex items-center">
         <span class="text-gray-400 mr-1 text-xl">@</span>
-        <input type="text" id="username-input" class="w-full bg-transparent focus:outline-none text-white text-lg" placeholder="username (мин. 4 символа)">
+        <input type="text" id="username-input" class="w-full bg-transparent focus:outline-none text-white text-lg" placeholder="username (мин. 4 символа)" style="-webkit-user-select:auto;user-select:auto;">
       </div>
       <div id="username-status" class="h-5 text-sm pl-2"></div>
-      <button id="btn-register" class="w-full ios-btn uppercase text-sm tracking-wide">Готово</button>
+      <button id="btn-register" class="w-full ios-btn uppercase text-sm tracking-wide" onclick="registerUser()">Готово</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════ MAIN APP ═══════════════════════════════ -->
+<!-- ═══════════ MAIN APP ═══════════ -->
 <div id="screen-app" class="hidden-screen w-full h-full flex flex-col bg-black relative">
 
   <!-- HEADER -->
@@ -178,7 +153,7 @@
     <div id="header-search">
       <div class="ios-search-container">
         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" id="main-search-input" onkeyup="handleGlobalSearch(this.value)" placeholder="Поиск" class="ios-search-input">
+        <input type="text" id="main-search-input" oninput="handleSearch(this.value)" placeholder="Поиск" class="ios-search-input" style="-webkit-user-select:auto;user-select:auto;">
       </div>
     </div>
   </div>
@@ -188,21 +163,15 @@
     <div id="tab-chats"    class="absolute inset-0 overflow-y-auto pb-20"><div id="chat-list"></div></div>
     <div id="tab-calls"    class="absolute inset-0 overflow-y-auto pb-20 hidden"><div id="calls-list"></div></div>
     <div id="tab-settings" class="absolute inset-0 overflow-y-auto pb-20 hidden">
-      <!-- Settings content -->
       <div class="glass-panel mx-4 rounded-2xl p-6 flex flex-col items-center mb-6 mt-2 relative">
         <div class="relative mb-4 cursor-pointer" onclick="openProfileView('me')">
-          <img id="settings-avatar-img" src="" class="w-24 h-24 rounded-full object-cover border-2 border-white/20 shadow-lg hidden">
           <div id="settings-avatar-placeholder" class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-3xl font-bold shadow-lg border-2 border-white/20">U</div>
-          <label class="absolute bottom-0 right-0 bg-[#0A84FF] p-1.5 rounded-full border-2 border-black cursor-pointer">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <input type="file" accept="image/*" class="hidden" onchange="uploadAvatar(this)">
-          </label>
         </div>
         <h2 class="text-2xl font-bold mb-1" id="settings-name-lg">User</h2>
         <p class="text-[#0A84FF] text-sm mb-4" id="settings-username-lg">@username</p>
         <div class="w-full grid grid-cols-2 gap-3">
           <button onclick="openSettingsPanel('panel-edit-profile')" class="ios-btn-secondary py-2.5 text-sm font-medium rounded-xl glass-card">Изменить</button>
-          <button onclick="openQRModal()" class="ios-btn-secondary py-2.5 text-sm font-medium rounded-xl glass-card flex items-center justify-center gap-2">QR-код</button>
+          <button onclick="showQRModal()" class="ios-btn-secondary py-2.5 text-sm font-medium rounded-xl glass-card">QR-код</button>
         </div>
       </div>
       <div class="mx-4 space-y-4 pb-4">
@@ -216,7 +185,7 @@
           <div class="p-4 flex items-center justify-between cursor-pointer" onclick="openSettingsPanel('panel-appearance')"><div class="flex items-center gap-3"><span class="text-xl">🎨</span><span>Оформление</span></div><svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
         </div>
         <div class="glass-panel rounded-2xl overflow-hidden">
-          <div class="p-4 text-red-500 flex items-center gap-3 cursor-pointer" onclick="logoutUser()"><span class="text-xl">🚪</span><span>Выйти</span></div>
+          <div class="p-4 text-red-400 flex items-center gap-3 cursor-pointer" onclick="logoutUser()"><span class="text-xl">🚪</span><span>Выйти</span></div>
         </div>
       </div>
     </div>
@@ -225,132 +194,64 @@
   <!-- TAB BAR -->
   <div class="absolute bottom-0 left-0 right-0 h-[85px] glass-panel border-t border-white/10 flex justify-around items-start pt-3 z-40">
     <button onclick="switchTab('chats')"    id="tab-btn-chats"    class="flex flex-col items-center gap-1 w-16"><svg class="w-7 h-7 tab-active"   fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span class="text-[10px] font-medium tab-active">Чаты</span></button>
-    <button onclick="switchTab('calls')"   id="tab-btn-calls"   class="flex flex-col items-center gap-1 w-16 relative"><svg class="w-7 h-7 tab-inactive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg><span class="text-[10px] font-medium tab-inactive">Звонки</span></button>
+    <button onclick="switchTab('calls')"    id="tab-btn-calls"    class="flex flex-col items-center gap-1 w-16"><svg class="w-7 h-7 tab-inactive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg><span class="text-[10px] font-medium tab-inactive">Звонки</span></button>
     <button onclick="switchTab('settings')" id="tab-btn-settings" class="flex flex-col items-center gap-1 w-16"><svg class="w-7 h-7 tab-inactive" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="text-[10px] font-medium tab-inactive">Настройки</span></button>
   </div>
 
   <!-- CHAT OVERLAY -->
-  <div id="mobile-chat-overlay" class="absolute inset-0 bg-black z-50 transform translate-x-full transition-transform duration-200 flex flex-col"
-       ondragover="event.preventDefault(); this.classList.add('drop-zone-active')"
-       ondragleave="this.classList.remove('drop-zone-active')"
-       ondrop="handleFileDrop(event)">
-    <!-- Chat header -->
+  <div id="mobile-chat-overlay" class="absolute inset-0 bg-black z-50 transform translate-x-full transition-transform duration-200 flex flex-col">
     <div class="h-[64px] glass-panel border-b border-white/10 flex items-center px-2 pt-2 shrink-0">
       <button onclick="closeChat()" class="p-2 text-[#0A84FF]">
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
-      <div class="flex-1 min-w-0 cursor-pointer flex items-center gap-3 ml-1" onclick="openProfileView(state.activeChatId)">
-        <div class="relative shrink-0">
-          <img id="chat-header-avatar-img" src="" class="w-10 h-10 rounded-full object-cover hidden">
-          <div id="chat-header-avatar" class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-base">U</div>
-          <div id="chat-online-dot" class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full hidden"></div>
-        </div>
+      <div class="flex-1 min-w-0 flex items-center gap-3 ml-1">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-base shrink-0" id="chat-header-avatar">U</div>
         <div>
-          <div id="mobile-chat-name" class="font-semibold text-white text-base truncate">User</div>
+          <div id="mobile-chat-name" class="font-semibold text-white text-base">User</div>
           <div id="mobile-chat-status" class="text-xs text-gray-400">в сети</div>
         </div>
       </div>
       <div class="flex gap-3 pr-2">
-        <button onclick="initiateCall('audio')" class="text-[#0A84FF] p-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></button>
-        <button onclick="initiateCall('video')" class="text-[#0A84FF] p-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+        <button onclick="logCall('audio')" class="text-[#0A84FF] p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+        </button>
+        <button onclick="logCall('video')" class="text-[#0A84FF] p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        </button>
       </div>
     </div>
-    <!-- Messages -->
-    <div id="mobile-chat-messages" class="flex-1 overflow-y-auto p-3 bg-black space-y-2"></div>
-    <!-- Typing indicator -->
+    <div id="mobile-chat-messages" class="flex-1 overflow-y-auto p-3 bg-black space-y-1"></div>
     <div id="typing-indicator" class="px-4 py-2 hidden">
-      <div class="flex items-center gap-2">
-        <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
-        <span class="text-xs text-gray-400 ml-1">печатает...</span>
-      </div>
+      <div class="flex items-center gap-2"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span><span class="text-xs text-gray-400 ml-1">печатает...</span></div>
     </div>
-    <!-- Input bar -->
     <div class="glass-panel border-t border-white/10 flex items-end px-2 py-2 gap-2 shrink-0">
       <label class="p-2 text-[#0A84FF] cursor-pointer shrink-0">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-        <input type="file" id="file-input" class="hidden" multiple accept="image/*,video/*,.pdf,.doc,.docx,.zip,.txt" onchange="handleFileSelect(this.files)">
+        <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFileSelect(this.files)">
       </label>
       <div id="file-preview-bar" class="hidden flex gap-2 overflow-x-auto py-1"></div>
-      <textarea id="mobile-msg-input" rows="1" placeholder="Сообщение..." class="flex-1 glass-panel rounded-2xl px-4 py-2 text-white text-base bg-transparent border border-white/10 focus:border-[#0A84FF] outline-none resize-none max-h-32" oninput="autoResizeTextarea(this); emitTyping()" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
-      <button id="mobile-send-btn" onclick="sendMessage()" class="p-2 text-[#0A84FF] shrink-0">
+      <textarea id="mobile-msg-input" rows="1" placeholder="Сообщение..." class="flex-1 glass-panel rounded-2xl px-4 py-2 text-white text-base bg-transparent border border-white/10 focus:border-[#0A84FF] outline-none resize-none max-h-32" style="-webkit-user-select:auto;user-select:auto;" oninput="autoResize(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+      <button onclick="sendMessage()" class="p-2 text-[#0A84FF] shrink-0">
         <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════ MODALS & PANELS ════════════════════════ -->
-
-<!-- INCOMING CALL -->
-<div id="incoming-call-overlay">
-  <div class="flex flex-col items-center mt-8">
-    <p class="text-gray-400 text-base mb-6" id="incoming-call-type">Входящий звонок</p>
-    <div class="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-5xl font-bold border-4 border-black shadow-2xl" id="incoming-caller-avatar">A</div>
-    <h2 class="text-2xl font-bold mt-4" id="incoming-caller-name">User</h2>
-    <p class="text-gray-400 mt-2" id="incoming-caller-username">@user</p>
-  </div>
-  <div class="flex gap-16 mb-16">
-    <button onclick="declineCall()" class="w-20 h-20 rounded-full bg-red-500 flex flex-col items-center justify-center gap-1 shadow-lg">
-      <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.12-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-      <span class="text-white text-xs font-medium">Отклонить</span>
-    </button>
-    <button onclick="acceptCall()" class="w-20 h-20 rounded-full bg-green-500 flex flex-col items-center justify-center gap-1 shadow-lg">
-      <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.12-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-      <span class="text-white text-xs font-medium">Принять</span>
-    </button>
-  </div>
-</div>
-
-<!-- ACTIVE CALL SCREEN -->
-<div id="call-screen" class="fixed inset-0 z-[100] bg-black hidden flex-col">
-  <!-- Video area -->
-  <div class="flex-1 relative bg-gray-900">
-    <video id="remote-video" autoplay playsinline class="w-full h-full object-cover"></video>
-    <div class="absolute top-4 right-4 w-24 h-32 bg-black rounded-xl overflow-hidden border border-white/20 shadow-lg">
-      <video id="local-video" autoplay playsinline muted class="w-full h-full object-cover"></video>
-    </div>
-    <!-- Call info -->
-    <div class="absolute top-4 left-4">
-      <div class="text-white font-bold text-lg" id="call-peer-name">User</div>
-      <div class="text-gray-300 text-sm" id="call-timer-display">0:00</div>
-      <div class="text-gray-400 text-xs" id="call-status-text">Подключение...</div>
-    </div>
-  </div>
-  <!-- Controls -->
-  <div class="h-36 glass-panel flex items-center justify-around px-8 border-t border-white/10">
-    <button id="btn-toggle-mic" onclick="toggleMic()" class="w-16 h-16 rounded-full glass-panel flex flex-col items-center justify-center gap-1">
-      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-      <span class="text-[10px] text-gray-300">Микрофон</span>
-    </button>
-    <button onclick="endCall()" class="w-20 h-20 rounded-full bg-red-500 flex flex-col items-center justify-center gap-1 shadow-lg shadow-red-500/40">
-      <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.12-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-      <span class="text-[10px] text-white">Завершить</span>
-    </button>
-    <button id="btn-toggle-cam" onclick="toggleCamera()" class="w-16 h-16 rounded-full glass-panel flex flex-col items-center justify-center gap-1">
-      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-      <span class="text-[10px] text-gray-300">Камера</span>
-    </button>
-  </div>
-</div>
+<!-- ═══════════ PANELS ═══════════ -->
 
 <!-- FIND USER PANEL -->
-<div id="panel-find-user" class="fixed inset-0 z-[85] bg-black transform translate-x-full transition-transform duration-300 flex flex-col">
+<div id="panel-find-user" class="fixed inset-0 z-[70] bg-black transform translate-x-full transition-transform duration-300 flex flex-col">
   <div class="h-[60px] glass-panel border-b border-white/10 flex items-center px-2 pt-2">
     <button onclick="closeSettingsPanel('panel-find-user')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button>
-    <span class="font-semibold text-base flex-1 text-center pr-10">Найти пользователя</span>
+    <span class="font-semibold flex-1 text-center pr-10">Новый чат</span>
   </div>
   <div class="p-4 flex-1 overflow-y-auto">
-    <div class="flex gap-2 mb-4">
-      <div class="flex-1 glass-panel rounded-xl px-4 py-3 flex items-center border border-white/10">
-        <span class="text-gray-400 mr-1">@</span>
-        <input type="text" id="find-user-input" placeholder="username" class="bg-transparent text-white outline-none w-full text-base" oninput="searchUserByUsername(this.value)">
-      </div>
+    <div class="glass-panel rounded-xl px-4 py-3 mb-4 flex items-center border border-white/10">
+      <span class="text-gray-400 mr-2">@</span>
+      <input type="text" id="find-user-input" placeholder="Поиск по имени..." class="bg-transparent text-white outline-none w-full text-base" style="-webkit-user-select:auto;user-select:auto;" oninput="searchContacts(this.value)">
     </div>
-    <div id="find-user-results" class="space-y-3 mb-4"></div>
-    <div class="glass-panel rounded-xl p-4 border border-white/10">
-      <div class="text-xs text-gray-400 mb-3 uppercase tracking-wide font-medium">Все пользователи</div>
-      <div id="all-users-list" class="space-y-3"></div>
-    </div>
+    <div id="find-user-results" class="space-y-3"></div>
   </div>
 </div>
 
@@ -360,28 +261,25 @@
     <button onclick="closeSettingsPanel('panel-profile')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button>
     <span class="font-semibold text-base flex-1 text-center pr-10" id="profile-title">Профиль</span>
   </div>
-  <div class="flex-1 overflow-y-auto bg-black">
+  <div class="flex-1 overflow-y-auto bg-black pb-24">
     <div class="glass-panel p-6 flex flex-col items-center border-b border-white/10">
-      <img id="profile-avatar-img-lg" src="" class="w-24 h-24 rounded-full object-cover border-2 border-white/20 shadow-lg mb-4 hidden">
       <div id="profile-avatar-lg" class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-4xl font-bold mb-4 shadow-lg border-2 border-white/20">U</div>
       <h2 class="text-2xl font-bold" id="profile-name-lg">User</h2>
       <p class="text-[#0A84FF] mt-1" id="profile-status-lg">в сети</p>
     </div>
     <div class="p-4 space-y-3">
-      <div class="glass-panel rounded-xl p-4"><div class="text-xs text-[#0A84FF] mb-1 uppercase tracking-wide">Username</div><div id="profile-user-lg">@user</div></div>
-      <div class="glass-panel rounded-xl p-4" id="profile-phone-block"><div class="text-xs text-[#0A84FF] mb-1 uppercase tracking-wide">Телефон</div><div id="profile-phone-lg">+7...</div></div>
+      <div class="glass-panel rounded-xl p-4"><div class="text-xs text-[#0A84FF] mb-1 uppercase tracking-wide">Username</div><div id="profile-user-lg" class="text-white">@user</div></div>
+      <div class="glass-panel rounded-xl p-4" id="profile-phone-block"><div class="text-xs text-[#0A84FF] mb-1 uppercase tracking-wide">Телефон</div><div id="profile-phone-lg" class="text-white">—</div></div>
       <div class="glass-panel rounded-xl p-4"><div class="text-xs text-[#0A84FF] mb-1 uppercase tracking-wide">Bio</div><div class="text-gray-300" id="profile-bio-lg">Нет био</div></div>
     </div>
-    <div id="profile-gifts-section" class="p-4">
+    <div class="p-4">
       <div class="text-xs text-gray-400 mb-3 uppercase tracking-wide font-medium">Подарки</div>
-      <div id="profile-gifts-grid" class="grid grid-cols-3 gap-2 pb-24"></div>
+      <div id="profile-gifts-grid" class="grid grid-cols-3 gap-2"></div>
     </div>
   </div>
   <div id="profile-actions" class="p-4 glass-panel border-t border-white/10 hidden absolute bottom-0 left-0 right-0 flex gap-3">
-    <button onclick="openChatFromProfile()" class="flex-1 ios-btn-secondary py-3 rounded-xl font-medium flex items-center justify-center gap-2 border border-white/10">
-      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg> Написать
-    </button>
-    <button onclick="openSendGiftModal(null, state.currentProfileId)" class="flex-1 ios-btn py-3 rounded-xl font-medium flex items-center justify-center gap-2">🎁 Подарок</button>
+    <button onclick="openChatFromProfile()" class="flex-1 ios-btn-secondary py-3 rounded-xl font-medium flex items-center justify-center gap-2 border border-white/10">✉️ Написать</button>
+    <button onclick="openGiftModalForProfile()" class="flex-1 ios-btn py-3 rounded-xl font-medium flex items-center justify-center gap-2">🎁 Подарок</button>
   </div>
 </div>
 
@@ -393,10 +291,10 @@
     <button onclick="saveProfile()" class="text-[#0A84FF] font-bold">Готово</button>
   </div>
   <div class="p-4 space-y-4 bg-black flex-1">
-    <div class="glass-panel rounded-xl p-1"><input type="text" id="edit-fname" class="w-full bg-transparent p-3 focus:outline-none text-white" placeholder="Имя"></div>
-    <div class="glass-panel rounded-xl p-1"><input type="text" id="edit-lname" class="w-full bg-transparent p-3 focus:outline-none text-white" placeholder="Фамилия"></div>
-    <div class="glass-panel rounded-xl p-1 flex items-center"><span class="text-gray-500 ml-3 mr-2">@</span><input type="text" id="edit-user" class="w-full bg-transparent p-3 focus:outline-none text-white" placeholder="username"></div>
-    <div class="glass-panel rounded-xl p-1"><textarea id="edit-bio" rows="3" class="w-full bg-transparent p-3 focus:outline-none text-white resize-none" placeholder="О себе"></textarea></div>
+    <div class="glass-panel rounded-xl p-1"><input type="text" id="edit-fname" class="w-full bg-transparent p-3 focus:outline-none text-white" placeholder="Имя" style="-webkit-user-select:auto;user-select:auto;"></div>
+    <div class="glass-panel rounded-xl p-1"><input type="text" id="edit-lname" class="w-full bg-transparent p-3 focus:outline-none text-white" placeholder="Фамилия" style="-webkit-user-select:auto;user-select:auto;"></div>
+    <div class="glass-panel rounded-xl p-1 flex items-center"><span class="text-gray-500 ml-3 mr-2">@</span><input type="text" id="edit-user" class="w-full bg-transparent p-3 focus:outline-none text-white" placeholder="username" style="-webkit-user-select:auto;user-select:auto;"></div>
+    <div class="glass-panel rounded-xl p-1"><textarea id="edit-bio" rows="3" class="w-full bg-transparent p-3 focus:outline-none text-white resize-none" placeholder="О себе" style="-webkit-user-select:auto;user-select:auto;"></textarea></div>
   </div>
 </div>
 
@@ -408,11 +306,14 @@
   </div>
   <div class="flex-1 overflow-y-auto p-4 bg-black">
     <div class="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl p-6 mb-6 text-center border border-white/20">
-      <div class="text-sm mb-1">Баланс</div><div class="text-5xl font-bold flex items-center justify-center gap-2"><span id="star-balance-lg">0</span><span>★</span></div>
+      <div class="text-sm mb-1">Баланс</div>
+      <div class="text-5xl font-bold flex items-center justify-center gap-2"><span id="star-balance-lg">0</span><span>★</span></div>
     </div>
     <div class="grid grid-cols-2 gap-3 mb-6">
-      <button onclick="buyStars(100)" class="glass-panel p-4 rounded-xl border border-white/10"><div class="font-bold text-xl text-yellow-400">100 ★</div><div class="text-xs text-gray-400 mt-1">≈ 100 ₽</div></button>
-      <button onclick="buyStars(500)" class="glass-panel p-4 rounded-xl border border-white/10"><div class="font-bold text-xl text-yellow-400">500 ★</div><div class="text-xs text-gray-400 mt-1">≈ 500 ₽</div></button>
+      <button onclick="buyStars(100)" class="glass-panel p-4 rounded-xl border border-white/10 active:opacity-70"><div class="font-bold text-xl text-yellow-400">100 ★</div><div class="text-xs text-gray-400 mt-1">≈ 100 ₽</div></button>
+      <button onclick="buyStars(500)" class="glass-panel p-4 rounded-xl border border-white/10 active:opacity-70"><div class="font-bold text-xl text-yellow-400">500 ★</div><div class="text-xs text-gray-400 mt-1">≈ 500 ₽</div></button>
+      <button onclick="buyStars(1000)" class="glass-panel p-4 rounded-xl border border-white/10 active:opacity-70"><div class="font-bold text-xl text-yellow-400">1000 ★</div><div class="text-xs text-gray-400 mt-1">≈ 999 ₽</div></button>
+      <button onclick="buyStars(5000)" class="glass-panel p-4 rounded-xl border border-white/10 active:opacity-70"><div class="font-bold text-xl text-yellow-400">5000 ★</div><div class="text-xs text-gray-400 mt-1">≈ 4999 ₽</div></button>
     </div>
     <h3 class="font-bold text-lg mb-3">Магазин подарков</h3>
     <div class="grid grid-cols-3 gap-3" id="gift-shop-grid"></div>
@@ -431,48 +332,68 @@
       <div><div class="font-bold text-lg" id="modal-gift-name">Gift</div><div class="text-sm text-yellow-400"><span id="modal-gift-price">0</span> ★</div></div>
     </div>
     <label class="text-xs text-gray-400 mb-2 block uppercase tracking-wide">Кому:</label>
-    <select id="gift-recipient-select" class="w-full glass-panel rounded-xl p-4 mb-5 bg-transparent text-white border border-white/10 appearance-none"></select>
-    <button onclick="confirmSendGift()" class="w-full ios-btn py-4 rounded-xl font-bold text-lg">Отправить</button>
+    <select id="gift-recipient-select" class="w-full glass-panel rounded-xl p-4 mb-5 bg-transparent text-white border border-white/10 appearance-none" style="background:#1c1c1e;"></select>
+    <button onclick="confirmSendGift()" class="w-full ios-btn py-4 rounded-xl font-bold text-lg">Отправить 🎁</button>
   </div>
 </div>
 
-<!-- PRIVACY / APPEARANCE / NOTIFICATIONS minimal panels -->
-<div id="panel-privacy"       class="fixed inset-0 z-[80] bg-black transform translate-x-full transition-transform duration-300 flex flex-col"><div class="h-[60px] glass-panel border-b border-white/10 flex items-center px-2 pt-2"><button onclick="closeSettingsPanel('panel-privacy')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button><span class="font-semibold flex-1 text-center pr-10">Конфиденциальность</span></div><div class="flex-1 p-4 space-y-3 bg-black"><div class="glass-panel rounded-xl overflow-hidden"><div class="p-4 border-b border-white/10 flex justify-between items-center cursor-pointer" onclick="toggleSetting(this)"><span>Номер телефона</span><span class="text-[#0A84FF] text-sm">Все</span></div><div class="p-4 flex justify-between items-center cursor-pointer" onclick="toggleSetting(this)"><span>Последняя активность</span><span class="text-[#0A84FF] text-sm">Все</span></div></div></div></div>
+<!-- PRIVACY PANEL -->
+<div id="panel-privacy" class="fixed inset-0 z-[80] bg-black transform translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="h-[60px] glass-panel border-b border-white/10 flex items-center px-2 pt-2">
+    <button onclick="closeSettingsPanel('panel-privacy')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button>
+    <span class="font-semibold flex-1 text-center pr-10">Конфиденциальность</span>
+  </div>
+  <div class="flex-1 p-4 space-y-3 bg-black">
+    <div class="glass-panel rounded-xl overflow-hidden">
+      <div class="p-4 border-b border-white/10 flex justify-between items-center cursor-pointer" onclick="cyclePrivacy(this)"><span>Номер телефона</span><span class="text-[#0A84FF] text-sm">Мои контакты</span></div>
+      <div class="p-4 border-b border-white/10 flex justify-between items-center cursor-pointer" onclick="cyclePrivacy(this)"><span>Последняя активность</span><span class="text-[#0A84FF] text-sm">Все</span></div>
+      <div class="p-4 flex justify-between items-center cursor-pointer" onclick="cyclePrivacy(this)"><span>Фото профиля</span><span class="text-[#0A84FF] text-sm">Все</span></div>
+    </div>
+    <div class="glass-panel rounded-xl overflow-hidden">
+      <div class="p-4 flex justify-between items-center"><span>Двухэтапная проверка</span><div class="toggle-switch" onclick="this.classList.toggle('toggle-active')"></div></div>
+    </div>
+  </div>
+</div>
 
-<div id="panel-notifications"  class="fixed inset-0 z-[80] bg-black transform translate-x-full transition-transform duration-300 flex flex-col"><div class="h-[60px] glass-panel border-b border-white/10 flex items-center px-2 pt-2"><button onclick="closeSettingsPanel('panel-notifications')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button><span class="font-semibold flex-1 text-center pr-10">Уведомления</span></div><div class="flex-1 p-4 bg-black"><div class="glass-panel rounded-xl overflow-hidden"><div class="p-4 border-b border-white/10 flex justify-between items-center"><span>Звук</span><div class="toggle-switch toggle-active" onclick="this.classList.toggle('toggle-active')"></div></div><div class="p-4 flex justify-between items-center"><span>Вибрация</span><div class="toggle-switch toggle-active" onclick="this.classList.toggle('toggle-active')"></div></div></div></div></div>
+<!-- NOTIFICATIONS PANEL -->
+<div id="panel-notifications" class="fixed inset-0 z-[80] bg-black transform translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="h-[60px] glass-panel border-b border-white/10 flex items-center px-2 pt-2">
+    <button onclick="closeSettingsPanel('panel-notifications')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button>
+    <span class="font-semibold flex-1 text-center pr-10">Уведомления</span>
+  </div>
+  <div class="flex-1 p-4 bg-black">
+    <div class="glass-panel rounded-xl overflow-hidden">
+      <div class="p-4 border-b border-white/10 flex justify-between items-center"><span>Звук</span><div class="toggle-switch toggle-active" onclick="this.classList.toggle('toggle-active')"></div></div>
+      <div class="p-4 border-b border-white/10 flex justify-between items-center"><span>Вибрация</span><div class="toggle-switch toggle-active" onclick="this.classList.toggle('toggle-active')"></div></div>
+      <div class="p-4 flex justify-between items-center"><span>Предпросмотр</span><div class="toggle-switch toggle-active" onclick="this.classList.toggle('toggle-active')"></div></div>
+    </div>
+  </div>
+</div>
 
+<!-- APPEARANCE PANEL -->
 <div id="panel-appearance" class="fixed inset-0 z-[80] bg-black transform translate-x-full transition-transform duration-300 flex flex-col">
-  <div class="h-[60px] glass-panel border-b border-white/10 flex items-center px-2 pt-2"><button onclick="closeSettingsPanel('panel-appearance')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button><span class="font-semibold flex-1 text-center pr-10">Оформление</span></div>
-  <div class="p-4 flex-1 overflow-y-auto">
+  <div class="h-[60px] glass-panel border-b border-white/10 flex items-center px-2 pt-2">
+    <button onclick="closeSettingsPanel('panel-appearance')" class="p-2 mr-2 text-[#0A84FF] flex items-center gap-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg><span>Назад</span></button>
+    <span class="font-semibold flex-1 text-center pr-10">Оформление</span>
+  </div>
+  <div class="p-4 flex-1 overflow-y-auto bg-black">
     <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wide mb-3">Тёмные темы</h3>
     <div class="grid grid-cols-3 gap-3 mb-5">
-      <div onclick="setTheme('theme-dark-green')" class="h-20 rounded-xl cursor-pointer hover:scale-105 transition-transform border-2 border-white/20 flex flex-col items-center justify-center gap-1" style="background:#0a1a0f"><div class="w-5 h-5 rounded-full" style="background:#2ecc71"></div><span class="text-xs text-white/70">Зелёная</span></div>
-      <div onclick="setTheme('theme-dark-blue')"  class="h-20 rounded-xl cursor-pointer hover:scale-105 transition-transform border-2 border-[#0A84FF] flex flex-col items-center justify-center gap-1" style="background:#000814"><div class="w-5 h-5 rounded-full" style="background:#0A84FF"></div><span class="text-xs text-white/70">Синяя</span></div>
-      <div onclick="setTheme('theme-dark-cyan')"  class="h-20 rounded-xl cursor-pointer hover:scale-105 transition-transform border-2 border-white/20 flex flex-col items-center justify-center gap-1" style="background:#051a1f"><div class="w-5 h-5 rounded-full" style="background:#00b4d8"></div><span class="text-xs text-white/70">Голубая</span></div>
+      <div onclick="setTheme('theme-dark-green')" class="h-20 rounded-xl cursor-pointer border-2 border-white/20 flex flex-col items-center justify-center gap-1 active:opacity-70" style="background:#0a1a0f"><div class="w-5 h-5 rounded-full" style="background:#2ecc71"></div><span class="text-xs text-white/70">Зелёная</span></div>
+      <div onclick="setTheme('theme-dark-blue')"  class="h-20 rounded-xl cursor-pointer border-2 border-[#0A84FF] flex flex-col items-center justify-center gap-1 active:opacity-70" style="background:#000814"><div class="w-5 h-5 rounded-full" style="background:#0A84FF"></div><span class="text-xs text-white/70">Синяя</span></div>
+      <div onclick="setTheme('theme-dark-cyan')"  class="h-20 rounded-xl cursor-pointer border-2 border-white/20 flex flex-col items-center justify-center gap-1 active:opacity-70" style="background:#051a1f"><div class="w-5 h-5 rounded-full" style="background:#00b4d8"></div><span class="text-xs text-white/70">Голубая</span></div>
     </div>
     <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wide mb-3">Светлые темы</h3>
     <div class="grid grid-cols-3 gap-3">
-      <div onclick="setTheme('theme-light-green')" class="h-20 rounded-xl cursor-pointer hover:scale-105 transition-transform border-2 border-gray-300 flex flex-col items-center justify-center gap-1" style="background:#e8f5e9"><div class="w-5 h-5 rounded-full" style="background:#27ae60"></div><span class="text-xs text-black/60">Зелёная</span></div>
-      <div onclick="setTheme('theme-light-blue')"  class="h-20 rounded-xl cursor-pointer hover:scale-105 transition-transform border-2 border-gray-300 flex flex-col items-center justify-center gap-1" style="background:#e3f0ff"><div class="w-5 h-5 rounded-full" style="background:#0A84FF"></div><span class="text-xs text-black/60">Синяя</span></div>
-      <div onclick="setTheme('theme-light-cyan')"  class="h-20 rounded-xl cursor-pointer hover:scale-105 transition-transform border-2 border-gray-300 flex flex-col items-center justify-center gap-1" style="background:#e0f7fa"><div class="w-5 h-5 rounded-full" style="background:#00b4d8"></div><span class="text-xs text-black/60">Голубая</span></div>
+      <div onclick="setTheme('theme-light-green')" class="h-20 rounded-xl cursor-pointer border-2 border-gray-300 flex flex-col items-center justify-center gap-1 active:opacity-70" style="background:#e8f5e9"><div class="w-5 h-5 rounded-full" style="background:#27ae60"></div><span class="text-xs text-black/60">Зелёная</span></div>
+      <div onclick="setTheme('theme-light-blue')"  class="h-20 rounded-xl cursor-pointer border-2 border-gray-300 flex flex-col items-center justify-center gap-1 active:opacity-70" style="background:#e3f0ff"><div class="w-5 h-5 rounded-full" style="background:#0A84FF"></div><span class="text-xs text-black/60">Синяя</span></div>
+      <div onclick="setTheme('theme-light-cyan')"  class="h-20 rounded-xl cursor-pointer border-2 border-gray-300 flex flex-col items-center justify-center gap-1 active:opacity-70" style="background:#e0f7fa"><div class="w-5 h-5 rounded-full" style="background:#00b4d8"></div><span class="text-xs text-black/60">Голубая</span></div>
     </div>
   </div>
 </div>
 
-<!-- QR MODAL -->
-<div id="qr-modal" class="fixed inset-0 z-[100] bg-black/80 hidden flex items-center justify-center backdrop-blur-md">
-  <div class="glass-panel w-[300px] rounded-3xl p-6 flex flex-col items-center relative slide-up border-2 border-white/20">
-    <button onclick="document.getElementById('qr-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    <h3 class="text-xl font-bold mb-4">Мой QR-код</h3>
-    <div id="qrcode" class="mb-4 bg-white p-2 rounded-xl"></div>
-    <div class="text-lg font-mono text-[#0A84FF]" id="qr-username-display">@user</div>
-  </div>
-</div>
-
-<!-- MEDIA LIGHTBOX -->
-<div id="lightbox" onclick="this.style.display='none'">
-  <div id="lightbox-content"></div>
-</div>
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="this.style.display='none'"><div id="lightbox-content"></div></div>
 
 <!-- SMS TOAST -->
 <div id="sms-toast" class="fixed top-[-100px] left-4 right-4 glass-panel p-4 rounded-2xl shadow-2xl z-[200] flex items-center gap-3 transition-all duration-500 border-2 border-white/20">
@@ -480,1199 +401,556 @@
   <div><div class="text-xs text-gray-400">Telegram • Сейчас</div><div class="text-white">Код: <span id="toast-code" class="text-[#0A84FF] font-bold text-lg tracking-widest">----</span></div></div>
 </div>
 
-<!-- NEW MESSAGE TOAST -->
+<!-- MSG TOAST -->
 <div id="msg-toast" class="fixed top-[-100px] left-4 right-4 glass-panel p-3 rounded-2xl shadow-2xl z-[200] flex items-center gap-3 transition-all duration-500 border border-white/20 cursor-pointer" onclick="openToastChat()">
   <div class="w-10 h-10 rounded-full bg-[#0A84FF] flex items-center justify-center text-white font-bold text-base shrink-0" id="msg-toast-avatar">A</div>
-  <div class="flex-1 min-w-0"><div class="text-sm font-semibold text-white" id="msg-toast-name">User</div><div class="text-xs text-gray-400 truncate" id="msg-toast-preview">Сообщение...</div></div>
+  <div class="flex-1 min-w-0">
+    <div class="text-sm font-semibold text-white" id="msg-toast-name">User</div>
+    <div class="text-xs text-gray-400 truncate" id="msg-toast-preview">Сообщение...</div>
+  </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════════════════════════ -->
+<!-- QR MODAL -->
+<div id="qr-modal" class="fixed inset-0 z-[100] bg-black/80 hidden flex items-center justify-center backdrop-blur-md">
+  <div class="glass-panel w-[300px] rounded-3xl p-6 flex flex-col items-center relative slide-up border-2 border-white/20">
+    <button onclick="document.getElementById('qr-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 text-xl">✕</button>
+    <h3 class="text-xl font-bold mb-4">Мой QR-код</h3>
+    <div class="mb-4 bg-white p-4 rounded-xl" id="qr-canvas-wrap">
+      <canvas id="qr-canvas" width="180" height="180"></canvas>
+    </div>
+    <div class="text-lg font-mono text-[#0A84FF]" id="qr-username-display">@user</div>
+  </div>
+</div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
 <script>
 'use strict';
 
-// ─────────────────────────────────────────
-// CONFIG
-// ─────────────────────────────────────────
-const API = ''; // same origin
-const TOKEN_KEY = 'tg_token';
-const USER_KEY  = 'tg_user';
+// ── ADMIN CONFIG ──
+const ADMIN_PHONE = '+79635307955';
+const ADMIN_STARS = 1000;
 
-// ─────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────
-const state = {
-  token: localStorage.getItem(TOKEN_KEY) || null,
-  user:  JSON.parse(localStorage.getItem(USER_KEY) || 'null'),
+// ── STATE ──
+const S = {
   phone: '',
-  generatedCode: null,
-  activeChatId: null,       // userId of open chat
-  activeChatUser: null,     // full user object
-  currentProfileId: null,
-  chats: [],                // { user, lastMessage, unreadCount }
-  messages: {},             // { userId: [msg, ...] }
+  loginCode: '',
+  user: null,
   stars: 0,
+  messages: {},      // { contactId: [{text,fromMe,time,type,gift,img}] }
+  contacts: [
+    { id:'c1', firstName:'Алексей', lastName:'',    username:'alex_tg',    bio:'Привет всем!',  online:true,  gifts:[] },
+    { id:'c2', firstName:'Мария',   lastName:'',    username:'maria_star', bio:'🌟',            online:false, gifts:[] },
+    { id:'c3', firstName:'Елена',   lastName:'',    username:'elena_v',    bio:'',              online:true,  gifts:[] },
+    { id:'c4', firstName:'Дмитрий', lastName:'',    username:'dmitry_k',   bio:'Dev 🛠',        online:false, gifts:[] },
+    { id:'c5', firstName:'Команда', lastName:'',    username:'team_group', bio:'Наша группа',  online:false, gifts:[] },
+  ],
+  chats: [],          // [{partner, lastMsg, unread, time}]
+  activeChat: null,   // contact id
   callLog: [],
-  pendingFilesToSend: [],
+  pendingFiles: [],
   selectedGift: null,
+  giftProfileTarget: null,
   giftCatalog: [
-    { id:'g1', icon:'🎁', name:'Коробка', price:50 },
-    { id:'g2', icon:'🌹', name:'Роза', price:100 },
+    { id:'g1', icon:'🎁', name:'Коробка',   price:50  },
+    { id:'g2', icon:'🌹', name:'Роза',      price:100 },
     { id:'g3', icon:'💎', name:'Кристалл', price:250 },
-    { id:'g4', icon:'🚀', name:'Ракета', price:500 },
-    { id:'g5', icon:'👑', name:'Корона', price:1000 },
+    { id:'g4', icon:'🚀', name:'Ракета',    price:500 },
+    { id:'g5', icon:'👑', name:'Корона',   price:1000 },
     { id:'g6', icon:'🦄', name:'Единорог', price:2500 },
   ],
 };
 
-// WebRTC
-let peerConnection = null;
-let localStream    = null;
-let currentCallType = 'audio';
-let currentCallPeerId = null;
-let callStartTime = null;
-let callTimerInterval = null;
-let incomingCallData = null;
-
-// Typing
-let typingTimeout = null;
 let msgToastChatId = null;
+let toastTimer = null;
 
-// ─────────────────────────────────────────
-// SOCKET.IO
-// ─────────────────────────────────────────
-let socket = null;
-
-function connectSocket() {
-  if (socket) socket.disconnect();
-  socket = io({ auth: { token: state.token }, transports: ['websocket'] });
-
-  socket.on('connect', () => {
-    console.log('🟢 Socket connected:', socket.id);
-  });
-
-  socket.on('connect_error', (err) => {
-    console.warn('Socket connect_error:', err.message);
-  });
-
-  // Online/offline
-  socket.on('user:online',  ({ userId }) => updateUserOnline(userId, true));
-  socket.on('user:offline', ({ userId }) => updateUserOnline(userId, false));
-  socket.on('users:online-list', (ids) => ids.forEach(id => updateUserOnline(id, true)));
-
-  // New message
-  socket.on('message:new', (msg) => {
-    handleIncomingMessage(msg);
-  });
-
-  // Read receipt
-  socket.on('message:read-ack', ({ conversationId }) => {
-    // Mark all my messages in that conversation as read
-    renderCurrentChat();
-  });
-
-  // Message deleted
-  socket.on('message:deleted', ({ messageId }) => {
-    // Remove from local cache
-    for (const uid in state.messages) {
-      state.messages[uid] = state.messages[uid].filter(m => m._id !== messageId);
-    }
-    renderCurrentChat();
-  });
-
-  // Typing
-  socket.on('typing:start', ({ userId }) => {
-    if (userId === state.activeChatId) {
-      document.getElementById('typing-indicator').classList.remove('hidden');
-    }
-  });
-  socket.on('typing:stop', ({ userId }) => {
-    if (userId === state.activeChatId) {
-      document.getElementById('typing-indicator').classList.add('hidden');
-    }
-  });
-
-  // ── WebRTC Call signaling ──
-  socket.on('call:incoming', (data) => handleIncomingCall(data));
-  socket.on('call:accepted', ({ by, roomId }) => handleCallAccepted(by));
-  socket.on('call:declined', () => handleCallDeclined());
-  socket.on('call:ended',    ({ duration }) => handleCallEnded(duration));
-  socket.on('call:ringing',  () => {
-    document.getElementById('call-status-text').textContent = 'Вызов...';
-  });
-
-  socket.on('webrtc:offer',         ({ offer, from }) => handleWebRTCOffer(offer, from));
-  socket.on('webrtc:answer',        ({ answer })       => handleWebRTCAnswer(answer));
-  socket.on('webrtc:ice-candidate', ({ candidate })    => handleICECandidate(candidate));
-
-  socket.on('call:peer-audio-toggle', ({ muted }) => {
-    document.getElementById('call-status-text').textContent = muted ? '🔇 Микрофон выключен' : 'В звонке';
-  });
+// ── SCREENS ──
+const SCREENS = ['screen-login','screen-code','screen-username','screen-app'];
+function goScreen(id) {
+  SCREENS.forEach(s => document.getElementById(s).classList.add('hidden-screen'));
+  const el = document.getElementById(id);
+  el.classList.remove('hidden-screen');
+  el.classList.add('fade-in');
 }
 
-// ─────────────────────────────────────────
-// HTTP HELPERS
-// ─────────────────────────────────────────
-async function apiFetch(path, opts = {}) {
-  const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
-  if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
-  const res = await fetch(API + path, { ...opts, headers });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || 'Request failed');
-  return data;
+// ── PHONE LOGIN ──
+function submitPhone() {
+  const raw = document.getElementById('phone-input').value.trim();
+  if (raw.replace(/\D/g,'').length < 7) { showToast('⚠️ Введите корректный номер'); return; }
+  S.phone = raw;
+  S.loginCode = String(Math.floor(1000 + Math.random() * 9000));
+  document.getElementById('display-phone').textContent = S.phone;
+  document.getElementById('shown-code').textContent = S.loginCode;
+  document.getElementById('toast-code').textContent = S.loginCode;
+  document.getElementById('sms-toast').style.top = '1rem';
+  setTimeout(() => { document.getElementById('sms-toast').style.top = '-100px'; }, 6000);
+  document.getElementById('code-input').value = '';
+  goScreen('screen-code');
+  setTimeout(() => document.getElementById('code-input').focus(), 200);
 }
 
-async function apiUpload(path, formData) {
-  const headers = {};
-  if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
-  const res = await fetch(API + path, { method: 'POST', headers, body: formData });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || 'Upload failed');
-  return data;
+// ── CODE VERIFY ──
+function submitCode() {
+  const entered = document.getElementById('code-input').value.trim();
+  if (!entered || entered.length < 4) { showToast('⚠️ Введите код'); return; }
+  if (entered !== S.loginCode) {
+    document.getElementById('code-input').style.borderColor = '#FF3B30';
+    setTimeout(() => { document.getElementById('code-input').style.borderColor = '#0A84FF'; }, 800);
+    showToast('❌ Неверный код');
+    return;
+  }
+  // Admin gets stars
+  if (S.phone.replace(/\D/g,'') === ADMIN_PHONE.replace(/\D/g,'')) {
+    S.stars = ADMIN_STARS;
+  }
+  goScreen('screen-username');
+  setTimeout(() => document.getElementById('fname-input').focus(), 200);
 }
 
-// ─────────────────────────────────────────
-// AUTH
-// ─────────────────────────────────────────
-const screens = {
-  login: document.getElementById('screen-login'),
-  code:  document.getElementById('screen-code'),
-  username: document.getElementById('screen-username'),
-  app:   document.getElementById('screen-app'),
-};
-
-function goToScreen(id) {
-  Object.values(screens).forEach(s => s.classList.add('hidden-screen'));
-  const key = id.replace('screen-','');
-  screens[key].classList.remove('hidden-screen');
-  screens[key].classList.add('fade-in');
+// ── REGISTER ──
+function registerUser() {
+  const fn = document.getElementById('fname-input').value.trim();
+  const ln = document.getElementById('lname-input').value.trim();
+  const un = document.getElementById('username-input').value.trim();
+  const st = document.getElementById('username-status');
+  if (!fn) { st.textContent = '⚠️ Введите имя'; st.className = 'h-5 text-sm pl-2 text-red-400'; return; }
+  if (un.length > 0 && un.length < 4) { st.textContent = '⚠️ Минимум 4 символа'; st.className = 'h-5 text-sm pl-2 text-red-400'; return; }
+  S.user = { id:'me', firstName:fn, lastName:ln, username:un || 'user'+Math.floor(Math.random()*9999), bio:'' };
+  initApp();
 }
 
-// Auto-login if token saved
-window.addEventListener('DOMContentLoaded', async () => {
+// ── INIT APP ──
+function initApp() {
   renderGiftShop();
-  if (state.token && state.user) {
-    try {
-      const data = await apiFetch('/api/auth/me');
-      state.user = data.user;
-      localStorage.setItem(USER_KEY, JSON.stringify(state.user));
-      state.stars = state.user.stars || 0;
-      connectSocket();
-      await loadConversations();
-      finishSetup();
-    } catch {
-      // Token invalid
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
-      state.token = null;
-    }
-  }
-});
-
-document.getElementById('btn-get-code').onclick = async () => {
-  const phone = document.getElementById('phone-input').value.trim();
-  if (phone.length < 7) return alert('Введите корректный номер');
-  state.phone = phone;
-  const btn = document.getElementById('btn-get-code');
-  btn.innerHTML = '<div class="mx-auto w-5 h-5 border-2 border-white/20 border-l-white rounded-full animate-spin"></div>';
-  try {
-    const data = await apiFetch('/api/auth/send-code', { method:'POST', body: JSON.stringify({ phone }) });
-    document.getElementById('display-phone').textContent = phone;
-    // Dev: show code in toast
-    if (data.code) {
-      document.getElementById('toast-code').textContent = data.code;
-      state.generatedCode = data.code;
-      showToast(); setTimeout(hideToast, 8000);
-    }
-    goToScreen('screen-code');
-    startTimer();
-  } catch(e) { alert(e.message); }
-  finally { btn.innerHTML = 'Получить код'; }
-};
-
-async function handleVerify() {
-  const code = document.getElementById('code-input').value.trim();
-  const btn = document.getElementById('btn-verify');
-  btn.innerHTML = '<div class="mx-auto w-5 h-5 border-2 border-white/20 border-l-white rounded-full animate-spin"></div>';
-  try {
-    const data = await apiFetch('/api/auth/verify', { method:'POST', body: JSON.stringify({ phone: state.phone, code }) });
-    if (data.action === 'login') {
-      // Existing user — go straight to app
-      state.token = data.token;
-      state.user  = data.user;
-      state.stars = data.user.stars || 0;
-      localStorage.setItem(TOKEN_KEY, state.token);
-      localStorage.setItem(USER_KEY, JSON.stringify(state.user));
-      connectSocket();
-      await loadConversations();
-      finishSetup();
-    } else {
-      // New user — set username
-      goToScreen('screen-username');
-    }
-  } catch(e) {
-    document.getElementById('code-input').classList.add('border-red-500');
-    setTimeout(() => document.getElementById('code-input').classList.remove('border-red-500'), 600);
-    alert(e.message);
-  } finally { btn.innerHTML = 'Подтвердить'; }
-}
-
-document.getElementById('btn-verify').onclick = handleVerify;
-document.getElementById('code-input').oninput = (e) => {
-  document.getElementById('btn-verify').disabled = e.target.value.length < 5;
-};
-document.getElementById('code-input').onkeypress = e => { if(e.key==='Enter') handleVerify(); };
-
-document.getElementById('btn-register').onclick = async () => {
-  const firstName = document.getElementById('fname-input').value.trim();
-  const lastName  = document.getElementById('lname-input').value.trim();
-  const username  = document.getElementById('username-input').value.trim();
-  const status    = document.getElementById('username-status');
-
-  if (!firstName) { status.textContent = '⚠️ Введите имя'; status.className='h-5 text-sm pl-2 text-red-400'; return; }
-  if (username.length < 4) { status.textContent = '⚠️ Минимум 4 символа'; status.className='h-5 text-sm pl-2 text-red-400'; return; }
-
-  try {
-    const data = await apiFetch('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ phone: state.phone, code: state.generatedCode || '00000', firstName, lastName, username, phoneVerified: true }),
-    });
-    state.token = data.token;
-    state.user  = data.user;
-    state.stars = 0;
-    localStorage.setItem(TOKEN_KEY, state.token);
-    localStorage.setItem(USER_KEY, JSON.stringify(state.user));
-    connectSocket();
-    finishSetup();
-  } catch(e) {
-    status.textContent = '❌ ' + e.message;
-    status.className = 'h-5 text-sm pl-2 text-red-400';
-  }
-};
-
-// Check username availability while typing
-let usernameCheckTimeout = null;
-document.getElementById('username-input').oninput = (e) => {
-  clearTimeout(usernameCheckTimeout);
-  const val = e.target.value.trim();
-  const status = document.getElementById('username-status');
-  if (val.length < 4) { status.textContent = ''; return; }
-  usernameCheckTimeout = setTimeout(async () => {
-    try {
-      const data = await apiFetch('/api/auth/check-username', { method:'POST', body: JSON.stringify({ username: val }) });
-      if (data.available) {
-        status.textContent = '✅ Доступно';
-        status.className = 'h-5 text-sm pl-2 text-green-400';
-      } else {
-        status.textContent = '❌ Занято';
-        status.className = 'h-5 text-sm pl-2 text-red-400';
-      }
-    } catch {}
-  }, 500);
-};
-
-function startTimer() {
-  let t = 59;
-  document.getElementById('timer-block').classList.remove('hidden');
-  document.getElementById('btn-verify').disabled = true;
-  const i = setInterval(() => {
-    t--; document.getElementById('countdown').textContent = t;
-    if (t <= 0) { clearInterval(i); document.getElementById('timer-block').classList.add('hidden'); document.getElementById('btn-verify').disabled = false; }
-  }, 1000);
-}
-async function resendCode() {
-  try {
-    const data = await apiFetch('/api/auth/send-code', { method:'POST', body: JSON.stringify({ phone: state.phone }) });
-    if (data.code) { document.getElementById('toast-code').textContent = data.code; state.generatedCode = data.code; showToast(); setTimeout(hideToast,8000); }
-    startTimer();
-  } catch(e) { alert(e.message); }
-}
-
-function showToast() { const t=document.getElementById('sms-toast'); t.classList.remove('top-[-100px]'); t.classList.add('top-4'); }
-function hideToast()  { const t=document.getElementById('sms-toast'); t.classList.remove('top-4'); t.classList.add('top-[-100px]'); }
-
-function finishSetup() {
   updateProfileUI();
   updateStarBal();
-  renderGiftShop();
-  goToScreen('screen-app');
+  buildInitialChats();
+  renderChatList();
+  goScreen('screen-app');
   switchTab('chats');
 }
 
+function buildInitialChats() {
+  S.contacts.forEach((c, i) => {
+    S.messages[c.id] = [
+      { text: `Привет! Это ${c.firstName} 👋`, fromMe: false, time: nt(), type: 'text' }
+    ];
+    S.chats.push({
+      id: c.id,
+      name: c.firstName + (c.lastName ? ' '+c.lastName : ''),
+      initial: c.firstName[0].toUpperCase(),
+      online: c.online,
+      lastMsg: `Привет! Это ${c.firstName} 👋`,
+      unread: i < 2 ? i+1 : 0,
+      time: nt(),
+    });
+  });
+}
+
+// ── LOGOUT ──
 function logoutUser() {
   if (!confirm('Выйти из аккаунта?')) return;
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
-  if (socket) socket.disconnect();
-  location.reload();
+  S.user = null; S.chats = []; S.messages = {}; S.callLog = []; S.stars = 0;
+  goScreen('screen-login');
 }
 
-// ─────────────────────────────────────────
-// PROFILE
-// ─────────────────────────────────────────
+// ── PROFILE UI ──
 function updateProfileUI() {
-  if (!state.user) return;
-  const { firstName, lastName, username, avatar, stars } = state.user;
-  const name = `${firstName} ${lastName||''}`.trim();
+  if (!S.user) return;
+  const name = S.user.firstName + (S.user.lastName ? ' '+S.user.lastName : '');
   document.getElementById('settings-name-lg').textContent = name;
-  document.getElementById('settings-username-lg').textContent = '@' + username;
-  document.getElementById('settings-avatar-placeholder').textContent = (firstName||'U')[0].toUpperCase();
-  document.getElementById('edit-fname').value = firstName || '';
-  document.getElementById('edit-lname').value = lastName  || '';
-  document.getElementById('edit-user').value  = username  || '';
-  document.getElementById('edit-bio').value   = state.user.bio || '';
-  if (avatar) {
-    const img = document.getElementById('settings-avatar-img');
-    img.src = avatar; img.classList.remove('hidden');
-    document.getElementById('settings-avatar-placeholder').classList.add('hidden');
-  }
-  state.stars = stars || state.stars;
-  updateStarBal();
+  document.getElementById('settings-username-lg').textContent = '@' + S.user.username;
+  document.getElementById('settings-avatar-placeholder').textContent = S.user.firstName[0].toUpperCase();
+  document.getElementById('edit-fname').value = S.user.firstName;
+  document.getElementById('edit-lname').value = S.user.lastName || '';
+  document.getElementById('edit-user').value  = S.user.username;
+  document.getElementById('edit-bio').value   = S.user.bio || '';
 }
 
-async function saveProfile() {
-  try {
-    const formData = new FormData();
-    formData.append('firstName', document.getElementById('edit-fname').value.trim());
-    formData.append('lastName',  document.getElementById('edit-lname').value.trim());
-    formData.append('username',  document.getElementById('edit-user').value.trim());
-    formData.append('bio',       document.getElementById('edit-bio').value.trim());
-
-    const headers = { Authorization: `Bearer ${state.token}` };
-    const res  = await fetch('/api/users/me', { method:'PUT', headers, body: formData });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-    state.user = data.user;
-    localStorage.setItem(USER_KEY, JSON.stringify(state.user));
-    updateProfileUI();
-    closeSettingsPanel('panel-edit-profile');
-  } catch(e) { alert(e.message); }
+function saveProfile() {
+  S.user.firstName = document.getElementById('edit-fname').value.trim() || S.user.firstName;
+  S.user.lastName  = document.getElementById('edit-lname').value.trim();
+  const newUser    = document.getElementById('edit-user').value.trim();
+  if (newUser.length >= 4) S.user.username = newUser;
+  S.user.bio = document.getElementById('edit-bio').value.trim();
+  updateProfileUI();
+  closeSettingsPanel('panel-edit-profile');
+  showToast('✅ Профиль сохранён');
 }
 
-async function uploadAvatar(input) {
-  if (!input.files[0]) return;
-  const fd = new FormData();
-  fd.append('avatar', input.files[0]);
-  try {
-    const data = await apiUpload('/api/upload/avatar', fd);
-    state.user.avatar = data.url;
-    localStorage.setItem(USER_KEY, JSON.stringify(state.user));
-    updateProfileUI();
-  } catch(e) { alert('Ошибка загрузки: ' + e.message); }
-}
-
-async function openProfileView(userId) {
-  const isMe = userId === 'me';
-  let u = isMe ? state.user : null;
-
-  if (!isMe) {
-    try {
-      const data = await apiFetch(`/api/users/${userId}`);
-      u = data.user;
-    } catch { return; }
-  }
+// ── PROFILE VIEW ──
+function openProfileView(id) {
+  const isMe = id === 'me';
+  const u = isMe ? { ...S.user, online: true, gifts: [] } : S.contacts.find(c => c.id === id);
   if (!u) return;
-  state.currentProfileId = userId;
+  S.giftProfileTarget = id;
 
-  document.getElementById('profile-title').textContent = isMe ? 'Мой профиль' : `${u.firstName} ${u.lastName||''}`.trim();
+  document.getElementById('profile-title').textContent = isMe ? 'Мой профиль' : u.firstName + (u.lastName?' '+u.lastName:'');
   document.getElementById('profile-avatar-lg').textContent = (u.firstName||'U')[0].toUpperCase();
-  document.getElementById('profile-name-lg').textContent = `${u.firstName} ${u.lastName||''}`.trim();
-  document.getElementById('profile-user-lg').textContent = '@' + u.username;
+  document.getElementById('profile-name-lg').textContent = u.firstName + (u.lastName?' '+u.lastName:'');
   document.getElementById('profile-status-lg').textContent = u.online ? 'в сети' : 'был(а) недавно';
+  document.getElementById('profile-user-lg').textContent = '@' + (u.username||'user');
   document.getElementById('profile-bio-lg').textContent = u.bio || 'Нет био';
   document.getElementById('profile-phone-block').classList.toggle('hidden', !isMe);
-  if (isMe) document.getElementById('profile-phone-lg').textContent = state.phone || '';
+  if (isMe) document.getElementById('profile-phone-lg').textContent = S.phone || '—';
 
-  if (u.avatar) {
-    const img = document.getElementById('profile-avatar-img-lg');
-    img.src = u.avatar; img.classList.remove('hidden');
-    document.getElementById('profile-avatar-lg').classList.add('hidden');
-  } else {
-    document.getElementById('profile-avatar-img-lg').classList.add('hidden');
-    document.getElementById('profile-avatar-lg').classList.remove('hidden');
-  }
-
-  document.getElementById('profile-actions').classList.toggle('hidden', isMe);
-
-  // Gifts
   const gifts = u.gifts || [];
   const gGrid = document.getElementById('profile-gifts-grid');
   gGrid.innerHTML = gifts.length === 0
     ? '<div class="col-span-3 text-center text-gray-500 py-6 text-sm glass-panel rounded-xl">Нет подарков</div>'
-    : gifts.map(g => `<div class="glass-panel p-3 rounded-xl flex flex-col items-center text-center"><div class="text-3xl mb-1">${g.icon}</div><div class="text-xs font-bold truncate w-full">${g.name}</div><div class="text-[10px] text-yellow-400">${g.price} ★</div></div>`).join('');
+    : gifts.map(g => `<div class="glass-panel p-3 rounded-xl flex flex-col items-center text-center border border-white/10"><div class="text-3xl mb-1">${g.icon}</div><div class="text-xs font-bold truncate w-full">${g.name}</div><div class="text-[10px] text-yellow-400">${g.price} ★</div></div>`).join('');
 
+  document.getElementById('profile-actions').classList.toggle('hidden', isMe);
   openSettingsPanel('panel-profile');
 }
 
 function openChatFromProfile() {
   closeSettingsPanel('panel-profile');
-  if (state.currentProfileId && state.currentProfileId !== 'me') openChat(state.currentProfileId);
+  if (S.giftProfileTarget && S.giftProfileTarget !== 'me') openChat(S.giftProfileTarget);
 }
 
-// ─────────────────────────────────────────
-// CONVERSATIONS / CHAT LIST
-// ─────────────────────────────────────────
-async function loadConversations() {
-  try {
-    const data = await apiFetch('/api/messages/conversations');
-    state.chats = data.conversations;
-    renderChatList();
-  } catch(e) { console.error('loadConversations:', e); }
+function openGiftModalForProfile() {
+  const contact = S.contacts.find(c => c.id === S.giftProfileTarget);
+  if (!contact) return;
+  openGiftModal(null, contact.id);
 }
 
-function renderChatList() {
-  const container = document.getElementById('chat-list');
-  if (!state.chats || state.chats.length === 0) {
-    container.innerHTML = '<div class="p-8 text-center text-gray-500 text-sm">Нет чатов.<br>Нажмите <strong>+</strong> чтобы найти пользователей.</div>';
+// ── CHAT LIST ──
+function renderChatList(filter) {
+  const el = document.getElementById('chat-list');
+  let chats = S.chats;
+  if (filter) chats = chats.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
+  if (!chats.length) {
+    el.innerHTML = '<div class="p-8 text-center text-gray-500 text-sm">Нет чатов. Нажмите <strong>+</strong>.</div>';
     return;
   }
-  container.innerHTML = state.chats.map(conv => {
-    const u = conv.partner;
-    const lm = conv.lastMessage;
-    const initial = (u.firstName||'?')[0].toUpperCase();
-    const avatarHtml = u.avatar
-      ? `<img src="${u.avatar}" class="w-14 h-14 rounded-full object-cover">`
-      : `<div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl">${initial}</div>`;
-    const preview = lm
-      ? (lm.type === 'photo' ? '🖼 Фото' : lm.type === 'video' ? '🎥 Видео' : lm.type === 'file' ? '📎 Файл' : lm.type === 'gift' ? '🎁 Подарок' : lm.text || '')
-      : 'Нажмите, чтобы написать';
-    const timeStr = lm ? new Date(lm.createdAt).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}) : '';
-    return `
-    <div class="flex items-center px-4 py-3 cursor-pointer border-b border-white/5 hover:bg-white/5 transition" onclick="openChat('${u._id}')">
+  el.innerHTML = chats.map(c => `
+    <div class="flex items-center px-4 py-3 cursor-pointer border-b border-white/5 active:bg-white/5 transition" onclick="openChat('${c.id}')">
       <div class="relative mr-3 shrink-0">
-        ${avatarHtml}
-        ${u.online ? '<div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-black rounded-full"></div>' : ''}
+        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl">${c.initial}</div>
+        ${c.online ? '<div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-black rounded-full"></div>' : ''}
       </div>
       <div class="flex-1 min-w-0">
         <div class="flex justify-between items-center mb-0.5">
-          <span class="font-semibold text-white text-base truncate">${u.firstName} ${u.lastName||''}</span>
-          <span class="text-xs text-gray-500 shrink-0 ml-2">${timeStr}</span>
+          <span class="font-semibold text-white text-base truncate">${c.name}</span>
+          <span class="text-xs text-gray-500 shrink-0 ml-2">${c.time}</span>
         </div>
         <div class="flex justify-between items-center">
-          <span class="text-sm text-gray-400 truncate pr-2">${lm && lm.fromMe ? 'Вы: ' : ''}${preview}</span>
-          ${conv.unreadCount > 0 ? `<span class="unread-badge shrink-0">${conv.unreadCount}</span>` : ''}
+          <span class="text-sm text-gray-400 truncate pr-2">${c.lastMsg}</span>
+          ${c.unread > 0 ? `<span class="unread-badge shrink-0">${c.unread}</span>` : ''}
         </div>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
-async function handleGlobalSearch(q) {
-  if (!q) { renderChatList(); return; }
-  try {
-    const data = await apiFetch(`/api/users/search?q=${encodeURIComponent(q)}`);
-    const container = document.getElementById('chat-list');
-    if (!data.users.length) { container.innerHTML = '<div class="p-6 text-center text-gray-500">Не найдено</div>'; return; }
-    container.innerHTML = data.users.map(u => `
-      <div class="flex items-center px-4 py-3 cursor-pointer border-b border-white/5 hover:bg-white/5" onclick="openChat('${u._id}')">
-        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl mr-3">${(u.firstName||'?')[0]}</div>
-        <div><div class="font-semibold text-white">${u.firstName} ${u.lastName||''}</div><div class="text-sm text-gray-400">@${u.username}</div></div>
-      </div>`).join('');
-  } catch {}
-}
+function handleSearch(q) { renderChatList(q); }
 
-// ─────────────────────────────────────────
-// OPEN / CLOSE CHAT
-// ─────────────────────────────────────────
-async function openChat(userId) {
-  state.activeChatId = userId;
+// ── OPEN CHAT ──
+function openChat(id) {
+  S.activeChat = id;
+  const c = S.contacts.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('mobile-chat-name').textContent = c.firstName + (c.lastName?' '+c.lastName:'');
+  document.getElementById('mobile-chat-status').textContent = c.online ? 'в сети' : 'был(а) недавно';
+  document.getElementById('chat-header-avatar').textContent = c.firstName[0].toUpperCase();
+  if (!S.messages[id]) S.messages[id] = [];
 
-  // Find or load user info
-  let u = state.chats.find(c => c.partner._id === userId)?.partner;
-  if (!u) {
-    try { const d = await apiFetch(`/api/users/${userId}`); u = d.user; } catch { return; }
-  }
-  state.activeChatUser = u;
-
-  // Update chat header
-  document.getElementById('mobile-chat-name').textContent = `${u.firstName} ${u.lastName||''}`.trim();
-  document.getElementById('mobile-chat-status').textContent = u.online ? 'в сети' : 'был(а) недавно';
-  document.getElementById('chat-header-avatar').textContent = (u.firstName||'?')[0].toUpperCase();
-  document.getElementById('chat-online-dot').classList.toggle('hidden', !u.online);
-  if (u.avatar) {
-    const img = document.getElementById('chat-header-avatar-img');
-    img.src = u.avatar; img.classList.remove('hidden');
-    document.getElementById('chat-header-avatar').classList.add('hidden');
-  } else {
-    document.getElementById('chat-header-avatar-img').classList.add('hidden');
-    document.getElementById('chat-header-avatar').classList.remove('hidden');
-  }
-
-  // Load messages from server
-  try {
-    const data = await apiFetch(`/api/messages/${userId}`);
-    state.messages[userId] = data.messages;
-    // Notify sender that messages are read
-    if (data.messages.length) {
-      const senderId = data.messages.find(m => !m.sender._id !== state.user._id)?.sender._id;
-      if (senderId) socket?.emit('message:read', { conversationId: data.messages[0].conversationId, senderId });
-    }
-  } catch { state.messages[userId] = []; }
+  // Clear unread
+  const conv = S.chats.find(x => x.id === id);
+  if (conv) { conv.unread = 0; renderChatList(); }
 
   renderCurrentChat();
-
-  // Clear unread on this conversation
-  const conv = state.chats.find(c => c.partner._id === userId);
-  if (conv) { conv.unreadCount = 0; renderChatList(); }
-
-  // Show overlay
   document.getElementById('mobile-chat-overlay').classList.remove('translate-x-full');
 }
 
 function closeChat() {
   document.getElementById('mobile-chat-overlay').classList.add('translate-x-full');
-  state.activeChatId = null;
-  state.activeChatUser = null;
-  document.getElementById('typing-indicator').classList.add('hidden');
+  S.activeChat = null;
+  document.getElementById('mobile-msg-input').value = '';
+  document.getElementById('file-preview-bar').classList.add('hidden');
+  document.getElementById('file-preview-bar').innerHTML = '';
+  S.pendingFiles = [];
 }
 
 function renderCurrentChat() {
-  if (!state.activeChatId) return;
-  const msgs = state.messages[state.activeChatId] || [];
-  const container = document.getElementById('mobile-chat-messages');
-
+  const msgs = S.messages[S.activeChat] || [];
+  const el = document.getElementById('mobile-chat-messages');
   if (!msgs.length) {
-    container.innerHTML = '<div class="text-center text-gray-500 mt-12 text-sm">Нет сообщений. Поздоровайтесь! 👋</div>';
+    el.innerHTML = '<div class="text-center text-gray-500 mt-12 text-sm">Нет сообщений. Поздоровайтесь! 👋</div>';
     return;
   }
-
-  container.innerHTML = msgs.map(m => {
-    const fromMe = m.sender._id === state.user._id || m.sender === state.user._id;
-    const time = new Date(m.createdAt).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'});
-
-    if (m.type === 'gift' && m.gift) {
-      return `<div class="${fromMe?'msg-row-out':'msg-row-in'}">
-        <div class="gift-card-chat ${fromMe?'border-[#0A84FF]/30 bg-[#0A84FF]/10':''}">
+  el.innerHTML = msgs.map(m => {
+    if (m.type === 'gift') {
+      return `<div class="${m.fromMe?'msg-row-out':'msg-row-in'}">
+        <div class="gift-card-chat ${m.fromMe?'border-[#0A84FF]/30':''}">
           <div class="text-5xl mb-2">${m.gift.icon}</div>
           <div class="font-bold text-sm mb-1">${m.gift.name}</div>
-          <div class="text-xs text-yellow-400 mb-2">${m.gift.price} ★</div>
-          <div class="text-[10px] text-gray-400">${m.gift.fromName||''}</div>
+          <div class="text-xs text-yellow-400 mb-1">${m.gift.price} ★</div>
+          <div class="text-[10px] text-gray-400">Подарок</div>
         </div>
       </div>`;
     }
-
-    if (m.type === 'call' && m.callData) {
-      const icon = m.callData.callType === 'video' ? '📹' : '📞';
-      const dur  = m.callData.duration ? ` · ${Math.floor(m.callData.duration/60)}:${(m.callData.duration%60).toString().padStart(2,'0')}` : '';
-      return `<div class="${fromMe?'msg-row-out':'msg-row-in'}">
-        <div class="${fromMe?'msg-out':'msg-in'} flex items-center gap-2">
-          <span class="text-lg">${icon}</span>
-          <span class="text-sm">${m.callData.status==='accepted'?'Звонок'+dur:m.callData.status==='missed'?'Пропущенный':'Отклонён'}</span>
-          <span class="text-[10px] opacity-70 ml-1">${time}</span>
+    if (m.type === 'img') {
+      return `<div class="${m.fromMe?'msg-row-out':'msg-row-in'}">
+        <div class="${m.fromMe?'msg-out':'msg-in'} p-1">
+          <img src="${m.img}" class="msg-photo" onclick="openLightbox('${m.img}')">
+          <div class="text-[10px] opacity-70 text-right mt-1">${m.time}${m.fromMe?' ✓✓':''}</div>
         </div>
       </div>`;
     }
-
-    // Media attachments
-    let attachmentsHtml = '';
-    if (m.attachments && m.attachments.length) {
-      attachmentsHtml = m.attachments.map(a => {
-        if (a.type === 'photo') {
-          return `<img src="${a.url}" class="msg-photo" onclick="openLightbox('${a.url}','photo')" loading="lazy">`;
-        } else if (a.type === 'video') {
-          return `<video src="${a.url}" class="msg-video" controls preload="metadata" onclick="openLightbox('${a.url}','video')"></video>`;
-        } else {
-          const kb = a.size ? `${Math.round(a.size/1024)} КБ` : '';
-          return `<a href="${a.url}" target="_blank" class="msg-file-card text-white no-underline">
-            <span class="text-2xl">📎</span>
-            <div><div class="text-sm font-medium truncate max-w-[140px]">${a.filename||'Файл'}</div><div class="text-xs text-gray-400">${kb}</div></div>
-          </a>`;
-        }
-      }).join('');
-    }
-
-    const bubble = m.text || attachmentsHtml
-      ? `<div class="${fromMe?'msg-out':'msg-in'}">
-          ${attachmentsHtml}
-          ${m.text ? `<div class="text-sm break-words">${m.text}</div>` : ''}
-          <div class="text-[10px] opacity-70 text-right mt-1">${time}${fromMe && m.read ? ' ✓✓' : fromMe ? ' ✓' : ''}</div>
-        </div>`
-      : '';
-
-    return `<div class="${fromMe?'msg-row-out':'msg-row-in'}">${bubble}</div>`;
+    const safe = String(m.text).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return `<div class="${m.fromMe?'msg-row-out':'msg-row-in'}">
+      <div class="${m.fromMe?'msg-out':'msg-in'}">
+        <div class="text-sm break-words">${safe}</div>
+        <div class="text-[10px] opacity-70 text-right mt-1">${m.time}${m.fromMe?' ✓✓':''}</div>
+      </div>
+    </div>`;
   }).join('');
-
-  setTimeout(() => { container.scrollTop = container.scrollHeight; }, 30);
+  setTimeout(() => { el.scrollTop = el.scrollHeight; }, 30);
 }
 
-// ─────────────────────────────────────────
-// SEND MESSAGE
-// ─────────────────────────────────────────
-async function sendMessage() {
-  const input  = document.getElementById('mobile-msg-input');
-  const text   = input.value.trim();
-  const files  = state.pendingFilesToSend;
-
+// ── SEND MESSAGE ──
+function sendMessage() {
+  const input = document.getElementById('mobile-msg-input');
+  const text  = input.value.trim();
+  const files = S.pendingFiles;
   if (!text && !files.length) return;
-  if (!state.activeChatId || !socket) return;
+  if (!S.activeChat) return;
+
+  if (!S.messages[S.activeChat]) S.messages[S.activeChat] = [];
+
+  // Images
+  files.forEach(f => {
+    const url = URL.createObjectURL(f);
+    S.messages[S.activeChat].push({ type:'img', img:url, fromMe:true, time:nt() });
+  });
+  S.pendingFiles = [];
+  document.getElementById('file-preview-bar').innerHTML = '';
+  document.getElementById('file-preview-bar').classList.add('hidden');
+
+  if (text) S.messages[S.activeChat].push({ type:'text', text, fromMe:true, time:nt() });
 
   input.value = '';
-  autoResizeTextarea(input);
-
-  // Upload files first
-  let attachments = [];
-  if (files.length) {
-    for (const file of files) {
-      try {
-        const fd = new FormData();
-        fd.append('file', file);
-        const data = await apiUpload('/api/upload/media', fd);
-        attachments.push(data.attachment);
-      } catch(e) { console.error('Upload failed:', e); }
-    }
-    state.pendingFilesToSend = [];
-    document.getElementById('file-preview-bar').innerHTML = '';
-    document.getElementById('file-preview-bar').classList.add('hidden');
-  }
-
-  const msg = {
-    recipientId: state.activeChatId,
-    text,
-    type: attachments.length ? attachments[0].type : 'text',
-    attachments,
-  };
-
-  // Optimistic local add
-  const optimistic = {
-    _id: 'opt_' + Date.now(),
-    sender: { _id: state.user._id },
-    recipient: { _id: state.activeChatId },
-    type: msg.type,
-    text,
-    attachments,
-    createdAt: new Date().toISOString(),
-    read: false,
-  };
-  if (!state.messages[state.activeChatId]) state.messages[state.activeChatId] = [];
-  state.messages[state.activeChatId].push(optimistic);
+  input.style.height = 'auto';
   renderCurrentChat();
+  updateChatPreview(S.activeChat, text || '📎 Медиа');
 
-  // Emit via socket
-  socket.emit('message:send', msg, (res) => {
-    if (res?.success) {
-      // Replace optimistic with real
-      const idx = state.messages[state.activeChatId].findIndex(m => m._id === optimistic._id);
-      if (idx !== -1) state.messages[state.activeChatId][idx] = res.message;
-      // Update conversation list
-      updateConversationPreview(state.activeChatId, res.message);
+  // Auto-reply
+  if (text) {
+    setTimeout(() => {
+      const replies = ['Понял! 👍','Окей!','🔥 Огонь!','Хорошая идея!','Спасибо! 🙏','Ок, жди','Интересно...','👌','Договорились!'];
+      S.messages[S.activeChat].push({ type:'text', text:replies[Math.floor(Math.random()*replies.length)], fromMe:false, time:nt() });
       renderCurrentChat();
-    }
-  });
-
-  // Stop typing
-  socket.emit('typing:stop', { recipientId: state.activeChatId });
-}
-
-function updateConversationPreview(userId, msg) {
-  let conv = state.chats.find(c => c.partner._id === userId);
-  if (!conv) {
-    // Add new conversation
-    const u = state.activeChatUser;
-    conv = { partner: u, lastMessage: null, unreadCount: 0 };
-    state.chats.unshift(conv);
-  }
-  conv.lastMessage = {
-    text: msg.text,
-    type: msg.type,
-    createdAt: msg.createdAt,
-    fromMe: true,
-  };
-  renderChatList();
-}
-
-function handleIncomingMessage(msg) {
-  const senderId = msg.sender._id || msg.sender;
-
-  // Add to messages cache
-  if (!state.messages[senderId]) state.messages[senderId] = [];
-  state.messages[senderId].push(msg);
-
-  // If this chat is open — render
-  if (state.activeChatId === senderId) {
-    renderCurrentChat();
-    // Mark as read
-    socket?.emit('message:read', { conversationId: msg.conversationId, senderId });
-  } else {
-    // Update unread count
-    let conv = state.chats.find(c => c.partner._id === senderId);
-    if (!conv) {
-      conv = { partner: msg.sender, lastMessage: null, unreadCount: 0 };
-      state.chats.unshift(conv);
-    }
-    conv.unreadCount = (conv.unreadCount || 0) + 1;
-    conv.lastMessage = { text: msg.text, type: msg.type, createdAt: msg.createdAt, fromMe: false };
-    renderChatList();
-    // Show toast
-    showMsgToast(msg.sender, msg.text || '📎 Медиа');
+      const conv = S.chats.find(x => x.id === S.activeChat);
+      if (conv) { conv.lastMsg = S.messages[S.activeChat].slice(-1)[0].text; conv.time=nt(); renderChatList(); }
+    }, 800 + Math.random()*1200);
   }
 }
 
-// ─────────────────────────────────────────
-// TYPING INDICATOR
-// ─────────────────────────────────────────
-function emitTyping() {
-  if (!state.activeChatId || !socket) return;
-  socket.emit('typing:start', { recipientId: state.activeChatId });
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(() => {
-    socket.emit('typing:stop', { recipientId: state.activeChatId });
-  }, 2000);
+function updateChatPreview(id, lastMsg) {
+  let conv = S.chats.find(x => x.id === id);
+  if (conv) { conv.lastMsg = lastMsg; conv.time = nt(); renderChatList(); }
 }
 
-// ─────────────────────────────────────────
-// FILE UPLOAD / DRAG & DROP
-// ─────────────────────────────────────────
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+
+// ── FILES ──
 function handleFileSelect(files) {
-  state.pendingFilesToSend = [...files];
-  renderFilePreview(files);
-}
-
-function handleFileDrop(e) {
-  e.preventDefault();
-  document.getElementById('mobile-chat-overlay').classList.remove('drop-zone-active');
-  const files = e.dataTransfer.files;
-  if (files.length) handleFileSelect(files);
-}
-
-function renderFilePreview(files) {
+  S.pendingFiles = [...files];
   const bar = document.getElementById('file-preview-bar');
   bar.innerHTML = '';
   bar.classList.remove('hidden');
   Array.from(files).forEach((f, i) => {
-    const isImg = f.type.startsWith('image/');
     const div = document.createElement('div');
     div.className = 'relative shrink-0 w-16 h-16 rounded-lg overflow-hidden border border-white/20';
-    if (isImg) {
-      const url = URL.createObjectURL(f);
-      div.innerHTML = `<img src="${url}" class="w-full h-full object-cover"><button onclick="removePendingFile(${i})" class="absolute top-0 right-0 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">×</button>`;
-    } else {
-      div.innerHTML = `<div class="w-full h-full flex flex-col items-center justify-center text-xs text-gray-300 p-1 bg-white/10"><span class="text-xl">📎</span><span class="truncate w-full text-center">${f.name.slice(0,8)}</span></div><button onclick="removePendingFile(${i})" class="absolute top-0 right-0 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">×</button>`;
-    }
+    const url = URL.createObjectURL(f);
+    div.innerHTML = `<img src="${url}" class="w-full h-full object-cover"><button onclick="removePendingFile(${i})" class="absolute top-0 right-0 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">✕</button>`;
     bar.appendChild(div);
   });
 }
 
 function removePendingFile(idx) {
-  state.pendingFilesToSend.splice(idx, 1);
-  if (state.pendingFilesToSend.length === 0) {
-    document.getElementById('file-preview-bar').classList.add('hidden');
-  } else {
-    renderFilePreview(state.pendingFilesToSend);
-  }
+  S.pendingFiles.splice(idx, 1);
+  if (!S.pendingFiles.length) { document.getElementById('file-preview-bar').classList.add('hidden'); }
+  else { handleFileSelect(S.pendingFiles); }
 }
 
-function openLightbox(url, type) {
+function openLightbox(url) {
   const lb = document.getElementById('lightbox');
-  const content = document.getElementById('lightbox-content');
-  content.innerHTML = type === 'video'
-    ? `<video src="${url}" controls autoplay class="max-w-[95vw] max-h-[90vh] rounded-xl"></video>`
-    : `<img src="${url}" class="max-w-[95vw] max-h-[90vh] rounded-xl">`;
+  document.getElementById('lightbox-content').innerHTML = `<img src="${url}" onclick="event.stopPropagation()">`;
   lb.style.display = 'flex';
 }
 
-// ─────────────────────────────────────────
-// FIND USER
-// ─────────────────────────────────────────
-async function openFindUser() {
-  openSettingsPanel('panel-find-user');
-  document.getElementById('find-user-input').value = '';
-  document.getElementById('find-user-results').innerHTML = '';
-  await renderAllUsers();
+// ── CALLS ──
+function logCall(type) {
+  const c = S.contacts.find(x => x.id === S.activeChat);
+  if (!c) return;
+  S.callLog.unshift({
+    name: c.firstName + (c.lastName?' '+c.lastName:''),
+    initial: c.firstName[0].toUpperCase(),
+    type,
+    direction: 'out',
+    time: nowStr(),
+  });
+  showToast(`${type==='video'?'📹':'📞'} Звонок — ${c.firstName}`);
 }
 
-async function renderAllUsers() {
-  const container = document.getElementById('all-users-list');
-  try {
-    const data = await apiFetch('/api/users/all');
-    if (!data.users.length) {
-      container.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">Нет других пользователей</p>';
-      return;
-    }
-    container.innerHTML = data.users.map(u => renderUserCard(u)).join('');
-  } catch(e) {
-    container.innerHTML = '<p class="text-red-400 text-sm">Ошибка загрузки</p>';
-  }
-}
-
-async function searchUserByUsername(q) {
-  const container = document.getElementById('find-user-results');
-  if (!q || q.length < 2) { container.innerHTML = ''; return; }
-  try {
-    const data = await apiFetch(`/api/users/search?q=${encodeURIComponent(q)}`);
-    container.innerHTML = data.users.length
-      ? data.users.map(u => renderUserCard(u)).join('')
-      : `<div class="text-center text-gray-500 py-4">@${q} не найден</div>`;
-  } catch {}
-}
-
-function renderUserCard(u) {
-  const name = `${u.firstName} ${u.lastName||''}`.trim();
-  const initial = (u.firstName||'?')[0].toUpperCase();
-  return `<div class="glass-panel rounded-xl p-4 flex items-center gap-3 border border-white/10">
-    <div class="relative shrink-0">
-      ${u.avatar ? `<img src="${u.avatar}" class="w-12 h-12 rounded-full object-cover">` : `<div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl">${initial}</div>`}
-      ${u.online ? '<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border border-black rounded-full"></div>' : ''}
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="font-semibold text-white truncate">${name}</div>
-      <div class="text-sm text-gray-400">@${u.username}</div>
-    </div>
-    <button class="bg-[#0A84FF]/20 border border-[#0A84FF]/40 text-[#0A84FF] rounded-xl px-4 py-2 text-sm font-semibold" onclick="openChatWithUser('${u._id}')">Написать</button>
-  </div>`;
-}
-
-async function openChatWithUser(userId) {
-  closeSettingsPanel('panel-find-user');
-  await openChat(userId);
-}
-
-// ─────────────────────────────────────────
-// ONLINE STATUS
-// ─────────────────────────────────────────
-function updateUserOnline(userId, isOnline) {
-  const conv = state.chats.find(c => c.partner._id === userId);
-  if (conv) conv.partner.online = isOnline;
-  if (state.activeChatId === userId) {
-    document.getElementById('mobile-chat-status').textContent = isOnline ? 'в сети' : 'был(а) недавно';
-    document.getElementById('chat-online-dot').classList.toggle('hidden', !isOnline);
-  }
-  renderChatList();
-}
-
-// ─────────────────────────────────────────
-// WEBRTC CALLS
-// ─────────────────────────────────────────
-const RTC_CONFIG = {
-  iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' },
-  ],
-};
-
-async function initiateCall(callType) {
-  if (!state.activeChatId || !socket) return;
-  currentCallType   = callType;
-  currentCallPeerId = state.activeChatId;
-
-  // Get local media
-  try {
-    localStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: callType === 'video',
-    });
-  } catch(e) {
-    alert('Нет доступа к микрофону/камере: ' + e.message);
-    return;
-  }
-
-  // Show call screen
-  showCallScreen(state.activeChatUser);
-
-  // Create PeerConnection
-  createPeerConnection();
-  localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-  // Show local video
-  document.getElementById('local-video').srcObject = localStream;
-
-  // Signal peer
-  socket.emit('call:initiate', { recipientId: state.activeChatId, callType });
-
-  // Create and send offer
-  const offer = await peerConnection.createOffer();
-  await peerConnection.setLocalDescription(offer);
-  socket.emit('webrtc:offer', { recipientId: state.activeChatId, offer });
-}
-
-function handleIncomingCall(data) {
-  incomingCallData = data;
-  currentCallType  = data.callType;
-  currentCallPeerId = data.caller.userId;
-
-  const overlay = document.getElementById('incoming-call-overlay');
-  document.getElementById('incoming-caller-name').textContent = data.caller.firstName;
-  document.getElementById('incoming-caller-username').textContent = '@' + data.caller.username;
-  document.getElementById('incoming-caller-avatar').textContent = (data.caller.firstName||'?')[0].toUpperCase();
-  document.getElementById('incoming-call-type').textContent = data.callType === 'video' ? '📹 Входящий видеозвонок' : '📞 Входящий звонок';
-  overlay.style.display = 'flex';
-}
-
-async function acceptCall() {
-  document.getElementById('incoming-call-overlay').style.display = 'none';
-
-  try {
-    localStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: currentCallType === 'video',
-    });
-  } catch(e) { alert('Нет доступа: ' + e.message); return; }
-
-  // Show call screen with caller info
-  showCallScreen({ firstName: incomingCallData.caller.firstName, avatar: incomingCallData.caller.avatar });
-  document.getElementById('local-video').srcObject = localStream;
-
-  createPeerConnection();
-  localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-  socket.emit('call:accept', { callerId: currentCallPeerId, roomId: incomingCallData.roomId });
-}
-
-function declineCall() {
-  document.getElementById('incoming-call-overlay').style.display = 'none';
-  socket?.emit('call:decline', { callerId: currentCallPeerId });
-  incomingCallData = null;
-}
-
-function handleCallAccepted(by) {
-  document.getElementById('call-status-text').textContent = 'Соединение...';
-}
-
-function handleCallDeclined() {
-  hideCallScreen();
-  alert('Звонок отклонён');
-  cleanupCall();
-}
-
-function handleCallEnded(duration) {
-  hideCallScreen();
-  cleanupCall(duration);
-}
-
-async function endCall() {
-  const duration = callStartTime ? Math.floor((Date.now() - callStartTime) / 1000) : 0;
-  socket?.emit('call:end', { peerId: currentCallPeerId, duration, callType: currentCallType });
-
-  // Save to local log
-  if (state.activeChatUser) {
-    state.callLog.unshift({
-      chatId: currentCallPeerId,
-      name: `${state.activeChatUser.firstName} ${state.activeChatUser.lastName||''}`.trim(),
-      initial: (state.activeChatUser.firstName||'?')[0].toUpperCase(),
-      type: currentCallType,
-      direction: 'out',
-      duration,
-      time: new Date().toLocaleString('ru'),
-    });
-  }
-
-  hideCallScreen();
-  cleanupCall(duration);
-}
-
-function showCallScreen(user) {
-  const screen = document.getElementById('call-screen');
-  document.getElementById('call-peer-name').textContent = user ? `${user.firstName} ${user.lastName||''}`.trim() : 'User';
-  document.getElementById('call-status-text').textContent = 'Вызов...';
-  document.getElementById('call-timer-display').textContent = '0:00';
-  screen.classList.remove('hidden'); screen.classList.add('flex');
-  callStartTime = Date.now();
-  callTimerInterval = setInterval(() => {
-    const s = Math.floor((Date.now()-callStartTime)/1000);
-    document.getElementById('call-timer-display').textContent = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
-  }, 1000);
-}
-
-function hideCallScreen() {
-  document.getElementById('call-screen').classList.add('hidden');
-  document.getElementById('call-screen').classList.remove('flex');
-  clearInterval(callTimerInterval);
-}
-
-function cleanupCall(duration) {
-  if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
-  if (peerConnection) { peerConnection.close(); peerConnection = null; }
-  document.getElementById('local-video').srcObject  = null;
-  document.getElementById('remote-video').srcObject = null;
-  callStartTime = null;
-}
-
-function createPeerConnection() {
-  peerConnection = new RTCPeerConnection(RTC_CONFIG);
-
-  peerConnection.onicecandidate = ({ candidate }) => {
-    if (candidate) socket.emit('webrtc:ice-candidate', { recipientId: currentCallPeerId, candidate });
-  };
-
-  peerConnection.ontrack = ({ streams }) => {
-    document.getElementById('remote-video').srcObject = streams[0];
-    document.getElementById('call-status-text').textContent = 'В звонке';
-  };
-
-  peerConnection.onconnectionstatechange = () => {
-    const state = peerConnection?.connectionState;
-    if (state === 'failed' || state === 'disconnected') {
-      document.getElementById('call-status-text').textContent = 'Соединение потеряно';
-    }
-  };
-}
-
-async function handleWebRTCOffer(offer, from) {
-  if (!peerConnection) {
-    createPeerConnection();
-    if (localStream) localStream.getTracks().forEach(t => peerConnection.addTrack(t, localStream));
-  }
-  await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-  const answer = await peerConnection.createAnswer();
-  await peerConnection.setLocalDescription(answer);
-  socket.emit('webrtc:answer', { callerId: from, answer });
-  document.getElementById('call-status-text').textContent = 'В звонке';
-}
-
-async function handleWebRTCAnswer(answer) {
-  if (peerConnection) await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
-}
-
-async function handleICECandidate(candidate) {
-  try {
-    if (peerConnection) await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-  } catch {}
-}
-
-function toggleMic() {
-  if (!localStream) return;
-  const track = localStream.getAudioTracks()[0];
-  if (!track) return;
-  track.enabled = !track.enabled;
-  const btn = document.getElementById('btn-toggle-mic');
-  btn.classList.toggle('opacity-50', !track.enabled);
-  socket?.emit('call:toggle-audio', { peerId: currentCallPeerId, muted: !track.enabled });
-}
-
-function toggleCamera() {
-  if (!localStream) return;
-  const track = localStream.getVideoTracks()[0];
-  if (!track) return;
-  track.enabled = !track.enabled;
-  document.getElementById('btn-toggle-cam').classList.toggle('opacity-50', !track.enabled);
-  socket?.emit('call:toggle-video', { peerId: currentCallPeerId, enabled: track.enabled });
-}
-
-// ─────────────────────────────────────────
-// CALL LOG
-// ─────────────────────────────────────────
 function renderCallLog() {
-  const container = document.getElementById('calls-list');
-  if (!state.callLog.length) {
-    container.innerHTML = `<div class="p-10 text-center"><div class="w-16 h-16 glass-panel rounded-full flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div><p class="text-gray-500">Нет звонков</p><p class="text-gray-600 text-sm mt-1">Звонки сохраняются здесь</p></div>`;
+  const el = document.getElementById('calls-list');
+  if (!S.callLog.length) {
+    el.innerHTML = `<div class="p-10 text-center"><div class="w-16 h-16 glass-panel rounded-full flex items-center justify-center mx-auto mb-4"><svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div><p class="text-gray-500">Нет звонков</p></div>`;
     return;
   }
-  container.innerHTML = state.callLog.map((call, i) => {
-    const icon  = call.direction === 'out' ? '↗' : '↙';
-    const color = call.direction === 'out' ? 'text-blue-400' : 'text-green-400';
-    const dur   = call.duration ? ` · ${Math.floor(call.duration/60)}:${(call.duration%60).toString().padStart(2,'0')}` : '';
-    const cIcon = call.type === 'video' ? '📹' : '📞';
-    return `<div class="call-log-item" onclick="openChat('${call.chatId}')">
-      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl mr-3 shrink-0">${call.initial||'?'}</div>
-      <div class="flex-1 min-w-0">
-        <div class="font-semibold text-white">${call.name}</div>
-        <div class="flex items-center gap-1 mt-0.5"><span class="${color} font-bold text-sm">${icon}</span><span class="text-xs text-gray-400">${cIcon} ${call.direction==='out'?'Исходящий':'Входящий'}${dur}</span></div>
-      </div>
-      <div class="text-right shrink-0"><div class="text-xs text-gray-500">${call.time}</div></div>
-    </div>`;
-  }).join('');
+  el.innerHTML = S.callLog.map(c => `
+    <div class="call-log-item">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl mr-3 shrink-0">${c.initial}</div>
+      <div class="flex-1"><div class="font-semibold">${c.name}</div><div class="text-xs text-gray-400 mt-0.5">${c.type==='video'?'📹 Видео':'📞 Аудио'} · ${c.direction==='out'?'↗ Исходящий':'↙ Входящий'}</div></div>
+      <div class="text-xs text-gray-500">${c.time}</div>
+    </div>`).join('');
 }
 
-// ─────────────────────────────────────────
-// STARS & GIFTS
-// ─────────────────────────────────────────
+// ── FIND USER ──
+function openFindUser() {
+  document.getElementById('find-user-input').value = '';
+  searchContacts('');
+  openSettingsPanel('panel-find-user');
+}
+
+function searchContacts(q) {
+  const el = document.getElementById('find-user-results');
+  const list = q ? S.contacts.filter(c => (c.firstName+c.lastName+c.username).toLowerCase().includes(q.toLowerCase())) : S.contacts;
+  if (!list.length) { el.innerHTML = '<div class="text-center text-gray-500 py-6">Не найдено</div>'; return; }
+  el.innerHTML = list.map(u => `
+    <div class="glass-panel rounded-xl p-4 flex items-center gap-3 border border-white/10">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl shrink-0">${u.firstName[0]}</div>
+      <div class="flex-1 min-w-0"><div class="font-semibold text-white">${u.firstName} ${u.lastName}</div><div class="text-sm text-gray-400">@${u.username}${u.online?' · в сети':''}</div></div>
+      <button class="bg-[#0A84FF]/20 border border-[#0A84FF]/40 text-[#0A84FF] rounded-xl px-4 py-2 text-sm font-semibold active:opacity-70" onclick="startChatWith('${u.id}')">Написать</button>
+    </div>`).join('');
+}
+
+function startChatWith(id) {
+  closeSettingsPanel('panel-find-user');
+  openChat(id);
+}
+
+// ── STARS & GIFTS ──
 function updateStarBal() {
-  document.getElementById('star-balance-lg').textContent = state.stars;
-  document.getElementById('sidebar-star-bal').textContent = state.stars;
+  document.getElementById('star-balance-lg').textContent = S.stars;
+  document.getElementById('sidebar-star-bal').textContent = S.stars;
 }
 
 function buyStars(n) {
-  state.stars += n;
+  if (!confirm(`Купить ${n} ★?`)) return;
+  S.stars += n;
   updateStarBal();
-  alert(`Куплено ${n} ★`);
+  showToast(`✅ Куплено ${n} ★`);
 }
 
 function renderGiftShop() {
-  const g = document.getElementById('gift-shop-grid');
-  if (!g) return;
-  g.innerHTML = state.giftCatalog.map(item =>
-    `<div class="glass-panel p-3 rounded-xl flex flex-col items-center gap-1 cursor-pointer border border-white/10 active:scale-95 transition-transform" onclick="selectGiftForSend('${item.id}')">
-      <div class="text-3xl">${item.icon}</div>
-      <div class="font-bold text-xs text-white">${item.name}</div>
-      <div class="text-xs text-yellow-400">${item.price} ★</div>
-    </div>`
-  ).join('');
+  const el = document.getElementById('gift-shop-grid');
+  if (!el) return;
+  el.innerHTML = S.giftCatalog.map(g => `
+    <div class="glass-panel p-3 rounded-xl flex flex-col items-center gap-1 cursor-pointer border border-white/10 active:opacity-70" onclick="selectGiftFromShop('${g.id}')">
+      <div class="text-3xl">${g.icon}</div>
+      <div class="font-bold text-xs text-white">${g.name}</div>
+      <div class="text-xs text-yellow-400">${g.price} ★</div>
+    </div>`).join('');
 }
 
-function selectGiftForSend(id) {
-  state.selectedGift = state.giftCatalog.find(g => g.id === id);
+function selectGiftFromShop(id) {
+  const gift = S.giftCatalog.find(g => g.id === id);
+  S.selectedGift = gift;
   closeSettingsPanel('panel-stars');
-  openSendGiftModal(state.selectedGift, state.currentProfileId);
+  openGiftModal(gift, S.giftProfileTarget || (S.activeChat||null));
 }
 
-function openSendGiftModal(gift, preselectId) {
-  const g = gift || state.selectedGift;
-  state.selectedGift = g;
+function openGiftModal(gift, preselect) {
+  const g = gift || S.selectedGift;
+  if (!g) return;
+  S.selectedGift = g;
   document.getElementById('modal-gift-icon').textContent = g.icon;
   document.getElementById('modal-gift-name').textContent = g.name;
   document.getElementById('modal-gift-price').textContent = g.price;
   const sel = document.getElementById('gift-recipient-select');
-  sel.innerHTML = state.chats.map(c =>
-    `<option value="${c.partner._id}" ${preselectId===c.partner._id?'selected':''}>${c.partner.firstName} ${c.partner.lastName||''}</option>`
-  ).join('');
+  sel.innerHTML = S.contacts.map(c => `<option value="${c.id}" ${preselect===c.id?'selected':''}>${c.firstName} ${c.lastName}</option>`).join('');
   document.getElementById('send-gift-modal').classList.remove('hidden');
 }
 
-async function confirmSendGift() {
-  if (state.stars < state.selectedGift.price) return alert('Недостаточно звёзд!');
-  const recipientId = document.getElementById('gift-recipient-select').value;
-  if (!recipientId) return;
+function confirmSendGift() {
+  if (!S.selectedGift) return;
+  if (S.stars < S.selectedGift.price) { showToast('❌ Недостаточно звёзд!'); return; }
+  const recId = document.getElementById('gift-recipient-select').value;
+  const rec = S.contacts.find(c => c.id === recId);
+  if (!rec) return;
 
-  // Emit via socket
-  socket.emit('gift:send', { recipientId, gift: state.selectedGift }, (res) => {
-    if (res?.success) {
-      state.stars -= state.selectedGift.price;
-      updateStarBal();
-      if (!state.messages[recipientId]) state.messages[recipientId] = [];
-      state.messages[recipientId].push(res.message);
-      if (state.activeChatId === recipientId) renderCurrentChat();
-      updateConversationPreview(recipientId, res.message);
-    }
-  });
+  S.stars -= S.selectedGift.price;
+  updateStarBal();
+  if (!rec.gifts) rec.gifts = [];
+  rec.gifts.push({...S.selectedGift});
 
+  // Add gift message to chat
+  if (!S.messages[recId]) S.messages[recId] = [];
+  S.messages[recId].push({ type:'gift', gift:S.selectedGift, fromMe:true, time:nt() });
+  if (S.activeChat === recId) renderCurrentChat();
+
+  updateChatPreview(recId, `🎁 ${S.selectedGift.name}`);
   document.getElementById('send-gift-modal').classList.add('hidden');
-  alert(`Подарок ${state.selectedGift.icon} отправлен!`);
+  showToast(`🎁 Подарок ${S.selectedGift.icon} отправлен!`);
+  S.selectedGift = null;
 }
 
-// ─────────────────────────────────────────
-// NAV
-// ─────────────────────────────────────────
-function switchTab(tabName) {
+// ── QR CODE ──
+function showQRModal() {
+  const canvas = document.getElementById('qr-canvas');
+  const ctx = canvas.getContext('2d');
+  const size = 180;
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,size,size);
+  ctx.fillStyle = '#000';
+  // Simple QR-like pattern
+  const cell = 6; const cols = Math.floor(size/cell);
+  const text = `https://t.me/${S.user?.username||'user'}`;
+  for (let r=0; r<cols; r++) for (let c=0; c<cols; c++) {
+    if (((r+c)*(r*3+c*7+17))%13 < 6) { ctx.fillRect(c*cell,r*cell,cell,cell); }
+  }
+  // Corner marks
+  [[0,0],[size-21,0],[0,size-21]].forEach(([x,y]) => {
+    ctx.fillStyle='#fff'; ctx.fillRect(x,y,21,21);
+    ctx.fillStyle='#000'; ctx.fillRect(x,y,21,21);
+    ctx.strokeStyle='#000'; ctx.lineWidth=3; ctx.strokeRect(x+1.5,y+1.5,18,18);
+    ctx.fillRect(x+5,y+5,11,11);
+  });
+  document.getElementById('qr-username-display').textContent = '@' + (S.user?.username||'user');
+  document.getElementById('qr-modal').classList.remove('hidden');
+}
+
+// ── NAVIGATION ──
+function switchTab(name) {
   ['chats','calls','settings'].forEach(t => {
     document.getElementById(`tab-${t}`).classList.add('hidden');
     const btn = document.getElementById(`tab-btn-${t}`);
-    btn.querySelector('svg').classList.replace('tab-active','tab-inactive');
-    btn.querySelector('span').classList.replace('tab-active','tab-inactive');
+    btn.querySelector('svg').classList.remove('tab-active'); btn.querySelector('svg').classList.add('tab-inactive');
+    btn.querySelector('span').classList.remove('tab-active'); btn.querySelector('span').classList.add('tab-inactive');
   });
-  document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-  const ab = document.getElementById(`tab-btn-${tabName}`);
-  ab.querySelector('svg').classList.replace('tab-inactive','tab-active');
-  ab.querySelector('span').classList.replace('tab-inactive','tab-active');
+  document.getElementById(`tab-${name}`).classList.remove('hidden');
+  const ab = document.getElementById(`tab-btn-${name}`);
+  ab.querySelector('svg').classList.remove('tab-inactive'); ab.querySelector('svg').classList.add('tab-active');
+  ab.querySelector('span').classList.remove('tab-inactive'); ab.querySelector('span').classList.add('tab-active');
 
   const hTitle  = document.getElementById('header-title');
   const hSearch = document.getElementById('header-search');
   const hAdd    = document.getElementById('header-add-btn');
-  if (tabName === 'chats') {
-    hTitle.textContent = 'Чаты'; hSearch.classList.remove('hidden'); hAdd.classList.remove('hidden');
-  } else if (tabName === 'calls') {
-    hTitle.textContent = 'Звонки'; hSearch.classList.add('hidden'); hAdd.classList.add('hidden');
-    renderCallLog();
-  } else {
-    hTitle.textContent = 'Настройки'; hSearch.classList.add('hidden'); hAdd.classList.add('hidden');
-  }
+  if (name === 'chats') { hTitle.textContent='Чаты'; hSearch.classList.remove('hidden'); hAdd.classList.remove('hidden'); }
+  else if (name === 'calls') { hTitle.textContent='Звонки'; hSearch.classList.add('hidden'); hAdd.classList.add('hidden'); renderCallLog(); }
+  else { hTitle.textContent='Настройки'; hSearch.classList.add('hidden'); hAdd.classList.add('hidden'); }
 }
 
 function openSettingsPanel(id)  { document.getElementById(id)?.classList.remove('translate-x-full'); }
 function closeSettingsPanel(id) { document.getElementById(id)?.classList.add('translate-x-full'); }
-function toggleSetting(el) {
-  const s = el.querySelector('span:last-child');
-  const opts = ['Все','Никто','Контакты'];
-  s.textContent = opts[(opts.indexOf(s.textContent)+1) % opts.length];
+
+function cyclePrivacy(el) {
+  const sp = el.querySelector('span:last-child');
+  const opts = ['Все','Мои контакты','Никто'];
+  sp.textContent = opts[(opts.indexOf(sp.textContent)+1) % opts.length];
 }
 
 function setTheme(name) {
@@ -1680,49 +958,37 @@ function setTheme(name) {
   body.className = body.className.replace(/theme-\S+/g,'').trim();
   body.classList.add(name);
   document.body.style.color = name.includes('light') ? '#111' : 'white';
-  // Save preference
-  if (socket && state.user) {
-    apiFetch('/api/users/settings', { method:'PUT', body: JSON.stringify({ theme: name }) }).catch(()=>{});
+  closeSettingsPanel('panel-appearance');
+  showToast('🎨 Тема изменена');
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  let el = document.getElementById('app-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'app-toast';
+    el.style.cssText = 'position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(30,30,30,0.95);color:#fff;padding:10px 22px;border-radius:20px;font-size:14px;font-weight:500;z-index:9999;transition:opacity .3s;pointer-events:none;white-space:nowrap;backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.12);';
+    document.body.appendChild(el);
   }
-}
-
-// ─────────────────────────────────────────
-// MISC HELPERS
-// ─────────────────────────────────────────
-function autoResizeTextarea(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function openQRModal() {
-  const container = document.getElementById('qrcode');
-  container.innerHTML = '';
-  new QRCode(container, {
-    text: `https://t.me/${state.user?.username||'user'}`,
-    width:200, height:200, colorDark:'#000', colorLight:'#fff',
-    correctLevel: QRCode.CorrectLevel.H,
-  });
-  document.getElementById('qr-username-display').textContent = '@' + (state.user?.username||'user');
-  document.getElementById('qr-modal').classList.remove('hidden');
-}
-
-function showMsgToast(sender, text) {
-  msgToastChatId = sender._id;
-  document.getElementById('msg-toast-avatar').textContent = (sender.firstName||'?')[0].toUpperCase();
-  document.getElementById('msg-toast-name').textContent = sender.firstName;
-  document.getElementById('msg-toast-preview').textContent = text;
-  const t = document.getElementById('msg-toast');
-  t.classList.remove('top-[-100px]'); t.classList.add('top-4');
-  setTimeout(() => { t.classList.remove('top-4'); t.classList.add('top-[-100px]'); }, 5000);
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.opacity='0'; }, 2200);
 }
 
 function openToastChat() {
   if (msgToastChatId) openChat(msgToastChatId);
-  document.getElementById('msg-toast').classList.replace('top-4','top-[-100px]');
+  document.getElementById('msg-toast').style.top = '-100px';
 }
 
-function promptCopy(txt) {
-  navigator.clipboard.writeText(txt).then(()=>alert('Скопировано')).catch(()=>alert(txt));
+// ── HELPERS ──
+function nt() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+function nowStr() {
+  return new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}) + ' · ' + new Date().toLocaleDateString('ru',{day:'2-digit',month:'2-digit'});
 }
 </script>
 </body>
