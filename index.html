@@ -34,23 +34,28 @@
 [data-theme="amoled"] {
   --bg-primary: #000000; --bg-secondary: #0a0a0a; --bg-glass: rgba(5,5,5,0.92);
   --bg-glass-card: rgba(15,15,15,0.7); --bg-msg-in: rgba(25,25,25,0.9);
-  --bg-tab: rgba(0,0,0,0.98); --border-color: rgba(255,255,255,0.08); --text-secondary: rgba(255,255,255,0.55);
+  --bg-tab: rgba(0,0,0,0.98); --border-color: rgba(255,255,255,0.08);
+  --text-secondary: rgba(255,255,255,0.55);
 }
 [data-theme="dark-green"] {
   --bg-primary: #000d08; --bg-secondary: #001a0f; --bg-glass: rgba(0,20,10,0.82);
-  --bg-glass-card: rgba(0,30,15,0.55); --bg-msg-in: rgba(0,40,20,0.6); --bg-msg-out: #34C759;
-  --bg-tab: rgba(0,12,6,0.97); --accent: #34C759; --accent-glow: rgba(52,199,89,0.3); --shadow-accent: 0 8px 32px rgba(52,199,89,0.25);
+  --bg-glass-card: rgba(0,30,15,0.55); --bg-msg-in: rgba(0,40,20,0.6);
+  --bg-msg-out: #34C759; --bg-tab: rgba(0,12,6,0.97);
+  --accent: #34C759; --accent-glow: rgba(52,199,89,0.3); --shadow-accent: 0 8px 32px rgba(52,199,89,0.25);
 }
 [data-theme="dark-purple"] {
   --bg-primary: #0a0014; --bg-secondary: #140028; --bg-glass: rgba(20,0,40,0.82);
-  --bg-glass-card: rgba(35,0,65,0.5); --bg-msg-in: rgba(50,0,80,0.5); --bg-msg-out: #BF5AF2;
-  --bg-tab: rgba(10,0,20,0.97); --accent: #BF5AF2; --accent-glow: rgba(191,90,242,0.3); --shadow-accent: 0 8px 32px rgba(191,90,242,0.25);
+  --bg-glass-card: rgba(35,0,65,0.5); --bg-msg-in: rgba(50,0,80,0.5);
+  --bg-msg-out: #BF5AF2; --bg-tab: rgba(10,0,20,0.97);
+  --accent: #BF5AF2; --accent-glow: rgba(191,90,242,0.3); --shadow-accent: 0 8px 32px rgba(191,90,242,0.25);
 }
 [data-theme="light"] {
   --bg-primary: #f2f2f7; --bg-secondary: #ffffff; --bg-glass: rgba(255,255,255,0.85);
-  --bg-glass-card: rgba(255,255,255,0.7); --bg-msg-in: rgba(0,0,0,0.07); --bg-msg-out: #0A84FF;
-  --bg-input: rgba(0,0,0,0.05); --bg-tab: rgba(242,242,247,0.97); --border-color: rgba(0,0,0,0.1);
-  --text-primary: #000000; --text-secondary: rgba(0,0,0,0.55); --text-muted: rgba(0,0,0,0.35); --shadow-accent: 0 8px 32px rgba(10,132,255,0.2);
+  --bg-glass-card: rgba(255,255,255,0.7); --bg-msg-in: rgba(0,0,0,0.07);
+  --bg-msg-out: #0A84FF; --bg-input: rgba(0,0,0,0.05); --bg-tab: rgba(242,242,247,0.97);
+  --border-color: rgba(0,0,0,0.1); --text-primary: #000000;
+  --text-secondary: rgba(0,0,0,0.55); --text-muted: rgba(0,0,0,0.35);
+  --shadow-accent: 0 8px 32px rgba(10,132,255,0.2);
 }
 [data-theme="light-warm"] {
   --bg-primary: #faf8f5; --bg-secondary: #ffffff; --bg-glass: rgba(255,252,248,0.88);
@@ -66,64 +71,75 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
   background: var(--bg-primary); color: var(--text-primary);
   height: 100dvh; overflow: hidden;
-  -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; -webkit-user-select: none;
   transition: background 0.4s ease, color 0.4s ease;
 }
 ::-webkit-scrollbar { display: none; }
 input, textarea { user-select: text; -webkit-user-select: text; }
 .glass {
-  background: var(--bg-glass); backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%); border: 1px solid var(--border-color);
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid var(--border-color);
   transition: background 0.4s ease, border-color 0.4s ease;
 }
 .glass-card {
-  background: var(--bg-glass-card); backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-color); transition: background 0.4s ease;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color); transition: background 0.4s ease;
 }
 .glass-input {
-  background: var(--bg-input); border: 1.5px solid var(--border-color); border-radius: 14px;
-  color: var(--text-primary); padding: 12px 16px; font-size: 17px; outline: none;
+  background: var(--bg-input); border: 1.5px solid var(--border-color);
+  border-radius: 14px; color: var(--text-primary);
+  padding: 12px 16px; font-size: 17px; outline: none;
   transition: border-color 0.2s, background 0.2s; width: 100%;
 }
 .glass-input:focus { border-color: var(--accent); background: rgba(10,132,255,0.06); }
 .glass-input::placeholder { color: var(--text-muted); }
 .btn-primary {
-  background: var(--accent); color: white; font-weight: 600; border-radius: 14px;
-  padding: 15px 20px; text-align: center; cursor: pointer;
-  transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
-  border: none; font-size: 16px; width: 100%; box-shadow: var(--shadow-accent);
-  position: relative; overflow: hidden;
+  background: var(--accent); color: white; font-weight: 600;
+  border-radius: 14px; padding: 15px 20px; text-align: center;
+  cursor: pointer; transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
+  border: none; font-size: 16px; width: 100%;
+  box-shadow: var(--shadow-accent); position: relative; overflow: hidden;
 }
 .btn-primary:active { transform: scale(0.97); opacity: 0.85; }
 .btn-secondary {
-  background: var(--bg-glass-card); color: var(--accent); border: 1px solid var(--border-color);
-  font-weight: 600; border-radius: 14px; padding: 12px 20px; cursor: pointer;
+  background: var(--bg-glass-card); color: var(--accent);
+  border: 1px solid var(--border-color); font-weight: 600;
+  border-radius: 14px; padding: 12px 20px; cursor: pointer;
   transition: transform 0.15s, opacity 0.15s; font-size: 15px;
 }
 .btn-secondary:active { transform: scale(0.97); opacity: 0.8; }
-.ripple-container { position: relative; overflow: hidden; }
 .ripple {
-  position: absolute; border-radius: 50%; background: rgba(255,255,255,0.25);
-  transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transform: scale(0); animation: rippleAnim 0.6s linear;
+  pointer-events: none;
 }
 @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
 #app-root {
-  display: flex; flex-direction: column; height: 100dvh; width: 100%;
+  display: flex; flex-direction: column;
+  height: 100dvh; width: 100%;
   position: relative; overflow: hidden;
 }
 .screen {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
   background: var(--bg-primary); transition: background 0.4s ease;
 }
 .screen.hidden { display: none !important; }
 .auth-container {
-  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: calc(var(--safe-top) + 20px) 28px calc(var(--safe-bottom) + 20px); gap: 0;
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: calc(var(--safe-top) + 20px) 28px calc(var(--safe-bottom) + 20px);
 }
 .auth-logo {
-  width: 96px; height: 96px; border-radius: 50%; background: var(--accent);
-  display: flex; align-items: center; justify-content: center; margin-bottom: 28px;
-  box-shadow: var(--shadow-accent); animation: logoPulse 3s ease-in-out infinite;
+  width: 96px; height: 96px; border-radius: 50%;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 28px; box-shadow: var(--shadow-accent);
+  animation: logoPulse 3s ease-in-out infinite;
 }
 @keyframes logoPulse {
   0%,100% { box-shadow: 0 0 0 0 var(--accent-glow); }
@@ -134,37 +150,48 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .auth-form { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 14px; }
 #screen-app { padding-top: var(--safe-top); padding-left: var(--safe-left); padding-right: var(--safe-right); }
 .app-header {
-  padding: 14px 16px 10px; background: var(--bg-tab); backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color);
+  padding: 14px 16px 10px;
+  background: var(--bg-tab); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
   position: sticky; top: 0; z-index: 20; transition: background 0.4s;
 }
 .app-header h1 { font-size: 28px; font-weight: 700; color: var(--text-primary); margin: 0 0 10px; }
 .tab-content-wrap { flex: 1; overflow: hidden; position: relative; }
-.tab-pane { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(var(--safe-bottom) + 90px); }
+.tab-pane {
+  position: absolute; inset: 0; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--safe-bottom) + 90px);
+}
 .tab-pane.hidden { display: none; }
 .tab-bar {
   position: absolute; bottom: 0; left: 0; right: 0;
-  height: calc(var(--safe-bottom) + 72px); padding-bottom: var(--safe-bottom);
+  height: calc(var(--safe-bottom) + 72px);
+  padding-bottom: var(--safe-bottom);
   background: var(--bg-tab); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border-color); display: flex; justify-content: space-around;
-  align-items: flex-start; padding-top: 10px; z-index: 30; transition: background 0.4s;
+  border-top: 1px solid var(--border-color);
+  display: flex; justify-content: space-around; align-items: flex-start;
+  padding-top: 10px; z-index: 30; transition: background 0.4s;
 }
-.tab-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 70px; cursor: pointer; transition: transform 0.2s; }
+.tab-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  width: 70px; cursor: pointer; transition: transform 0.2s; background: none; border: none;
+}
 .tab-btn:active { transform: scale(0.92); }
 .tab-btn svg { width: 26px; height: 26px; transition: color 0.2s; }
 .tab-btn span { font-size: 10px; font-weight: 600; transition: color 0.2s; }
 .tab-btn.active svg, .tab-btn.active span { color: var(--accent); }
 .tab-btn:not(.active) svg, .tab-btn:not(.active) span { color: var(--text-muted); }
 .search-bar {
-  display: flex; align-items: center; gap: 10px; background: var(--bg-input);
-  border-radius: 12px; padding: 9px 12px; transition: background 0.3s;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg-input); border-radius: 12px; padding: 9px 12px;
+  transition: background 0.3s;
 }
 .search-bar input { background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 16px; flex: 1; }
 .search-bar input::placeholder { color: var(--text-muted); }
 .chat-item {
   display: flex; align-items: center; padding: 12px 16px;
-  border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.15s;
-  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border-color); cursor: pointer;
+  transition: background 0.15s; position: relative; overflow: hidden;
 }
 .chat-item:active { background: rgba(255,255,255,0.05); }
 .chat-avatar {
@@ -176,8 +203,9 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 }
 .chat-item:active .chat-avatar { transform: scale(0.95); }
 .online-dot {
-  position: absolute; bottom: 1px; right: 1px; width: 14px; height: 14px;
-  background: var(--green); border-radius: 50%; border: 2.5px solid var(--bg-primary);
+  position: absolute; bottom: 1px; right: 1px;
+  width: 14px; height: 14px; background: var(--green);
+  border-radius: 50%; border: 2.5px solid var(--bg-primary);
 }
 .chat-info { flex: 1; min-width: 0; }
 .chat-name { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
@@ -195,60 +223,86 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 #chat-overlay {
-  position: absolute; inset: 0; background: var(--bg-primary); z-index: 50;
-  display: flex; flex-direction: column; transform: translateX(100%);
+  position: absolute; inset: 0; background: var(--bg-primary);
+  z-index: 50; display: flex; flex-direction: column;
+  transform: translateX(100%);
   transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); will-change: transform;
 }
 #chat-overlay.open { transform: translateX(0); }
 .chat-header {
-  padding: calc(var(--safe-top) + 8px) 8px 8px; background: var(--bg-tab);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  padding: calc(var(--safe-top) + 8px) 8px 8px;
+  background: var(--bg-tab); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
 }
-.chat-messages { flex: 1; overflow-y: auto; padding: 12px; -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 4px; }
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 12px;
+  -webkit-overflow-scrolling: touch; display: flex; flex-direction: column; gap: 4px;
+}
 .chat-input-bar {
-  padding: 8px 8px calc(var(--safe-bottom) + 8px); background: var(--bg-tab);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border-color); display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0;
+  padding: 8px 8px calc(var(--safe-bottom) + 8px);
+  background: var(--bg-tab); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-color);
+  display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0;
 }
 .msg-row { display: flex; margin-bottom: 2px; animation: msgAppear 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 .msg-row.out { justify-content: flex-end; }
-.msg-row.in { justify-content: flex-start; }
-@keyframes msgAppear { from { opacity: 0; transform: translateY(12px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-.msg-bubble { max-width: 78%; padding: 9px 13px; border-radius: 20px; font-size: 15px; line-height: 1.45; word-break: break-word; position: relative; }
-.msg-bubble.out { background: var(--bg-msg-out); border-radius: 20px 20px 5px 20px; color: white; box-shadow: 0 2px 12px var(--accent-glow); }
-.msg-bubble.in { background: var(--bg-msg-in); border-radius: 20px 20px 20px 5px; color: var(--text-primary); border: 1px solid var(--border-color); }
+.msg-row.in  { justify-content: flex-start; }
+@keyframes msgAppear {
+  from { opacity: 0; transform: translateY(12px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.msg-bubble {
+  max-width: 78%; padding: 9px 13px; border-radius: 20px;
+  font-size: 15px; line-height: 1.45; word-break: break-word; position: relative;
+}
+.msg-bubble.out {
+  background: var(--bg-msg-out); border-radius: 20px 20px 5px 20px;
+  color: white; box-shadow: 0 2px 12px var(--accent-glow);
+}
+.msg-bubble.in {
+  background: var(--bg-msg-in); border-radius: 20px 20px 20px 5px;
+  color: var(--text-primary); border: 1px solid var(--border-color);
+}
 .msg-time { font-size: 10px; opacity: 0.6; text-align: right; margin-top: 4px; }
 .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 10px 13px; }
-.typing-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: typingBounce 1.3s ease-in-out infinite; }
+.typing-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); animation: typingBounce 1.3s ease-in-out infinite;
+}
 .typing-dot:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-7px); } }
 #msg-textarea {
   flex: 1; background: var(--bg-input); border: 1.5px solid var(--border-color);
-  border-radius: 22px; padding: 10px 16px; color: var(--text-primary); font-size: 16px;
-  resize: none; outline: none; max-height: 120px; line-height: 1.4; transition: border-color 0.2s;
+  border-radius: 22px; padding: 10px 16px; color: var(--text-primary);
+  font-size: 16px; resize: none; outline: none; max-height: 120px;
+  line-height: 1.4; transition: border-color 0.2s;
 }
 #msg-textarea:focus { border-color: var(--accent); }
 #msg-textarea::placeholder { color: var(--text-muted); }
 .panel {
-  position: fixed; inset: 0; z-index: 70; background: var(--bg-primary);
-  transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  position: fixed; inset: 0; z-index: 70;
+  background: var(--bg-primary);
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
   display: flex; flex-direction: column; will-change: transform;
 }
 .panel.open { transform: translateX(0); }
 .panel-header {
-  padding: calc(var(--safe-top) + 10px) 16px 12px; background: var(--bg-tab);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  padding: calc(var(--safe-top) + 10px) 16px 12px;
+  background: var(--bg-tab); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
 }
 .panel-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(var(--safe-bottom) + 20px); }
 .settings-group { margin: 0 16px 16px; }
 .settings-group-label { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 4px 8px; }
 .settings-card { background: var(--bg-glass-card); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; transition: background 0.4s; }
 .settings-row {
-  display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer;
-  transition: background 0.15s; border-bottom: 1px solid var(--border-color); position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+  cursor: pointer; transition: background 0.15s;
+  border-bottom: 1px solid var(--border-color); position: relative; overflow: hidden;
 }
 .settings-row:last-child { border-bottom: none; }
 .settings-row:active { background: rgba(255,255,255,0.04); }
@@ -257,12 +311,32 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .settings-row-title { font-size: 16px; font-weight: 500; color: var(--text-primary); }
 .settings-row-sub { font-size: 13px; color: var(--text-secondary); margin-top: 1px; }
 .chevron { color: var(--text-muted); flex-shrink: 0; }
-.toggle { width: 52px; height: 32px; background: rgba(120,120,128,0.3); border-radius: 16px; position: relative; cursor: pointer; transition: background 0.3s; flex-shrink: 0; }
-.toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 28px; height: 28px; background: white; border-radius: 50%; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+.toggle {
+  width: 52px; height: 32px; background: rgba(120,120,128,0.3);
+  border-radius: 16px; position: relative; cursor: pointer;
+  transition: background 0.3s; flex-shrink: 0;
+}
+.toggle::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 28px; height: 28px; background: white; border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
 .toggle.on { background: var(--green); }
 .toggle.on::after { transform: translateX(20px); }
-.profile-hero { padding: calc(var(--safe-top) + 60px) 20px 24px; background: linear-gradient(180deg, var(--accent-glow) 0%, transparent 100%); display: flex; flex-direction: column; align-items: center; text-align: center; }
-.profile-avatar-xl { width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 42px; font-weight: 700; color: white; margin-bottom: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.2); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.profile-hero {
+  padding: calc(var(--safe-top) + 60px) 20px 24px;
+  background: linear-gradient(180deg, var(--accent-glow) 0%, transparent 100%);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.profile-avatar-xl {
+  width: 96px; height: 96px; border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 42px; font-weight: 700; color: white; margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.2);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
 .profile-avatar-xl:active { transform: scale(0.95); }
 .stories-row { display: flex; gap: 12px; overflow-x: auto; padding: 0 16px 16px; -webkit-overflow-scrolling: touch; }
 .story-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; }
@@ -275,26 +349,61 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .gift-icon { font-size: 36px; margin-bottom: 6px; }
 .gift-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
 .gift-price { font-size: 11px; color: var(--yellow); margin-top: 2px; }
-.modal-overlay { position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
 .modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal-sheet { background: var(--bg-glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border-color); border-radius: 24px 24px 0 0; width: 100%; max-width: 480px; padding: 16px 20px calc(var(--safe-bottom) + 24px); transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+.modal-sheet {
+  background: var(--bg-glass); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-color); border-radius: 24px 24px 0 0;
+  width: 100%; max-width: 480px;
+  padding: 16px 20px calc(var(--safe-bottom) + 24px);
+  transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+}
 .modal-overlay.open .modal-sheet { transform: translateY(0); }
 .modal-handle { width: 40px; height: 5px; background: var(--border-color); border-radius: 3px; margin: 0 auto 20px; }
-#call-screen { position: fixed; inset: 0; z-index: 200; background: #000; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+#call-screen {
+  position: fixed; inset: 0; z-index: 200; background: #000;
+  display: flex; flex-direction: column;
+  transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
 #call-screen.active { transform: translateY(0); }
-.call-overlay { position: relative; z-index: 10; display: flex; flex-direction: column; height: 100%; padding: calc(var(--safe-top) + 20px) 20px calc(var(--safe-bottom) + 30px); }
+.call-overlay {
+  position: relative; z-index: 10; display: flex; flex-direction: column;
+  height: 100%; padding: calc(var(--safe-top) + 20px) 20px calc(var(--safe-bottom) + 30px);
+}
 .call-top { text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-.call-avatar { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 50px; font-weight: 700; color: white; border: 4px solid rgba(255,255,255,0.3); animation: callPulse 2s ease-in-out infinite; }
-@keyframes callPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); } 50% { box-shadow: 0 0 0 20px transparent; } }
+.call-avatar {
+  width: 110px; height: 110px; border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 50px; font-weight: 700; color: white;
+  border: 4px solid rgba(255,255,255,0.3);
+  animation: callPulse 2s ease-in-out infinite;
+}
+@keyframes callPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
+  50% { box-shadow: 0 0 0 20px transparent; }
+}
 .call-name { font-size: 28px; font-weight: 700; color: white; }
 .call-status { font-size: 16px; color: rgba(255,255,255,0.7); }
 .call-duration { font-size: 20px; font-weight: 600; color: white; font-variant-numeric: tabular-nums; }
 .call-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 0 8px 20px; }
 .call-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
-.call-btn-circle { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; transition: transform 0.15s, background 0.15s; backdrop-filter: blur(10px); }
+.call-btn-circle {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s, background 0.15s; backdrop-filter: blur(10px);
+}
 .call-btn-circle:active { transform: scale(0.9); }
 .call-btn-circle.active { background: rgba(255,255,255,0.35); }
 .call-btn-circle.end { background: var(--red); }
+.call-btn-circle.end:active { background: #cc3026; }
+.call-btn label { font-size: 11px; color: rgba(255,255,255,0.7); }
 .incoming-call-actions { display: flex; justify-content: space-around; padding: 20px 40px; }
 .incoming-btn { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; }
 .incoming-btn-circle { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.15s; }
@@ -305,16 +414,43 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 #local-video-pip { position: absolute; top: calc(var(--safe-top) + 80px); right: 16px; width: 100px; height: 150px; border-radius: 14px; overflow: hidden; border: 2px solid rgba(255,255,255,0.3); z-index: 15; cursor: pointer; }
 #local-video { width: 100%; height: 100%; object-fit: cover; }
 #remote-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-#sms-toast, #msg-toast { position: fixed; left: 12px; right: 12px; z-index: 300; border-radius: 20px; top: calc(var(--safe-top) + 8px); transform: translateY(-120%); transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); will-change: transform; }
+#sms-toast, #msg-toast {
+  position: fixed; left: 12px; right: 12px; z-index: 300;
+  border-radius: 20px; top: calc(var(--safe-top) + 8px);
+  transform: translateY(-120%);
+  transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1); will-change: transform;
+}
 #sms-toast.show, #msg-toast.show { transform: translateY(0); }
-#app-toast { position: fixed; bottom: calc(var(--safe-bottom) + 100px); left: 50%; transform: translateX(-50%) translateY(10px); background: rgba(30,30,35,0.95); color: var(--text-primary); padding: 10px 22px; border-radius: 22px; font-size: 14px; font-weight: 500; z-index: 400; opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; white-space: nowrap; backdrop-filter: blur(16px); border: 1px solid var(--border-color); }
+#app-toast {
+  position: fixed; bottom: calc(var(--safe-bottom) + 100px);
+  left: 50%; transform: translateX(-50%) translateY(10px);
+  background: rgba(30,30,35,0.95); color: var(--text-primary);
+  padding: 10px 22px; border-radius: 22px; font-size: 14px; font-weight: 500;
+  z-index: 400; opacity: 0; transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none; white-space: nowrap; backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+}
 #app-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-#qr-modal { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+#qr-modal {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
 #qr-modal.open { opacity: 1; pointer-events: all; }
-.qr-card { background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 28px; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 14px; transform: scale(0.85); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+.qr-card {
+  background: var(--bg-glass); border: 1px solid var(--border-color); border-radius: 28px;
+  padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  transform: scale(0.85); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
 #qr-modal.open .qr-card { transform: scale(1); }
 .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 16px 16px; }
-.theme-tile { border-radius: 16px; height: 80px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s; position: relative; overflow: hidden; }
+.theme-tile {
+  border-radius: 16px; height: 80px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  border: 2px solid transparent; transition: transform 0.2s, border-color 0.2s;
+  position: relative; overflow: hidden;
+}
 .theme-tile:active { transform: scale(0.95); }
 .theme-tile.active { border-color: var(--accent); }
 .theme-dot { width: 20px; height: 20px; border-radius: 50%; }
@@ -327,7 +463,7 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .stars-hero { margin: 16px; background: linear-gradient(135deg, #FFD60A, #FF9F0A, #FF6B35); border-radius: 20px; padding: 24px; text-align: center; }
 .stars-balance { font-size: 52px; font-weight: 800; color: white; }
 .buy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px 16px; }
-.buy-card { background: var(--bg-glass-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; cursor: pointer; transition: transform 0.15s; }
+.buy-card { background: var(--bg-glass-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; cursor: pointer; transition: transform 0.15s; position: relative; overflow: hidden; }
 .buy-card:active { transform: scale(0.96); }
 .privacy-option { color: var(--accent); font-size: 14px; }
 #lightbox { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; }
@@ -343,7 +479,8 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 </head>
 <body>
 <div id="app-root">
-<!-- LOGIN SCREEN -->
+
+<!-- LOGIN -->
 <div id="screen-login" class="screen">
   <div class="auth-container fade-up">
     <div class="auth-logo">
@@ -353,16 +490,15 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     <p class="auth-subtitle">Войдите в ваш аккаунт</p>
     <div class="auth-form">
       <input type="tel" id="phone-input" class="glass-input" placeholder="+7 999 000-00-00" autocomplete="tel">
-      <div id="phone-error" style="color:var(--red);font-size:13px;min-height:18px;padding:0 4px;"></div>
-      <!-- FIXED: button uses id and addEventListener instead of inline onclick -->
-      <button id="btn-get-code" class="btn-primary ripple-container">Получить код</button>
+      <button type="button" class="btn-primary" id="btn-get-code" onclick="submitPhone()">Получить код</button>
     </div>
   </div>
 </div>
-<!-- CODE SCREEN -->
+
+<!-- CODE -->
 <div id="screen-code" class="screen hidden">
   <div style="padding: calc(var(--safe-top) + 16px) 16px 16px;">
-    <button onclick="goScreen('screen-login')" style="color:var(--accent);font-size:17px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:4px 0;">
+    <button type="button" onclick="goScreen('screen-login')" style="color:var(--accent);font-size:17px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:4px 0;">
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
   </div>
@@ -374,16 +510,17 @@ input, textarea { user-select: text; -webkit-user-select: text; }
         <span class="code-number" id="shown-code">----</span>
         <p class="code-hint">Ваш код подтверждения</p>
       </div>
-      <input type="number" id="code-input" class="glass-input" style="text-align:center;font-size:28px;font-weight:700;letter-spacing:12px;" maxlength="4" placeholder="">
-      <button id="btn-submit-code" class="btn-primary ripple-container">Подтвердить</button>
-      <button onclick="goScreen('screen-login')" style="color:var(--accent);background:none;border:none;font-size:15px;cursor:pointer;padding:8px;">Изменить номер</button>
+      <input type="tel" id="code-input" class="glass-input" style="text-align:center;font-size:28px;font-weight:700;letter-spacing:12px;" maxlength="4" placeholder="----" inputmode="numeric">
+      <button type="button" class="btn-primary" id="btn-confirm-code" onclick="submitCode()">Подтвердить</button>
+      <button type="button" onclick="goScreen('screen-login')" style="color:var(--accent);background:none;border:none;font-size:15px;cursor:pointer;padding:8px;">Изменить номер</button>
     </div>
   </div>
 </div>
-<!-- REGISTER SCREEN -->
+
+<!-- REGISTER -->
 <div id="screen-register" class="screen hidden">
   <div style="padding: calc(var(--safe-top) + 16px) 16px 16px;">
-    <button onclick="goScreen('screen-code')" style="color:var(--accent);font-size:17px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:4px 0;">
+    <button type="button" onclick="goScreen('screen-code')" style="color:var(--accent);font-size:17px;display:flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:4px 0;">
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
   </div>
@@ -399,16 +536,17 @@ input, textarea { user-select: text; -webkit-user-select: text; }
         <input type="text" id="username-input" class="glass-input" style="padding-left:32px;" placeholder="username (мин. 4 симв.)">
       </div>
       <div id="reg-status" style="height:18px;font-size:13px;color:var(--red);padding:0 4px;"></div>
-      <button id="btn-register" class="btn-primary ripple-container">Готово</button>
+      <button type="button" class="btn-primary" onclick="registerUser()">Готово</button>
     </div>
   </div>
 </div>
-<!-- MAIN APP SCREEN -->
+
+<!-- MAIN APP -->
 <div id="screen-app" class="screen hidden" style="display:flex;flex-direction:column;">
   <div class="app-header" id="main-header">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
       <h1 id="header-title" style="font-size:28px;font-weight:700;margin:0;">Чаты</h1>
-      <button id="header-add-btn" onclick="openPanel('panel-find-user')" style="width:36px;height:36px;border-radius:50%;background:rgba(10,132,255,0.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--accent);">
+      <button type="button" id="header-add-btn" onclick="openPanel('panel-find-user')" style="width:36px;height:36px;border-radius:50%;background:rgba(10,132,255,0.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--accent);">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
       </button>
     </div>
@@ -417,6 +555,7 @@ input, textarea { user-select: text; -webkit-user-select: text; }
       <input type="search" placeholder="Поиск" id="main-search" oninput="handleSearch(this.value)">
     </div>
   </div>
+
   <div class="tab-content-wrap" style="flex:1;overflow:hidden;position:relative;">
     <div id="tab-chats" class="tab-pane">
       <div class="stories-row" id="stories-row" style="padding:12px 16px 4px;"></div>
@@ -432,14 +571,14 @@ input, textarea { user-select: text; -webkit-user-select: text; }
           <div id="settings-name" style="font-size:22px;font-weight:700;color:var(--text-primary);">User</div>
           <div id="settings-username" style="font-size:15px;color:var(--accent);margin-top:3px;">@username</div>
           <div style="display:flex;gap:10px;margin-top:16px;width:100%;">
-            <button class="btn-secondary" style="flex:1;" onclick="event.stopPropagation();openPanel('panel-edit-profile')">Изменить</button>
-            <button class="btn-secondary" style="flex:1;" onclick="event.stopPropagation();showQRModal()">QR-код</button>
+            <button type="button" class="btn-secondary" style="flex:1;" onclick="event.stopPropagation();openPanel('panel-edit-profile')">Изменить</button>
+            <button type="button" class="btn-secondary" style="flex:1;" onclick="event.stopPropagation();showQRModal()">QR-код</button>
           </div>
         </div>
       </div>
       <div class="settings-group">
         <div class="settings-card">
-          <div class="settings-row ripple-container" onclick="openPanel('panel-stars')">
+          <div class="settings-row" onclick="openPanel('panel-stars')">
             <div class="settings-row-icon" style="background:rgba(255,214,10,0.15);">⭐</div>
             <div class="settings-row-text">
               <div class="settings-row-title">Звёзды</div>
@@ -451,17 +590,17 @@ input, textarea { user-select: text; -webkit-user-select: text; }
       </div>
       <div class="settings-group">
         <div class="settings-card">
-          <div class="settings-row ripple-container" onclick="openPanel('panel-notifications')">
+          <div class="settings-row" onclick="openPanel('panel-notifications')">
             <div class="settings-row-icon" style="background:rgba(255,59,48,0.15);">🔔</div>
             <div class="settings-row-text"><div class="settings-row-title">Уведомления</div></div>
             <svg class="chevron" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7"/></svg>
           </div>
-          <div class="settings-row ripple-container" onclick="openPanel('panel-privacy')">
+          <div class="settings-row" onclick="openPanel('panel-privacy')">
             <div class="settings-row-icon" style="background:rgba(52,199,89,0.15);">🔒</div>
             <div class="settings-row-text"><div class="settings-row-title">Конфиденциальность</div></div>
             <svg class="chevron" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7"/></svg>
           </div>
-          <div class="settings-row ripple-container" onclick="openPanel('panel-appearance')">
+          <div class="settings-row" onclick="openPanel('panel-appearance')">
             <div class="settings-row-icon" style="background:rgba(191,90,242,0.15);">🎨</div>
             <div class="settings-row-text"><div class="settings-row-title">Оформление</div></div>
             <svg class="chevron" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7"/></svg>
@@ -470,7 +609,7 @@ input, textarea { user-select: text; -webkit-user-select: text; }
       </div>
       <div class="settings-group">
         <div class="settings-card">
-          <div class="settings-row ripple-container" onclick="logoutUser()">
+          <div class="settings-row" onclick="logoutUser()">
             <div class="settings-row-icon" style="background:rgba(255,59,48,0.12);">🚪</div>
             <div class="settings-row-text"><div style="font-size:16px;font-weight:500;color:var(--red);">Выйти</div></div>
           </div>
@@ -478,24 +617,26 @@ input, textarea { user-select: text; -webkit-user-select: text; }
       </div>
     </div>
   </div>
+
   <div class="tab-bar">
-    <button class="tab-btn active" id="tab-btn-chats" onclick="switchTab('chats')">
+    <button type="button" class="tab-btn active" id="tab-btn-chats" onclick="switchTab('chats')">
       <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
       <span>Чаты</span>
     </button>
-    <button class="tab-btn" id="tab-btn-calls" onclick="switchTab('calls')">
+    <button type="button" class="tab-btn" id="tab-btn-calls" onclick="switchTab('calls')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
       <span>Звонки</span>
     </button>
-    <button class="tab-btn" id="tab-btn-settings" onclick="switchTab('settings')">
+    <button type="button" class="tab-btn" id="tab-btn-settings" onclick="switchTab('settings')">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
       <span>Настройки</span>
     </button>
   </div>
+
   <!-- CHAT OVERLAY -->
   <div id="chat-overlay">
     <div class="chat-header">
-      <button onclick="closeChat()" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:6px 4px;flex-shrink:0;">
+      <button type="button" onclick="closeChat()" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:6px 4px;flex-shrink:0;">
         <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
       <div onclick="openProfileView(S.activeChat)" style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;">
@@ -506,10 +647,10 @@ input, textarea { user-select: text; -webkit-user-select: text; }
         </div>
       </div>
       <div style="display:flex;gap:4px;">
-        <button onclick="startCall('audio')" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:6px;">
+        <button type="button" onclick="startCall('audio')" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:6px;">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
         </button>
-        <button onclick="startCall('video')" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:6px;">
+        <button type="button" onclick="startCall('video')" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:6px;">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
         </button>
       </div>
@@ -522,16 +663,17 @@ input, textarea { user-select: text; -webkit-user-select: text; }
         <input type="file" id="file-input" style="display:none;" accept="image/*" onchange="handleFileSelect(this.files)">
       </label>
       <textarea id="msg-textarea" rows="1" placeholder="Сообщение..." oninput="autoResize(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
-      <button onclick="sendMessage()" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:8px 4px;flex-shrink:0;transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.88)'" onmouseup="this.style.transform='scale(1)'">
+      <button type="button" onclick="sendMessage()" style="color:var(--accent);background:none;border:none;cursor:pointer;padding:8px 4px;flex-shrink:0;transition:transform 0.15s;" onmousedown="this.style.transform='scale(0.88)'" onmouseup="this.style.transform='scale(1)'">
         <svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
   </div>
 </div>
+
 <!-- PANELS -->
 <div id="panel-find-user" class="panel">
   <div class="panel-header">
-    <button onclick="closePanel('panel-find-user')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
+    <button type="button" onclick="closePanel('panel-find-user')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
     <span style="flex:1;text-align:center;font-size:17px;font-weight:600;color:var(--text-primary);padding-right:60px;">Новый чат</span>
@@ -544,9 +686,10 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     <div id="find-user-results" style="display:flex;flex-direction:column;gap:10px;"></div>
   </div>
 </div>
+
 <div id="panel-profile" class="panel">
   <div style="position:absolute;top:0;left:0;right:0;z-index:10;padding:calc(var(--safe-top)+12px) 16px 12px;display:flex;align-items:center;justify-content:space-between;">
-    <button onclick="closePanel('panel-profile')" style="color:var(--accent);background:rgba(0,0,0,0.4);border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:16px;padding:8px 12px;border-radius:20px;backdrop-filter:blur(10px);">
+    <button type="button" onclick="closePanel('panel-profile')" style="color:var(--accent);background:rgba(0,0,0,0.4);border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:16px;padding:8px 12px;border-radius:20px;backdrop-filter:blur(10px);">
       <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
     </button>
   </div>
@@ -584,15 +727,16 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     </div>
   </div>
   <div id="pv-actions" style="position:absolute;bottom:0;left:0;right:0;padding:12px 16px calc(var(--safe-bottom)+12px);background:var(--bg-tab);backdrop-filter:blur(20px);border-top:1px solid var(--border-color);display:flex;gap:10px;">
-    <button class="btn-secondary" style="flex:1;" onclick="openChatFromProfile()">✉️ Написать</button>
-    <button class="btn-primary ripple-container" style="flex:1;" onclick="openGiftModalForProfile()">🎁 Подарок</button>
+    <button type="button" class="btn-secondary" style="flex:1;" onclick="openChatFromProfile()">✉️ Написать</button>
+    <button type="button" class="btn-primary" style="flex:1;" onclick="openGiftModalForProfile()">🎁 Подарок</button>
   </div>
 </div>
+
 <div id="panel-edit-profile" class="panel" style="z-index:80;">
   <div class="panel-header" style="justify-content:space-between;">
-    <button onclick="closePanel('panel-edit-profile')" style="color:var(--accent);background:none;border:none;font-size:17px;cursor:pointer;">Отмена</button>
+    <button type="button" onclick="closePanel('panel-edit-profile')" style="color:var(--accent);background:none;border:none;font-size:17px;cursor:pointer;">Отмена</button>
     <span style="font-size:17px;font-weight:600;color:var(--text-primary);">Редактировать</span>
-    <button onclick="saveProfile()" style="color:var(--accent);background:none;border:none;font-size:17px;font-weight:700;cursor:pointer;">Готово</button>
+    <button type="button" onclick="saveProfile()" style="color:var(--accent);background:none;border:none;font-size:17px;font-weight:700;cursor:pointer;">Готово</button>
   </div>
   <div class="panel-content" style="padding:20px 16px;display:flex;flex-direction:column;gap:12px;">
     <input id="edit-fname" type="text" class="glass-input" placeholder="Имя">
@@ -604,9 +748,10 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     <textarea id="edit-bio" class="glass-input" rows="4" style="resize:none;line-height:1.5;" placeholder="О себе"></textarea>
   </div>
 </div>
+
 <div id="panel-stars" class="panel" style="z-index:80;">
   <div class="panel-header">
-    <button onclick="closePanel('panel-stars')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
+    <button type="button" onclick="closePanel('panel-stars')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
     <span style="flex:1;text-align:center;font-size:17px;font-weight:600;color:var(--text-primary);padding-right:60px;">⭐ Звёзды</span>
@@ -618,18 +763,19 @@ input, textarea { user-select: text; -webkit-user-select: text; }
       <div style="font-size:13px;opacity:0.75;color:white;">звёзд</div>
     </div>
     <div class="buy-grid">
-      <div class="buy-card ripple-container" onclick="buyStars(100,event)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">100 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 100 ₽</div></div>
-      <div class="buy-card ripple-container" onclick="buyStars(500,event)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">500 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 500 ₽</div></div>
-      <div class="buy-card ripple-container" onclick="buyStars(1000,event)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">1000 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 999 ₽</div></div>
-      <div class="buy-card ripple-container" onclick="buyStars(5000,event)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">5000 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 4999 ₽</div></div>
+      <div class="buy-card" onclick="buyStars(100)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">100 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 100 ₽</div></div>
+      <div class="buy-card" onclick="buyStars(500)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">500 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 500 ₽</div></div>
+      <div class="buy-card" onclick="buyStars(1000)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">1000 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 999 ₽</div></div>
+      <div class="buy-card" onclick="buyStars(5000)"><div style="font-size:22px;font-weight:800;color:var(--yellow);">5000 ★</div><div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">≈ 4999 ₽</div></div>
     </div>
     <div style="padding:0 16px;font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Магазин подарков</div>
     <div id="gift-shop-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 16px;"></div>
   </div>
 </div>
+
 <div id="panel-appearance" class="panel" style="z-index:80;">
   <div class="panel-header">
-    <button onclick="closePanel('panel-appearance')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
+    <button type="button" onclick="closePanel('panel-appearance')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
     <span style="flex:1;text-align:center;font-size:17px;font-weight:600;color:var(--text-primary);padding-right:60px;">🎨 Оформление</span>
@@ -641,9 +787,10 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     <div class="theme-grid" id="theme-grid-light"></div>
   </div>
 </div>
+
 <div id="panel-notifications" class="panel" style="z-index:80;">
   <div class="panel-header">
-    <button onclick="closePanel('panel-notifications')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
+    <button type="button" onclick="closePanel('panel-notifications')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
     <span style="flex:1;text-align:center;font-size:17px;font-weight:600;color:var(--text-primary);padding-right:60px;">🔔 Уведомления</span>
@@ -656,9 +803,10 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     </div>
   </div>
 </div>
+
 <div id="panel-privacy" class="panel" style="z-index:80;">
   <div class="panel-header">
-    <button onclick="closePanel('panel-privacy')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
+    <button type="button" onclick="closePanel('panel-privacy')" style="color:var(--accent);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:17px;">
       <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg> Назад
     </button>
     <span style="flex:1;text-align:center;font-size:17px;font-weight:600;color:var(--text-primary);padding-right:60px;">🔒 Конфиденциальность</span>
@@ -672,31 +820,41 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     </div>
   </div>
 </div>
-<!-- MODALS -->
+
+<!-- GIFT MODAL -->
 <div id="gift-modal" class="modal-overlay" onclick="if(event.target===this)closeGiftModal()">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <h3 style="font-size:20px;font-weight:700;color:var(--text-primary);margin:0;">Отправить подарок</h3>
-      <button onclick="closeGiftModal()" style="color:var(--text-muted);background:none;border:none;cursor:pointer;font-size:22px;line-height:1;">✕</button>
+      <button type="button" onclick="closeGiftModal()" style="color:var(--text-muted);background:none;border:none;cursor:pointer;font-size:22px;line-height:1;">✕</button>
     </div>
     <div style="display:flex;align-items:center;gap:14px;background:var(--bg-glass-card);border:1px solid var(--border-color);border-radius:16px;padding:14px;margin-bottom:18px;">
       <div id="gm-icon" style="font-size:48px;">🎁</div>
-      <div><div id="gm-name" style="font-size:17px;font-weight:700;color:var(--text-primary);">Gift</div><div style="font-size:14px;color:var(--yellow);margin-top:3px;"><span id="gm-price">0</span> ★</div></div>
+      <div>
+        <div id="gm-name" style="font-size:17px;font-weight:700;color:var(--text-primary);">Gift</div>
+        <div style="font-size:14px;color:var(--yellow);margin-top:3px;"><span id="gm-price">0</span> ★</div>
+      </div>
     </div>
     <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Кому:</div>
     <div id="gift-recipient-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;max-height:180px;overflow-y:auto;"></div>
-    <button class="btn-primary ripple-container" onclick="confirmSendGift(event)">Отправить 🎁</button>
+    <button type="button" class="btn-primary" onclick="confirmSendGift()">Отправить 🎁</button>
   </div>
 </div>
+
+<!-- QR MODAL -->
 <div id="qr-modal" onclick="if(event.target===this){this.classList.remove('open');}">
   <div class="qr-card">
     <div style="font-size:20px;font-weight:700;color:var(--text-primary);margin-bottom:4px;">Мой QR-код</div>
-    <div style="background:white;padding:16px;border-radius:16px;"><canvas id="qr-canvas" width="180" height="180"></canvas></div>
+    <div style="background:white;padding:16px;border-radius:16px;">
+      <canvas id="qr-canvas" width="180" height="180"></canvas>
+    </div>
     <div id="qr-user-display" style="font-size:17px;font-weight:600;color:var(--accent);">@user</div>
-    <button onclick="document.getElementById('qr-modal').classList.remove('open')" class="btn-secondary" style="width:100%;margin-top:4px;">Закрыть</button>
+    <button type="button" onclick="document.getElementById('qr-modal').classList.remove('open')" class="btn-secondary" style="width:100%;margin-top:4px;">Закрыть</button>
   </div>
 </div>
+
+<!-- SMS TOAST -->
 <div id="sms-toast" class="glass" style="padding:14px 16px;display:flex;align-items:center;gap:12px;">
   <div style="width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
@@ -706,6 +864,8 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     <div style="color:var(--text-primary);">Код: <span id="toast-code" style="color:var(--accent);font-weight:700;font-size:18px;letter-spacing:4px;">----</span></div>
   </div>
 </div>
+
+<!-- MSG TOAST -->
 <div id="msg-toast" class="glass" style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="openToastChat()">
   <div id="mt-avatar" class="chat-avatar" style="width:42px;height:42px;font-size:18px;margin:0;flex-shrink:0;">A</div>
   <div style="flex:1;min-width:0;">
@@ -713,13 +873,17 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     <div id="mt-preview" style="font-size:13px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Сообщение</div>
   </div>
 </div>
+
 <div id="app-toast"></div>
 <div id="lightbox" onclick="this.style.display='none'"><div id="lightbox-inner"></div></div>
+
 <!-- CALL SCREEN -->
 <div id="call-screen">
   <video id="remote-video" autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"></video>
   <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.7) 100%);"></div>
-  <div id="local-video-pip"><video id="local-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video></div>
+  <div id="local-video-pip">
+    <video id="local-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video>
+  </div>
   <div class="call-overlay">
     <div class="call-top">
       <div class="call-avatar" id="call-avatar">U</div>
@@ -730,21 +894,45 @@ input, textarea { user-select: text; -webkit-user-select: text; }
     <div id="incoming-controls" style="display:none;">
       <div class="incoming-call-actions">
         <div class="incoming-btn" onclick="acceptCall()">
-          <div class="incoming-btn-circle accept"><svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+          <div class="incoming-btn-circle accept">
+            <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </div>
           <span style="font-size:13px;color:rgba(255,255,255,0.8);">Принять</span>
         </div>
         <div class="incoming-btn" onclick="declineCall()">
-          <div class="incoming-btn-circle decline"><svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg></div>
+          <div class="incoming-btn-circle decline">
+            <svg width="32" height="32" fill="white" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+          </div>
           <span style="font-size:13px;color:rgba(255,255,255,0.8);">Отклонить</span>
         </div>
       </div>
     </div>
     <div id="active-controls" style="display:none;">
       <div class="call-controls">
-        <div class="call-btn" onclick="toggleMic()"><div class="call-btn-circle" id="mic-btn"><svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg></div><span style="font-size:11px;color:rgba(255,255,255,0.7);">Микрофон</span></div>
-        <div class="call-btn" onclick="toggleCamera()"><div class="call-btn-circle" id="camera-btn"><svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div><span style="font-size:11px;color:rgba(255,255,255,0.7);">Камера</span></div>
-        <div class="call-btn" onclick="flipCamera()"><div class="call-btn-circle"><svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm3.2-5.8L12 15.4 8.8 12.2 10 11l2 2 2-2 1.2 1.2z"/></svg></div><span style="font-size:11px;color:rgba(255,255,255,0.7);">Перевернуть</span></div>
-        <div class="call-btn" onclick="endCall()"><div class="call-btn-circle end"><svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg></div><span style="font-size:11px;color:rgba(255,255,255,0.7);">Завершить</span></div>
+        <div class="call-btn" onclick="toggleMic()">
+          <div class="call-btn-circle" id="mic-btn">
+            <svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+          </div>
+          <span style="font-size:11px;color:rgba(255,255,255,0.7);">Микрофон</span>
+        </div>
+        <div class="call-btn" onclick="toggleCamera()">
+          <div class="call-btn-circle" id="camera-btn">
+            <svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+          </div>
+          <span style="font-size:11px;color:rgba(255,255,255,0.7);">Камера</span>
+        </div>
+        <div class="call-btn" onclick="flipCamera()">
+          <div class="call-btn-circle">
+            <svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm3.2-5.8L12 15.4 8.8 12.2 10 11l2 2 2-2 1.2 1.2z"/></svg>
+          </div>
+          <span style="font-size:11px;color:rgba(255,255,255,0.7);">Перевернуть</span>
+        </div>
+        <div class="call-btn" onclick="endCall()">
+          <div class="call-btn-circle end">
+            <svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+          </div>
+          <span style="font-size:11px;color:rgba(255,255,255,0.7);">Завершить</span>
+        </div>
       </div>
     </div>
   </div>
@@ -756,7 +944,8 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 // ── CONFIG ──────────────────────────────────────────────
 const ADMIN_PHONE = '+79635307955';
 const ADMIN_STARS = 1000;
-const LS_KEY = 'tg_session_v2';
+const LS_KEY = 'tg_session_v3';
+
 const GIFT_CATALOG = [
   { id:'g1', icon:'🎁', name:'Коробка',  price:50   },
   { id:'g2', icon:'🌹', name:'Роза',     price:100  },
@@ -765,6 +954,7 @@ const GIFT_CATALOG = [
   { id:'g5', icon:'👑', name:'Корона',   price:1000 },
   { id:'g6', icon:'🦄', name:'Единорог', price:2500 },
 ];
+
 const THEMES = {
   dark: [
     { id:'dark-blue',   label:'Синяя',   bg:'#000814', dot:'#0A84FF' },
@@ -778,110 +968,99 @@ const THEMES = {
   ],
 };
 
-// ── STATE ───────────────────────────────────────────────
+// ── STATE ────────────────────────────────────────────────
 let S = {
   phone: '', loginCode: '', user: null, stars: 0,
-  messages: {}, contacts: [
+  messages: {},
+  contacts: [
     { id:'c1', fn:'Алексей', ln:'', username:'alex_tg',    bio:'Привет всем!',        online:true,  gifts:[], regDate:'05.01.2022' },
     { id:'c2', fn:'Мария',   ln:'', username:'maria_star', bio:'🌟 Люблю жизнь',     online:false, gifts:[], regDate:'12.03.2021' },
     { id:'c3', fn:'Елена',   ln:'', username:'elena_v',    bio:'',                    online:true,  gifts:[], regDate:'07.09.2023' },
     { id:'c4', fn:'Дмитрий', ln:'', username:'dmitry_k',   bio:'Dev 🛠️ Python/Go',  online:false, gifts:[], regDate:'19.11.2020' },
-    { id:'c5', fn:'Команда', ln:'', username:'team_group', bio:'Наша рабочая группа', online:false, gifts:[], regDate:'01.01.2022' },
+    { id:'c5', fn:'Команда', ln:'', username:'team_group', bio:'Рабочая группа',      online:false, gifts:[], regDate:'01.01.2022' },
   ],
   chats: [], activeChat: null, callLog: [], pendingFiles: [],
-  selectedGift: null, giftTarget: null, currentTheme: 'dark-blue', msgToastChatId: null,
+  selectedGift: null, giftTarget: null,
+  currentTheme: 'dark-blue', msgToastChatId: null,
 };
 
-// ── SESSION ─────────────────────────────────────────────
+// ── SESSION ──────────────────────────────────────────────
 function saveSession() {
   if (!S.user) return;
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({
       user: S.user, stars: S.stars, phone: S.phone,
-      messages: S.messages, contacts: S.contacts, chats: S.chats,
-      callLog: S.callLog, currentTheme: S.currentTheme, ts: Date.now(),
+      messages: S.messages, contacts: S.contacts,
+      chats: S.chats, callLog: S.callLog,
+      currentTheme: S.currentTheme, ts: Date.now(),
     }));
   } catch(e) {}
 }
+
 function loadSession() {
   try {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return false;
     const d = JSON.parse(raw);
     if (Date.now() - d.ts > 30 * 86400000) { localStorage.removeItem(LS_KEY); return false; }
-    S.user = d.user; S.stars = d.stars||0; S.phone = d.phone||'';
-    S.messages = d.messages||{}; S.contacts = d.contacts||S.contacts;
-    S.chats = d.chats||[]; S.callLog = d.callLog||[];
-    S.currentTheme = d.currentTheme||'dark-blue';
+    Object.assign(S, {
+      user: d.user, stars: d.stars||0, phone: d.phone||'',
+      messages: d.messages||{}, contacts: d.contacts||S.contacts,
+      chats: d.chats||[], callLog: d.callLog||[],
+      currentTheme: d.currentTheme||'dark-blue',
+    });
     return true;
   } catch(e) { return false; }
 }
 
-// ── SCREENS ─────────────────────────────────────────────
+// ── NAVIGATION ───────────────────────────────────────────
 const ALL_SCREENS = ['screen-login','screen-code','screen-register','screen-app'];
 function goScreen(id) {
   ALL_SCREENS.forEach(s => {
     const el = document.getElementById(s);
-    if (s === id) {
-      el.classList.remove('hidden');
-      el.style.animation = 'fadeSlideUp 0.35s cubic-bezier(0.16,1,0.3,1)';
-    } else {
-      el.classList.add('hidden');
-    }
+    el.classList.toggle('hidden', s !== id);
+    if (s === id) el.style.animation = 'fadeSlideUp 0.35s cubic-bezier(0.16,1,0.3,1)';
   });
 }
 
 // ── AUTH: PHONE ──────────────────────────────────────────
-// FIX: this is now attached via addEventListener, not inline onclick
 function submitPhone() {
   const raw = document.getElementById('phone-input').value.trim();
-  const errEl = document.getElementById('phone-error');
-
-  // Clear previous error
-  errEl.textContent = '';
-
-  // Accept any input with at least 5 digits
-  const digits = raw.replace(/\D/g, '');
-  if (digits.length < 5) {
-    errEl.textContent = '⚠️ Введите корректный номер телефона';
-    document.getElementById('phone-input').focus();
-    return;
-  }
-
-  S.phone = raw || digits;
-  S.loginCode = String(Math.floor(1000 + Math.random() * 9000));
-
+  if (raw.replace(/\D/g,'').length < 7) { showToast('⚠️ Введите корректный номер'); return; }
+  S.phone = raw;
+  // Generate a 4-digit code as a STRING — critical for comparison
+  S.loginCode = String(1000 + Math.floor(Math.random() * 9000));
   document.getElementById('display-phone').textContent = S.phone;
-  document.getElementById('shown-code').textContent = S.loginCode;
-  document.getElementById('toast-code').textContent = S.loginCode;
+  document.getElementById('shown-code').textContent    = S.loginCode;
+  document.getElementById('toast-code').textContent    = S.loginCode;
   document.getElementById('code-input').value = '';
-
   showSmsToast();
   goScreen('screen-code');
-  setTimeout(() => { document.getElementById('code-input').focus(); }, 250);
+  setTimeout(() => document.getElementById('code-input').focus(), 300);
 }
 
 function showSmsToast() {
   const t = document.getElementById('sms-toast');
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 5500);
+  setTimeout(() => t.classList.remove('show'), 6000);
 }
 
 // ── AUTH: CODE ───────────────────────────────────────────
 function submitCode() {
   const entered = document.getElementById('code-input').value.trim();
   if (entered.length < 4) { showToast('⚠️ Введите 4-значный код'); return; }
+  // Compare as strings — avoids number/string mismatch
   if (entered !== S.loginCode) {
     const inp = document.getElementById('code-input');
     inp.style.borderColor = 'var(--red)';
-    inp.style.animation = 'shake 0.3s';
-    setTimeout(() => { inp.style.borderColor = ''; inp.style.animation = ''; }, 700);
+    inp.style.animation = 'shake 0.35s ease';
+    setTimeout(() => { inp.style.borderColor = ''; inp.style.animation = ''; }, 800);
     showToast('❌ Неверный код');
     return;
   }
   if (S.phone.replace(/\D/g,'') === ADMIN_PHONE.replace(/\D/g,'')) S.stars = ADMIN_STARS;
   goScreen('screen-register');
-  setTimeout(() => document.getElementById('fname-input').focus(), 250);
+  setTimeout(() => document.getElementById('fname-input').focus(), 300);
 }
 
 // ── AUTH: REGISTER ───────────────────────────────────────
@@ -893,7 +1072,7 @@ function registerUser() {
   if (!fn) { st.textContent = '⚠️ Введите имя'; return; }
   if (un.length > 0 && un.length < 4) { st.textContent = '⚠️ Минимум 4 символа'; return; }
   st.textContent = '';
-  S.user = { id:'me', fn, ln, username: un || 'user'+Math.floor(Math.random()*9999), bio:'', regDate: new Date().toLocaleDateString('ru') };
+  S.user = { id:'me', fn, ln, username: un || ('user' + Math.floor(Math.random()*9999)), bio:'', regDate: new Date().toLocaleDateString('ru') };
   initApp();
 }
 
@@ -907,7 +1086,7 @@ function initApp() {
   if (!S.chats.length) buildInitialChats();
   renderStories();
   showSkeletons();
-  setTimeout(() => renderChatList(), 400);
+  setTimeout(renderChatList, 400);
   goScreen('screen-app');
   switchTab('chats');
   saveSession();
@@ -934,17 +1113,17 @@ function buildInitialChats() {
 function logoutUser() {
   if (!confirm('Выйти из аккаунта?')) return;
   localStorage.removeItem(LS_KEY);
-  S.user=null; S.chats=[]; S.messages={}; S.callLog=[]; S.stars=0;
+  Object.assign(S, { user:null, chats:[], messages:{}, callLog:[], stars:0 });
   goScreen('screen-login');
 }
 
-// ── PROFILE UI ───────────────────────────────────────────
+// ── PROFILE ──────────────────────────────────────────────
 function updateProfileUI() {
   if (!S.user) return;
-  const name = S.user.fn + (S.user.ln?' '+S.user.ln:'');
-  document.getElementById('settings-name').textContent = name;
+  const name = S.user.fn + (S.user.ln ? ' '+S.user.ln : '');
+  document.getElementById('settings-name').textContent     = name;
   document.getElementById('settings-username').textContent = '@'+S.user.username;
-  document.getElementById('settings-avatar').textContent = S.user.fn[0].toUpperCase();
+  document.getElementById('settings-avatar').textContent   = S.user.fn[0].toUpperCase();
   document.getElementById('edit-fname').value = S.user.fn;
   document.getElementById('edit-lname').value = S.user.ln||'';
   document.getElementById('edit-user').value  = S.user.username;
@@ -957,54 +1136,55 @@ function saveProfile() {
   const nu  = document.getElementById('edit-user').value.trim();
   if (nu.length >= 4) S.user.username = nu;
   S.user.bio = document.getElementById('edit-bio').value.trim();
-  updateProfileUI(); saveSession();
-  closePanel('panel-edit-profile'); showToast('✅ Профиль сохранён');
+  updateProfileUI(); saveSession(); closePanel('panel-edit-profile'); showToast('✅ Профиль сохранён');
 }
 
-// ── PROFILE VIEW ─────────────────────────────────────────
 function openProfileView(id) {
   const isMe = id === 'me';
-  const u = isMe
-    ? { fn:S.user.fn, ln:S.user.ln, username:S.user.username, bio:S.user.bio, online:true, gifts:[], regDate:S.user.regDate }
-    : S.contacts.find(c => c.id === id);
+  const u = isMe ? { fn:S.user.fn, ln:S.user.ln||'', username:S.user.username, bio:S.user.bio, online:true, gifts:[], regDate:S.user.regDate } : S.contacts.find(c => c.id === id);
   if (!u) return;
   S.giftTarget = id;
-  document.getElementById('pv-avatar').textContent = u.fn[0].toUpperCase();
-  document.getElementById('pv-name').textContent   = u.fn+(u.ln?' '+u.ln:'');
-  document.getElementById('pv-status').textContent = u.online ? '🟢 в сети' : 'был(а) недавно';
-  document.getElementById('pv-status').style.color = u.online ? 'var(--green)' : 'var(--text-muted)';
+  document.getElementById('pv-avatar').textContent   = u.fn[0].toUpperCase();
+  document.getElementById('pv-name').textContent     = u.fn + (u.ln?' '+u.ln:'');
+  document.getElementById('pv-status').textContent   = u.online ? '🟢 в сети' : 'был(а) недавно';
+  document.getElementById('pv-status').style.color   = u.online ? 'var(--green)' : 'var(--text-muted)';
   document.getElementById('pv-username').textContent = '@'+(u.username||'user');
-  document.getElementById('pv-bio').textContent = u.bio||'Нет описания';
-  document.getElementById('pv-regdate').textContent = u.regDate||'—';
-  document.getElementById('pv-phone-block').style.display = isMe?'block':'none';
-  if (isMe) document.getElementById('pv-phone').textContent = S.phone||'—';
+  document.getElementById('pv-bio').textContent      = u.bio || 'Нет описания';
+  document.getElementById('pv-regdate').textContent  = u.regDate || '—';
+  document.getElementById('pv-phone-block').style.display = isMe ? 'block' : 'none';
+  if (isMe) document.getElementById('pv-phone').textContent = S.phone || '—';
+
   const stories = document.getElementById('pv-stories');
   stories.innerHTML = '';
-  for (let i=0;i<Math.floor(Math.random()*4+1);i++) {
-    const d=document.createElement('div'); d.className='story-item';
-    d.onclick=()=>showToast('📖 История '+(i+1));
-    d.innerHTML=`<div class="story-ring"><div class="story-ring-inner" style="background:${randGrad()}">${u.fn[0]}</div></div><span class="story-name">${['Сегодня','Вчера','2 дня','3 дня'][i]||'Давно'}</span>`;
+  for (let i = 0; i < Math.floor(Math.random()*4+1); i++) {
+    const d = document.createElement('div');
+    d.className = 'story-item';
+    d.onclick = () => showToast('📖 История ' + (i+1));
+    d.innerHTML = `<div class="story-ring"><div class="story-ring-inner" style="background:${randGrad()}">${u.fn[0]}</div></div><span class="story-name">${['Сегодня','Вчера','2 дня','3 дня'][i]||'Давно'}</span>`;
     stories.appendChild(d);
   }
-  const gGrid=document.getElementById('pv-gifts');
-  const gifts=u.gifts||[];
-  gGrid.innerHTML=gifts.length===0
-    ?'<div style="grid-column:span 3;text-align:center;padding:20px;color:var(--text-muted);font-size:14px;">Нет подарков</div>'
-    :gifts.map(g=>`<div class="gift-card"><div class="gift-icon">${g.icon}</div><div class="gift-name">${g.name}</div><div class="gift-price">${g.price}★</div></div>`).join('');
-  document.getElementById('pv-actions').style.display = isMe?'none':'flex';
+
+  const gifts = u.gifts || [];
+  document.getElementById('pv-gifts').innerHTML = gifts.length === 0
+    ? '<div style="grid-column:span 3;text-align:center;padding:20px;color:var(--text-muted);font-size:14px;">Нет подарков</div>'
+    : gifts.map(g=>`<div class="gift-card"><div class="gift-icon">${g.icon}</div><div class="gift-name">${g.name}</div><div class="gift-price">${g.price}★</div></div>`).join('');
+
+  document.getElementById('pv-actions').style.display = isMe ? 'none' : 'flex';
   openPanel('panel-profile');
 }
 
-function openChatFromProfile() { closePanel('panel-profile'); if (S.giftTarget&&S.giftTarget!=='me') openChat(S.giftTarget); }
-function openGiftModalForProfile() { S.selectedGift=GIFT_CATALOG[0]; openGiftModal(GIFT_CATALOG[0], S.giftTarget); }
+function openChatFromProfile() { closePanel('panel-profile'); if (S.giftTarget && S.giftTarget !== 'me') openChat(S.giftTarget); }
+function openGiftModalForProfile() { openGiftModal(GIFT_CATALOG[0], S.giftTarget); }
 
 // ── STORIES ──────────────────────────────────────────────
 function renderStories() {
-  const row=document.getElementById('stories-row'); row.innerHTML='';
-  S.contacts.slice(0,4).forEach(c=>{
-    const d=document.createElement('div'); d.className='story-item';
-    d.onclick=()=>showToast(`📖 История — ${c.fn}`);
-    d.innerHTML=`<div class="story-ring"><div class="story-ring-inner" style="background:${randGrad()}">${c.fn[0]}</div></div><span class="story-name">${c.fn}</span>`;
+  const row = document.getElementById('stories-row');
+  row.innerHTML = '';
+  S.contacts.slice(0,4).forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'story-item';
+    d.onclick = () => showToast(`📖 История — ${c.fn}`);
+    d.innerHTML = `<div class="story-ring"><div class="story-ring-inner" style="background:${randGrad()}">${c.fn[0]}</div></div><span class="story-name">${c.fn}</span>`;
     row.appendChild(d);
   });
 }
@@ -1015,104 +1195,123 @@ function randGrad() {
 
 // ── CHAT LIST ────────────────────────────────────────────
 function renderChatList(filter='') {
-  const el=document.getElementById('chat-list');
-  let chats=S.chats;
-  if (filter) chats=chats.filter(c=>c.name.toLowerCase().includes(filter.toLowerCase()));
+  const el = document.getElementById('chat-list');
+  let chats = filter ? S.chats.filter(c => c.name.toLowerCase().includes(filter.toLowerCase())) : S.chats;
   if (!chats.length) { el.innerHTML='<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:15px;">Нет чатов. Нажмите <strong>+</strong>.</div>'; return; }
-  el.innerHTML=chats.map((c,i)=>`
-    <div class="chat-item ripple-container" onclick="openChat('${c.id}')" style="animation:fadeSlideUp ${0.05*i+0.1}s ease both;">
+  el.innerHTML = chats.map((c,i) => `
+    <div class="chat-item" onclick="openChat('${c.id}')" style="animation:fadeSlideUp ${0.05*i+0.1}s ease both;">
       <div class="chat-avatar" style="background:${avatarGrad(c.id)};">${c.initial}${c.online?'<div class="online-dot"></div>':''}</div>
-      <div class="chat-info"><div class="chat-name">${c.name}</div><div class="chat-preview">${escHtml(c.lastMsg)}</div></div>
-      <div class="chat-meta"><span class="chat-time">${c.time}</span>${c.unread>0?`<span class="unread-badge">${c.unread}</span>`:''}</div>
+      <div class="chat-info">
+        <div class="chat-name">${c.name}</div>
+        <div class="chat-preview">${escHtml(c.lastMsg)}</div>
+      </div>
+      <div class="chat-meta">
+        <span class="chat-time">${c.time}</span>
+        ${c.unread>0?`<span class="unread-badge">${c.unread}</span>`:''}
+      </div>
     </div>`).join('');
 }
+
 function handleSearch(q) { renderChatList(q); }
 function avatarGrad(id) {
   const g=['linear-gradient(135deg,#667eea,#764ba2)','linear-gradient(135deg,#f093fb,#f5576c)','linear-gradient(135deg,#4facfe,#00f2fe)','linear-gradient(135deg,#43e97b,#38f9d7)','linear-gradient(135deg,#fa709a,#fee140)'];
-  return g[(parseInt(id.replace(/\D/g,''),10)||0)%g.length];
+  return g[(parseInt(id.replace(/\D/g,''),10)||0) % g.length];
 }
 
-// ── CHAT ─────────────────────────────────────────────────
+// ── OPEN / CLOSE CHAT ────────────────────────────────────
 function openChat(id) {
-  S.activeChat=id;
-  const c=S.contacts.find(x=>x.id===id); if (!c) return;
-  document.getElementById('chat-hdr-name').textContent = c.fn+(c.ln?' '+c.ln:'');
-  document.getElementById('chat-hdr-status').textContent = c.online?'🟢 в сети':'был(а) недавно';
+  S.activeChat = id;
+  const c = S.contacts.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('chat-hdr-name').textContent   = c.fn + (c.ln?' '+c.ln:'');
+  document.getElementById('chat-hdr-status').textContent = c.online ? '🟢 в сети' : 'был(а) недавно';
   document.getElementById('chat-hdr-avatar').textContent = c.fn[0].toUpperCase();
   document.getElementById('chat-hdr-avatar').style.background = avatarGrad(id);
-  if (!S.messages[id]) S.messages[id]=[];
-  const conv=S.chats.find(x=>x.id===id);
-  if (conv) { conv.unread=0; renderChatList(); }
+  if (!S.messages[id]) S.messages[id] = [];
+  const conv = S.chats.find(x => x.id === id);
+  if (conv) { conv.unread = 0; renderChatList(); }
   renderCurrentChat();
   document.getElementById('chat-overlay').classList.add('open');
-  document.getElementById('msg-textarea').value='';
+  document.getElementById('msg-textarea').value = '';
   autoResize(document.getElementById('msg-textarea'));
 }
-function closeChat() { document.getElementById('chat-overlay').classList.remove('open'); S.activeChat=null; S.pendingFiles=[]; }
 
-function renderCurrentChat() {
-  const msgs=S.messages[S.activeChat]||[];
-  const el=document.getElementById('chat-messages');
-  if (!msgs.length) { el.innerHTML='<div style="text-align:center;color:var(--text-muted);margin-top:60px;font-size:15px;">Нет сообщений 👋</div>'; return; }
-  el.innerHTML=msgs.map((m,i)=>renderMsg(m,i)).join('');
-  requestAnimationFrame(()=>{ el.scrollTop=el.scrollHeight; });
+function closeChat() {
+  document.getElementById('chat-overlay').classList.remove('open');
+  S.activeChat = null; S.pendingFiles = [];
 }
 
-function renderMsg(m,idx) {
-  const cls=m.fromMe?'out':'in'; const delay=Math.min(idx*0.03,0.3);
-  if (m.type==='gift') return `<div class="msg-row ${cls}" style="animation-delay:${delay}s;"><div class="gift-card" style="max-width:160px;text-align:center;"><div style="font-size:40px;margin-bottom:6px;">${m.gift.icon}</div><div style="font-size:13px;font-weight:700;color:var(--text-primary);">${m.gift.name}</div><div style="font-size:12px;color:var(--yellow);margin-top:3px;">${m.gift.price} ★</div></div></div>`;
+// ── MESSAGES ─────────────────────────────────────────────
+function renderCurrentChat() {
+  const msgs = S.messages[S.activeChat] || [];
+  const el = document.getElementById('chat-messages');
+  if (!msgs.length) { el.innerHTML='<div style="text-align:center;color:var(--text-muted);margin-top:60px;font-size:15px;">Нет сообщений 👋</div>'; return; }
+  el.innerHTML = msgs.map(renderMsg).join('');
+  requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
+}
+
+function renderMsg(m, idx) {
+  const cls = m.fromMe ? 'out' : 'in';
+  const delay = Math.min(idx * 0.03, 0.3);
+  if (m.type==='gift') return `<div class="msg-row ${cls}" style="animation-delay:${delay}s;"><div class="gift-card" style="max-width:160px;"><div style="font-size:40px;margin-bottom:6px;">${m.gift.icon}</div><div style="font-size:13px;font-weight:700;color:var(--text-primary);">${m.gift.name}</div><div style="font-size:12px;color:var(--yellow);margin-top:3px;">${m.gift.price} ★</div></div></div>`;
   if (m.type==='img') return `<div class="msg-row ${cls}" style="animation-delay:${delay}s;"><div class="msg-bubble ${cls}" style="padding:4px;"><img src="${m.img}" loading="lazy" style="max-width:220px;max-height:220px;border-radius:16px;display:block;object-fit:cover;cursor:pointer;" onclick="openLightbox('${m.img}')"><div class="msg-time">${m.time}${m.fromMe?' ✓✓':''}</div></div></div>`;
   return `<div class="msg-row ${cls}" style="animation-delay:${delay}s;"><div class="msg-bubble ${cls}"><div>${escHtml(m.text)}</div><div class="msg-time">${m.time}${m.fromMe?' ✓✓':''}</div></div></div>`;
 }
 
 function sendMessage() {
-  const ta=document.getElementById('msg-textarea'); const text=ta.value.trim();
-  if (!text&&!S.pendingFiles.length) return;
+  const ta = document.getElementById('msg-textarea');
+  const text = ta.value.trim();
+  if (!text && !S.pendingFiles.length) return;
   if (!S.activeChat) return;
-  if (!S.messages[S.activeChat]) S.messages[S.activeChat]=[];
-  S.pendingFiles.forEach(f=>{ const url=URL.createObjectURL(f); S.messages[S.activeChat].push({type:'img',img:url,fromMe:true,time:nt()}); });
-  S.pendingFiles=[];
-  if (text) S.messages[S.activeChat].push({type:'text',text,fromMe:true,time:nt()});
-  ta.value=''; ta.style.height='auto';
-  renderCurrentChat(); updateChatPreview(S.activeChat,text||'📎 Медиа'); saveSession();
+  if (!S.messages[S.activeChat]) S.messages[S.activeChat] = [];
+  S.pendingFiles.forEach(f => S.messages[S.activeChat].push({ type:'img', img:URL.createObjectURL(f), fromMe:true, time:nt() }));
+  S.pendingFiles = [];
+  if (text) S.messages[S.activeChat].push({ type:'text', text, fromMe:true, time:nt() });
+  ta.value = ''; ta.style.height = 'auto';
+  renderCurrentChat();
+  updateChatPreview(S.activeChat, text || '📎 Медиа');
+  saveSession();
   if (text) {
     showTyping();
-    setTimeout(()=>{
+    setTimeout(() => {
       hideTyping();
-      const replies=['Понял! 👍','Окей!','🔥','Хорошая идея!','Спасибо! 🙏','Ок, жди','Интересно...','👌','Договорились!','💯'];
-      const reply=replies[Math.floor(Math.random()*replies.length)];
-      S.messages[S.activeChat].push({type:'text',text:reply,fromMe:false,time:nt()});
-      renderCurrentChat(); updateChatPreview(S.activeChat,reply); saveSession();
-      const conv=S.chats.find(x=>x.id===S.activeChat);
-      if (conv) showMsgToast(S.activeChat,conv.name,conv.initial,reply);
-    }, 700+Math.random()*1300);
+      const replies = ['Понял! 👍','Окей!','🔥','Хорошая идея!','Спасибо! 🙏','Ок, жди','Интересно...','👌','Договорились!','💯'];
+      const reply = replies[Math.floor(Math.random()*replies.length)];
+      S.messages[S.activeChat].push({ type:'text', text:reply, fromMe:false, time:nt() });
+      renderCurrentChat();
+      updateChatPreview(S.activeChat, reply);
+      saveSession();
+      const conv = S.chats.find(x=>x.id===S.activeChat);
+      if (conv) showMsgToast(S.activeChat, conv.name, conv.initial, reply);
+    }, 700 + Math.random()*1300);
   }
 }
 
 function showTyping() { document.getElementById('typing-bar').innerHTML=`<div class="typing-indicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span><span style="font-size:12px;color:var(--text-muted);margin-left:6px;">печатает...</span></div>`; }
 function hideTyping() { document.getElementById('typing-bar').innerHTML=''; }
-function updateChatPreview(id,lastMsg) { const conv=S.chats.find(x=>x.id===id); if(conv){conv.lastMsg=lastMsg;conv.time=nt();renderChatList();} }
+function updateChatPreview(id, lastMsg) { const c=S.chats.find(x=>x.id===id); if(c){c.lastMsg=lastMsg;c.time=nt();renderChatList();} }
 function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
-function handleFileSelect(files) { S.pendingFiles=[...files]; showToast(`📎 ${files.length} файл(ов) готово к отправке`); }
-function openLightbox(url) { const lb=document.getElementById('lightbox'); document.getElementById('lightbox-inner').innerHTML=`<img src="${url}" onclick="event.stopPropagation()">`; lb.style.display='flex'; }
+function handleFileSelect(files) { S.pendingFiles=[...files]; showToast(`📎 ${files.length} файл(ов) готово`); }
+function openLightbox(url) { document.getElementById('lightbox-inner').innerHTML=`<img src="${url}" onclick="event.stopPropagation()">`; document.getElementById('lightbox').style.display='flex'; }
 
 // ── CALLS ────────────────────────────────────────────────
 function renderCallLog() {
-  const el=document.getElementById('calls-list');
+  const el = document.getElementById('calls-list');
   if (!S.callLog.length) { el.innerHTML=`<div style="padding:60px 20px;text-align:center;color:var(--text-muted);"><div style="font-size:48px;margin-bottom:12px;">📞</div><div>Нет звонков</div></div>`; return; }
   el.innerHTML=S.callLog.map(c=>`<div class="call-log-item"><div class="chat-avatar" style="width:48px;height:48px;font-size:20px;background:${avatarGrad(c.cid||'c1')};margin-right:12px;flex-shrink:0;">${c.initial}</div><div style="flex:1;"><div style="font-size:16px;font-weight:600;color:var(--text-primary);">${c.name}</div><div style="font-size:13px;color:${c.dir==='out'?'var(--accent)':'var(--green)'};margin-top:2px;">${c.type==='video'?'📹 Видео':'📞 Аудио'} · ${c.dir==='out'?'↗ Исходящий':'↙ Входящий'}</div></div><div style="font-size:12px;color:var(--text-muted);">${c.time}</div></div>`).join('');
 }
 
-let callState = { active:false,incoming:false,type:'audio',localStream:null,contactId:null,micOn:true,camOn:false,facingMode:'user',durationSec:0,durationTimer:null };
+let callState = { active:false, incoming:false, type:'audio', localStream:null, micOn:true, camOn:false, facingMode:'user', contactId:null, durationSec:0, durationTimer:null };
 
 async function startCall(type) {
   if (!S.activeChat) return;
-  const c=S.contacts.find(x=>x.id===S.activeChat); if (!c) return;
+  const c = S.contacts.find(x=>x.id===S.activeChat);
+  if (!c) return;
   callState.type=type; callState.contactId=S.activeChat; callState.incoming=false; callState.camOn=type==='video';
-  showCallScreen(c,false);
+  showCallScreen(c, false);
   document.getElementById('call-status').textContent='Соединение...';
   try {
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:type==='video'?{facingMode:callState.facingMode}:false});
+    const stream = await navigator.mediaDevices.getUserMedia({ audio:true, video: type==='video'?{facingMode:'user'}:false });
     callState.localStream=stream;
     document.getElementById('local-video').srcObject=stream;
     document.getElementById('local-video-pip').style.display=type==='video'?'block':'none';
@@ -1120,18 +1319,15 @@ async function startCall(type) {
       document.getElementById('call-status').style.display='none';
       document.getElementById('call-duration').style.display='block';
       document.getElementById('active-controls').style.display='block';
-      document.getElementById('incoming-controls').style.display='none';
       callState.active=true; startDurationTimer();
-      document.getElementById('call-avatar').style.animation='none';
     },1500);
-  } catch(err) { showToast('⚠️ Нет доступа к микрофону/камере'); endCall(); }
+  } catch(e) { showToast('⚠️ Нет доступа к микрофону/камере'); }
   logCallEntry(type,'out',c);
 }
 
 function logCallEntry(type,dir,c) { S.callLog.unshift({name:c.fn+(c.ln?' '+c.ln:''),initial:c.fn[0].toUpperCase(),cid:c.id,type,dir,time:nowStr()}); saveSession(); }
 
-function showCallScreen(c,isIncoming) {
-  const cs=document.getElementById('call-screen');
+function showCallScreen(c, isIncoming) {
   document.getElementById('call-avatar').textContent=c.fn[0].toUpperCase();
   document.getElementById('call-name').textContent=c.fn+(c.ln?' '+c.ln:'');
   document.getElementById('call-duration').style.display='none';
@@ -1139,21 +1335,20 @@ function showCallScreen(c,isIncoming) {
   document.getElementById('call-status').textContent=isIncoming?'Входящий звонок...':'Вызов...';
   if (isIncoming) { document.getElementById('incoming-controls').style.display='block'; document.getElementById('active-controls').style.display='none'; }
   else { document.getElementById('incoming-controls').style.display='none'; document.getElementById('active-controls').style.display='none'; }
-  cs.classList.add('active');
+  document.getElementById('call-screen').classList.add('active');
 }
 
 async function acceptCall() {
   document.getElementById('incoming-controls').style.display='none';
   document.getElementById('active-controls').style.display='block';
   document.getElementById('call-status').textContent='Соединено';
-  setTimeout(()=>{document.getElementById('call-status').style.display='none';document.getElementById('call-duration').style.display='block';},800);
+  setTimeout(()=>{ document.getElementById('call-status').style.display='none'; document.getElementById('call-duration').style.display='block'; },800);
   callState.active=true; callState.incoming=false; startDurationTimer();
-  try { const s=await navigator.mediaDevices.getUserMedia({audio:true}); callState.localStream=s; } catch(e){}
-  const c=S.contacts.find(x=>x.id===callState.contactId)||S.contacts[0]; logCallEntry(callState.type,'in',c);
+  try { callState.localStream=await navigator.mediaDevices.getUserMedia({audio:true}); } catch(e){}
+  logCallEntry(callState.type,'in',S.contacts.find(x=>x.id===callState.contactId)||S.contacts[0]);
 }
 
 function declineCall() { endCall(); }
-
 function endCall() {
   if (callState.localStream) { callState.localStream.getTracks().forEach(t=>t.stop()); callState.localStream=null; }
   if (callState.durationTimer) { clearInterval(callState.durationTimer); callState.durationTimer=null; }
@@ -1178,9 +1373,8 @@ function startDurationTimer() {
 
 function toggleMic() {
   callState.micOn=!callState.micOn;
-  if (callState.localStream) callState.localStream.getAudioTracks().forEach(t=>{t.enabled=callState.micOn;});
-  const btn=document.getElementById('mic-btn');
-  btn.style.background=callState.micOn?'rgba(255,255,255,0.15)':'rgba(255,59,48,0.5)';
+  if (callState.localStream) callState.localStream.getAudioTracks().forEach(t=>{ t.enabled=callState.micOn; });
+  document.getElementById('mic-btn').style.background=callState.micOn?'rgba(255,255,255,0.15)':'rgba(255,59,48,0.5)';
   showToast(callState.micOn?'🎤 Микрофон включён':'🔇 Микрофон выключен');
 }
 
@@ -1189,55 +1383,59 @@ async function toggleCamera() {
   if (callState.camOn) {
     try {
       const vs=await navigator.mediaDevices.getUserMedia({video:{facingMode:callState.facingMode}});
-      if (callState.localStream) callState.localStream.addTrack(vs.getVideoTracks()[0]);
-      document.getElementById('local-video').srcObject=callState.localStream||vs;
-      document.getElementById('local-video-pip').style.display='block';
-    } catch(e){callState.camOn=false;showToast('⚠️ Нет доступа к камере');return;}
+      callState.localStream=vs; document.getElementById('local-video').srcObject=vs; document.getElementById('local-video-pip').style.display='block';
+    } catch(e) { callState.camOn=false; showToast('⚠️ Нет доступа к камере'); return; }
   } else {
-    if (callState.localStream) callState.localStream.getVideoTracks().forEach(t=>{t.stop();callState.localStream.removeTrack(t);});
+    if (callState.localStream) callState.localStream.getVideoTracks().forEach(t=>{t.stop();});
     document.getElementById('local-video-pip').style.display='none';
   }
   document.getElementById('camera-btn').style.background=callState.camOn?'rgba(255,255,255,0.15)':'rgba(255,59,48,0.5)';
-  showToast(callState.camOn?'📹 Камера включена':'📵 Камера выключена');
 }
 
 async function flipCamera() {
   callState.facingMode=callState.facingMode==='user'?'environment':'user';
-  if (!callState.camOn||!callState.localStream){showToast('Сначала включите камеру');return;}
+  if (!callState.camOn||!callState.localStream) { showToast('Сначала включите камеру'); return; }
   callState.localStream.getVideoTracks().forEach(t=>t.stop());
   try {
     const ns=await navigator.mediaDevices.getUserMedia({audio:true,video:{facingMode:callState.facingMode}});
     callState.localStream=ns; document.getElementById('local-video').srcObject=ns;
-    showToast(callState.facingMode==='user'?'📷 Фронтальная камера':'📷 Задняя камера');
-  } catch(e){showToast('⚠️ Ошибка смены камеры');}
+    showToast(callState.facingMode==='user'?'📷 Фронтальная':'📷 Задняя');
+  } catch(e) { showToast('⚠️ Ошибка смены камеры'); }
 }
 
 // ── FIND USER ────────────────────────────────────────────
 function searchContacts(q) {
   const el=document.getElementById('find-user-results');
   const list=q?S.contacts.filter(c=>(c.fn+c.ln+c.username).toLowerCase().includes(q.toLowerCase())):S.contacts;
-  if (!list.length){el.innerHTML='<div style="text-align:center;color:var(--text-muted);padding:24px;">Не найдено</div>';return;}
-  el.innerHTML=list.map(u=>`<div class="settings-card ripple-container" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;"><div class="chat-avatar" style="width:50px;height:50px;font-size:22px;background:${avatarGrad(u.id)};margin:0;flex-shrink:0;">${u.fn[0]}</div><div style="flex:1;min-width:0;"><div style="font-size:16px;font-weight:600;color:var(--text-primary);">${u.fn} ${u.ln}</div><div style="font-size:13px;color:var(--text-secondary);">@${u.username}${u.online?' · 🟢 в сети':''}</div></div><button class="btn-primary" style="padding:8px 16px;font-size:14px;width:auto;border-radius:10px;" onclick="startChatWith('${u.id}')">Написать</button></div>`).join('');
+  if (!list.length) { el.innerHTML='<div style="text-align:center;color:var(--text-muted);padding:24px;">Не найдено</div>'; return; }
+  el.innerHTML=list.map(u=>`
+    <div class="settings-card" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;">
+      <div class="chat-avatar" style="width:50px;height:50px;font-size:22px;background:${avatarGrad(u.id)};margin:0;flex-shrink:0;">${u.fn[0]}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:16px;font-weight:600;color:var(--text-primary);">${u.fn} ${u.ln}</div>
+        <div style="font-size:13px;color:var(--text-secondary);">@${u.username}${u.online?' · 🟢 в сети':''}</div>
+      </div>
+      <button type="button" class="btn-primary" style="padding:8px 16px;font-size:14px;width:auto;border-radius:10px;" onclick="startChatWith('${u.id}')">Написать</button>
+    </div>`).join('');
 }
-function startChatWith(id){closePanel('panel-find-user');openChat(id);}
+function startChatWith(id) { closePanel('panel-find-user'); openChat(id); }
 
 // ── STARS & GIFTS ────────────────────────────────────────
 function updateStarUI() {
   document.getElementById('star-bal-settings').textContent=S.stars;
   document.getElementById('star-balance-big').textContent=S.stars;
 }
-function buyStars(n,e) {
-  addRipple(e);
-  if (!confirm(`Купить ${n} ★?`)) return;
-  S.stars+=n; updateStarUI(); saveSession(); showToast(`✅ Куплено ${n} ★`);
-}
+function buyStars(n) { if (!confirm(`Купить ${n} ★?`)) return; S.stars+=n; updateStarUI(); saveSession(); showToast(`✅ Куплено ${n} ★`); }
+
 function renderGiftShop() {
-  const el=document.getElementById('gift-shop-grid'); if(!el)return;
-  el.innerHTML=GIFT_CATALOG.map(g=>`<div class="gift-card ripple-container" onclick="selectGiftFromShop('${g.id}')"><div class="gift-icon">${g.icon}</div><div class="gift-name">${g.name}</div><div class="gift-price">${g.price} ★</div></div>`).join('');
+  const el=document.getElementById('gift-shop-grid');
+  if (!el) return;
+  el.innerHTML=GIFT_CATALOG.map(g=>`<div class="gift-card" onclick="selectGiftFromShop('${g.id}')"><div class="gift-icon">${g.icon}</div><div class="gift-name">${g.name}</div><div class="gift-price">${g.price} ★</div></div>`).join('');
 }
-function selectGiftFromShop(id){const g=GIFT_CATALOG.find(x=>x.id===id);S.selectedGift=g;closePanel('panel-stars');openGiftModal(g,S.giftTarget||(S.activeChat||null));}
-function openGiftModal(gift,preselect){
-  const g=gift||S.selectedGift; if(!g)return; S.selectedGift=g;
+function selectGiftFromShop(id) { const g=GIFT_CATALOG.find(x=>x.id===id); S.selectedGift=g; closePanel('panel-stars'); openGiftModal(g, S.giftTarget||(S.activeChat||null)); }
+
+function openGiftModal(gift, preselect) {
+  const g=gift||S.selectedGift; if (!g) return; S.selectedGift=g;
   document.getElementById('gm-icon').textContent=g.icon;
   document.getElementById('gm-name').textContent=g.name;
   document.getElementById('gm-price').textContent=g.price;
@@ -1246,162 +1444,99 @@ function openGiftModal(gift,preselect){
   list.dataset.selected=preselect||S.contacts[0].id;
   document.getElementById('gift-modal').classList.add('open');
 }
-function selectGiftRecipient(el,id){el.closest('#gift-recipient-list').querySelectorAll('.gift-select-option').forEach(e=>e.classList.remove('selected'));el.classList.add('selected');el.closest('#gift-recipient-list').dataset.selected=id;}
-function closeGiftModal(){document.getElementById('gift-modal').classList.remove('open');}
-function confirmSendGift(e){
-  addRipple(e);
-  if (!S.selectedGift)return;
-  if (S.stars<S.selectedGift.price){showToast('❌ Недостаточно звёзд!');return;}
+function selectGiftRecipient(el,id) { el.closest('#gift-recipient-list').querySelectorAll('.gift-select-option').forEach(e=>e.classList.remove('selected')); el.classList.add('selected'); el.closest('#gift-recipient-list').dataset.selected=id; }
+function closeGiftModal() { document.getElementById('gift-modal').classList.remove('open'); }
+
+function confirmSendGift() {
+  if (!S.selectedGift) return;
+  if (S.stars<S.selectedGift.price) { showToast('❌ Недостаточно звёзд!'); return; }
   const recId=document.getElementById('gift-recipient-list').dataset.selected;
-  const rec=S.contacts.find(c=>c.id===recId); if(!rec)return;
+  const rec=S.contacts.find(c=>c.id===recId); if (!rec) return;
   S.stars-=S.selectedGift.price; updateStarUI();
-  if(!rec.gifts)rec.gifts=[];
+  if (!rec.gifts) rec.gifts=[];
   rec.gifts.push({...S.selectedGift});
-  if(!S.messages[recId])S.messages[recId]=[];
-  S.messages[recId].push({type:'gift',gift:S.selectedGift,fromMe:true,time:nt()});
-  if(S.activeChat===recId)renderCurrentChat();
-  updateChatPreview(recId,`🎁 ${S.selectedGift.name}`); saveSession(); closeGiftModal();
-  showToast(`🎁 ${S.selectedGift.icon} отправлен ${rec.fn}!`); S.selectedGift=null;
+  if (!S.messages[recId]) S.messages[recId]=[];
+  S.messages[recId].push({ type:'gift', gift:S.selectedGift, fromMe:true, time:nt() });
+  if (S.activeChat===recId) renderCurrentChat();
+  updateChatPreview(recId, `🎁 ${S.selectedGift.name}`);
+  saveSession(); closeGiftModal(); showToast(`🎁 ${S.selectedGift.icon} отправлен ${rec.fn}!`); S.selectedGift=null;
 }
 
 // ── TABS ─────────────────────────────────────────────────
-function switchTab(name){
+function switchTab(name) {
   ['chats','calls','settings'].forEach(t=>{
-    document.getElementById(`tab-${t}`).classList.toggle('hidden',t!==name);
-    document.getElementById(`tab-btn-${t}`).classList.toggle('active',t===name);
+    document.getElementById(`tab-${t}`).classList.toggle('hidden', t!==name);
+    document.getElementById(`tab-btn-${t}`).classList.toggle('active', t===name);
   });
   const titles={chats:'Чаты',calls:'Звонки',settings:'Настройки'};
   document.getElementById('header-title').textContent=titles[name];
   document.getElementById('header-search').style.display=name==='chats'?'flex':'none';
   document.getElementById('header-add-btn').style.display=name==='chats'?'flex':'none';
-  if(name==='calls')renderCallLog();
+  if (name==='calls') renderCallLog();
 }
 
 // ── PANELS ───────────────────────────────────────────────
-function openPanel(id){document.getElementById(id)?.classList.add('open');}
-function closePanel(id){document.getElementById(id)?.classList.remove('open');}
+function openPanel(id) { document.getElementById(id)?.classList.add('open'); }
+function closePanel(id) { document.getElementById(id)?.classList.remove('open'); }
 
 // ── THEMES ───────────────────────────────────────────────
-function renderThemeGrids(){
-  document.getElementById('theme-grid-dark').innerHTML=THEMES.dark.map(t=>renderThemeTile(t)).join('');
-  document.getElementById('theme-grid-light').innerHTML=THEMES.light.map(t=>renderThemeTile(t)).join('');
+function renderThemeGrids() {
+  document.getElementById('theme-grid-dark').innerHTML=THEMES.dark.map(renderThemeTile).join('');
+  document.getElementById('theme-grid-light').innerHTML=THEMES.light.map(renderThemeTile).join('');
 }
-function renderThemeTile(t){
+function renderThemeTile(t) {
   const isLight=t.id.startsWith('light');
   return `<div class="theme-tile ${S.currentTheme===t.id?'active':''}" style="background:${t.bg};border-color:${S.currentTheme===t.id?'var(--accent)':'rgba(255,255,255,0.1)'};" onclick="setTheme('${t.id}')"><div class="theme-dot" style="background:${t.dot};"></div><span class="theme-label" style="color:${isLight?'rgba(0,0,0,0.6)':'rgba(255,255,255,0.7)'};">${t.label}</span></div>`;
 }
-function setTheme(id){S.currentTheme=id;applyTheme(id,true);renderThemeGrids();saveSession();closePanel('panel-appearance');showToast('🎨 Тема изменена');}
-function applyTheme(id,animate){
-  document.documentElement.setAttribute('data-theme',id);
-  if(animate){document.documentElement.style.transition='background 0.5s ease';setTimeout(()=>{document.documentElement.style.transition='';},600);}
+function setTheme(id) { S.currentTheme=id; applyTheme(id,true); renderThemeGrids(); saveSession(); closePanel('panel-appearance'); showToast('🎨 Тема изменена'); }
+function applyTheme(id, animate) {
+  document.documentElement.setAttribute('data-theme', id);
+  if (animate) { document.documentElement.style.transition='background 0.5s ease'; setTimeout(()=>{ document.documentElement.style.transition=''; },600); }
 }
 
 // ── QR ───────────────────────────────────────────────────
-function showQRModal(){
+function showQRModal() {
   const canvas=document.getElementById('qr-canvas'); const ctx=canvas.getContext('2d');
-  const sz=180;const cell=6;const cols=Math.floor(sz/cell);
-  ctx.fillStyle='#fff';ctx.fillRect(0,0,sz,sz);ctx.fillStyle='#000';
-  for(let r=0;r<cols;r++)for(let c=0;c<cols;c++){if(((r+c)*(r*3+c*7+17))%13<6)ctx.fillRect(c*cell,r*cell,cell,cell);}
-  [[0,0],[sz-21,0],[0,sz-21]].forEach(([x,y])=>{ctx.fillStyle='#fff';ctx.fillRect(x,y,21,21);ctx.fillStyle='#000';ctx.strokeStyle='#000';ctx.lineWidth=3;ctx.strokeRect(x+1.5,y+1.5,18,18);ctx.fillRect(x+5,y+5,11,11);});
+  const sz=180; const cell=6; const cols=Math.floor(sz/cell);
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,sz,sz); ctx.fillStyle='#000';
+  for (let r=0;r<cols;r++) for (let c=0;c<cols;c++) if (((r+c)*(r*3+c*7+17))%13<6) ctx.fillRect(c*cell,r*cell,cell,cell);
+  [[0,0],[sz-21,0],[0,sz-21]].forEach(([x,y])=>{ ctx.fillStyle='#fff'; ctx.fillRect(x,y,21,21); ctx.fillStyle='#000'; ctx.strokeStyle='#000'; ctx.lineWidth=3; ctx.strokeRect(x+1.5,y+1.5,18,18); ctx.fillRect(x+5,y+5,11,11); });
   document.getElementById('qr-user-display').textContent='@'+(S.user?.username||'user');
   document.getElementById('qr-modal').classList.add('open');
 }
 
 // ── PRIVACY ──────────────────────────────────────────────
-function cyclePrivacy(el){const sp=el.querySelector('.privacy-option');const opts=['Все','Мои контакты','Никто'];sp.textContent=opts[(opts.indexOf(sp.textContent)+1)%opts.length];}
+function cyclePrivacy(el) { const sp=el.querySelector('.privacy-option'); const opts=['Все','Мои контакты','Никто']; sp.textContent=opts[(opts.indexOf(sp.textContent)+1)%opts.length]; }
 
-// ── TOAST ────────────────────────────────────────────────
-let toastT=null;
-function showToast(msg){
-  const el=document.getElementById('app-toast'); el.textContent=msg; el.classList.add('show');
-  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),2400);
+// ── TOASTS ───────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const el=document.getElementById('app-toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2400);
 }
-function showMsgToast(chatId,name,initial,preview){
-  if(S.activeChat===chatId)return; S.msgToastChatId=chatId;
+function showMsgToast(chatId,name,initial,preview) {
+  if (S.activeChat===chatId) return;
+  S.msgToastChatId=chatId;
   document.getElementById('mt-avatar').textContent=initial;
   document.getElementById('mt-avatar').style.background=avatarGrad(chatId);
   document.getElementById('mt-name').textContent=name;
   document.getElementById('mt-preview').textContent=preview;
-  const t=document.getElementById('msg-toast'); t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),4000);
+  const t=document.getElementById('msg-toast');
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),4000);
 }
-function openToastChat(){if(S.msgToastChatId)openChat(S.msgToastChatId);document.getElementById('msg-toast').classList.remove('show');}
-
-// ── RIPPLE ───────────────────────────────────────────────
-function addRipple(e) {
-  if (!e) return;
-  const el = e.currentTarget || e.target;
-  if (!el || !el.getBoundingClientRect) return;
-  const r = document.createElement('span');
-  r.className = 'ripple';
-  const rect = el.getBoundingClientRect();
-  const sz = Math.max(rect.width, rect.height);
-  const x = (e.clientX || rect.left+rect.width/2) - rect.left - sz/2;
-  const y = (e.clientY || rect.top+rect.height/2) - rect.top - sz/2;
-  r.style.cssText = `width:${sz}px;height:${sz}px;left:${x}px;top:${y}px;`;
-  el.appendChild(r);
-  setTimeout(() => r.remove(), 700);
-}
-document.addEventListener('click', e => {
-  const el = e.target.closest('.ripple-container');
-  if (el) addRipple({...e, currentTarget: el});
-});
+function openToastChat() { if (S.msgToastChatId) openChat(S.msgToastChatId); document.getElementById('msg-toast').classList.remove('show'); }
 
 // ── HELPERS ──────────────────────────────────────────────
-function nt(){const d=new Date();return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');}
-function nowStr(){return new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})+' · '+new Date().toLocaleDateString('ru',{day:'2-digit',month:'2-digit'});}
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function nt() { const d=new Date(); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); }
+function nowStr() { return new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})+' · '+new Date().toLocaleDateString('ru',{day:'2-digit',month:'2-digit'}); }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ── BOOT ─────────────────────────────────────────────────
-// KEY FIX: attach all button listeners after DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-  // "Получить код" button
-  const btnGetCode = document.getElementById('btn-get-code');
-  if (btnGetCode) {
-    btnGetCode.addEventListener('click', function(e) {
-      submitPhone();
-    });
-  }
-
-  // "Подтвердить" button
-  const btnSubmitCode = document.getElementById('btn-submit-code');
-  if (btnSubmitCode) {
-    btnSubmitCode.addEventListener('click', function(e) {
-      submitCode();
-    });
-  }
-
-  // "Готово" (register) button
-  const btnRegister = document.getElementById('btn-register');
-  if (btnRegister) {
-    btnRegister.addEventListener('click', function(e) {
-      registerUser();
-    });
-  }
-
-  // Also allow pressing Enter on phone input
-  const phoneInput = document.getElementById('phone-input');
-  if (phoneInput) {
-    phoneInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') { e.preventDefault(); submitPhone(); }
-    });
-  }
-
-  // Allow pressing Enter on code input
-  const codeInput = document.getElementById('code-input');
-  if (codeInput) {
-    codeInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') { e.preventDefault(); submitCode(); }
-    });
-  }
-
-  // Boot: restore session or show login
-  if (loadSession()) {
-    initApp();
-  } else {
-    goScreen('screen-login');
-  }
-});
+(function boot() {
+  if (loadSession()) { initApp(); } else { goScreen('screen-login'); }
+})();
 </script>
 </body>
 </html>
